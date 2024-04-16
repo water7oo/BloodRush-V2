@@ -115,6 +115,7 @@ var direction = Vector3()
 
 #Attacking
 
+@onready var Attack_Box = $RootNode/Armature/Skeleton3D/AttackBox
 var attacklight_1 = Input.is_action_just_pressed("attack_light_1")
 var attacklight1_timer = 0.0
 var attack_cooldown = 0.0
@@ -407,12 +408,16 @@ func _proccess_attack(delta):
 		is_attacking = false
 	if Input.is_action_pressed("attack_light_1") && is_on_floor() && attack_cooldown <= 0.0:
 		$AnimationTree.set("parameters/Attack_Shot/request", 1)
+		Attack_Box.monitoring = true
 		is_attacking = true
+		
+
 		attack_cooldown = 0.2 # Set the cooldown time (0.5 seconds in this case)
 	if Input.is_action_just_released("attack_light_1") && is_on_floor():
 		attacklight1_timer = 0.0
 		attacklight2_timer += delta
 		print(attacklight2_timer)
+		Attack_Box.monitoring = false
 		$AnimationTree.set("parameters/Attack_Shot/request", 2)
 	if Input.is_action_just_pressed("attack_light_1") && attacklight2_timer >= 0 && is_on_floor():
 		attacklight1_timer = 0.0
@@ -430,7 +435,7 @@ func _physics_process(delta):
 	_proccess_sprinting(delta)
 	
 	_proccess_attack(delta)
-
+	
 	if Input.is_action_just_pressed("mouse_left"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -438,7 +443,7 @@ func _physics_process(delta):
 	dodging = Input.is_action_pressed("move_dodge")
 	jumping = Input.is_action_pressed("move_jump")
 
-
+	
 	if is_on_floor():
 		if sprinting && jumping:
 			velocity.y = JUMP_VELOCITY * RUNJUMP_MULTIPLIER
@@ -448,17 +453,25 @@ func _physics_process(delta):
 
 func respawn():
 	get_tree().reload_current_scene()
-#Time Stop
-#func hit_stop(timeScale, duration):
-#	if is_attacking:
-#		Engine.time_scale = timeScale
-#		var timer = get_tree().create_timer(timeScale*duration)
-#		await timer.timeout
-#		Engine.time_scale = 1
-#
-#
-
+	
+	
 
 
 func _on_refill_cooldown_timeout():
+
 	pass # Replace with function body.
+
+
+func hit_stop(timeScale, duration):
+		Engine.time_scale = timeScale
+		var timer = get_tree().create_timer(timeScale * duration)
+		await timer.timeout
+		Engine.time_scale = 1
+	
+	
+func _on_area_3d_area_entered(area):
+	if area.name == "enemyBox" && Attack_Box.monitoring == true:
+		print("Player has hit enemy")
+		hit_stop(.005, 2)
+		
+		
