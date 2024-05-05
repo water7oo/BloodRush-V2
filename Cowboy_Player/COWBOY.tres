@@ -7,13 +7,13 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w36hw"]
 render_priority = 0
 shader = ExtResource("1_oawxm")
-shader_parameter/border_width = 0.02
+shader_parameter/border_width = 0.057
 shader_parameter/color = Color(0, 0, 0, 1)
 shader_parameter/pattern = false
 shader_parameter/line_number = null
 shader_parameter/line_sharpness = null
 shader_parameter/pulse = false
-shader_parameter/pulse_speed = null
+shader_parameter/pulse_speed = 0.0
 shader_parameter/line_movement = null
 shader_parameter/line_movement_speed = null
 shader_parameter/wave = false
@@ -23,7 +23,7 @@ render_priority = 0
 next_pass = SubResource("ShaderMaterial_w36hw")
 shader = ExtResource("2_oy5gm")
 shader_parameter/affine_mapping = false
-shader_parameter/alpha_scissor = 0.5
-shader_parameter/jitter = 0.6
+shader_parameter/alpha_scissor = 0.0
+shader_parameter/jitter = 0.25
 shader_parameter/resolution = Vector2i(320, 240)
 shader_parameter/albedo = ExtResource("3_7edqp")

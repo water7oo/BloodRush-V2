@@ -23,18 +23,17 @@ spring_arm_pivot = NodePath("SpringArmPivot")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0353532, 0.005)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.959388, 0.640344, 0, -0.28209, 2.17781, 0.00799954, 0.0505664, 0.814087)
+transform = Transform3D(1, 0, 0, 0, 0.946006, 0.735816, 0, -0.324148, 2.14743, 0.00799954, 0.0505664, 0.100976)
 collision_mask = 255
-spring_length = 1.42
-margin = 1.0
 
 [node name="Margin" type="Node3D" parent="SpringArmPivot/SpringArm3D"]
-transform = Transform3D(1, 0, 0, -1.51513e-15, 0.99344, 0.114364, -6.94201e-15, -0.114365, 0.993441, 3.58559e-07, 3.18617, -3.05663)
+transform = Transform3D(1, 0, 0, -8.18316e-16, 1.00393, 0.0147458, -6.9647e-15, -0.0949428, 0.994697, 3.58559e-07, 3.25808, -2.69453)
 
 [node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D/Margin"]
-transform = Transform3D(0.996683, 0.0109681, 0.0806445, 0.0267416, 0.886182, -0.451024, -0.0315458, 0.283108, 0.35137, 0, -1.42441, 0.385088)
+transform = Transform3D(0.996503, 0.00439831, 0.083445, 0.0249132, 0.932028, -0.346641, -0.0329995, 0.240969, 0.38138, 0, -4.39528, 5.99716)
 current = true
-size = 2.0
+fov = 24.8
+size = 5.762
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SpringArmPivot/SpringArm3D/Margin/Camera3D"]
 transform = Transform3D(2, 3.92603e-15, -1.23954e-15, -3.73113e-15, 1.98296, 0.260499, 1.74033e-15, -0.260499, 1.98296, -0.0079999, -0.0948203, -0.825129)
@@ -47,7 +46,7 @@ skeleton = NodePath("../../../../..")
 transform = Transform3D(1, 0, 0, 9.31323e-10, 1, 1.49012e-08, 7.45058e-09, -1.49012e-08, 1, -2.79397e-08, 4.47035e-08, 9.68575e-08)
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="SpringArmPivot"]
-transform = Transform3D(0.443524, 0.00488081, 0.0358868, 1.65775e-09, 0.44094, -0.0599704, -0.0362172, 0.0597715, 0.439478, -0.506201, 0.337818, 0.232216)
+transform = Transform3D(0.443524, 0.00488081, 0.0358868, 1.65775e-09, 0.44094, -0.0599704, -0.0362172, 0.0597715, 0.439478, 0.0416664, 0.337818, 0.232216)
 visible = false
 mesh = SubResource("CapsuleMesh_a8st2")
 skeleton = NodePath("../SpringArm3D/Margin/Camera3D")

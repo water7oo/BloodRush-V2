@@ -7,7 +7,10 @@ extends Node3D
 @export var mouse_sensitivity = 0.005
 @export var joystick_sensitivity = 0.005 
 
-@export var randomStrength: float = .01
+var y_cam_rot_dist = -80
+var x_cam_rot_dist = -1
+
+@export var randomStrength: float = .1
 @export var shakeFade: float = .7
 var rng = RandomNumberGenerator.new()
 
@@ -29,10 +32,20 @@ func _unhandled_input(event):
 		var rotation_x = spring_arm_pivot.rotation.x - event.relative.y * mouse_sensitivity
 		var rotation_y = spring_arm_pivot.rotation.y - event.relative.x * mouse_sensitivity
 
-		rotation_x = clamp(rotation_x, deg_to_rad(-80), deg_to_rad(-1))
-
+		rotation_x = clamp(rotation_x, deg_to_rad(y_cam_rot_dist), deg_to_rad(x_cam_rot_dist))
+		#rotation_x = clamp(rotation_x, deg_to_rad(-1), deg_to_rad(0))
+		
 		spring_arm_pivot.rotation.x = rotation_x
 		spring_arm_pivot.rotation.y = rotation_y
+		
+	if Input.is_action_pressed("cam_down"):
+		spring_arm_pivot.rotation.x -= joystick_sensitivity 
+	if Input.is_action_pressed("cam_up"):
+		spring_arm_pivot.rotation.x += joystick_sensitivity 
+	if Input.is_action_pressed("cam_right"):
+		spring_arm_pivot.rotation.y -= joystick_sensitivity 
+	if Input.is_action_pressed("cam_left"):
+		spring_arm_pivot.rotation.y += joystick_sensitivity 
 
 func apply_shake():
 	shake_strength = randomStrength
@@ -40,8 +53,8 @@ func apply_shake():
 func _process(delta: float) -> void:
 	_unhandled_input(delta)
 	
-	if Input.is_action_just_pressed("attack_light_1"):
-		apply_shake()
+	#if Input.is_action_just_pressed("move_dodge"):
+		#apply_shake()
 
 	if not enabled or not target_node:
 		return
