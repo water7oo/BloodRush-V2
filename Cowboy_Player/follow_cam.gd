@@ -1,5 +1,7 @@
 extends Node3D
 
+@onready var gameJuice = get_node("/root/GameJuice")
+@onready var gameDamage = gameJuice.knockback()
 @export var target: NodePath
 @export var speed := 1.0
 @export var enabled: bool
@@ -10,19 +12,14 @@ extends Node3D
 var y_cam_rot_dist = -80
 var x_cam_rot_dist = -1
 
-@export var randomStrength: float = .1
-@export var shakeFade: float = .7
-var rng = RandomNumberGenerator.new()
-
-var shake_strength: float = 0.0
 var original_global_transform: Transform3D
 var target_node: Node3D
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	set_as_top_level(true)
 	target_node = get_node(target) as Node3D
-	original_global_transform = target_node.global_transform
+	
+	#original_global_transform = target_node.global_transform
 
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("quit_game"):
@@ -31,6 +28,8 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		var rotation_x = spring_arm_pivot.rotation.x - event.relative.y * mouse_sensitivity
 		var rotation_y = spring_arm_pivot.rotation.y - event.relative.x * mouse_sensitivity
+		
+		
 
 		rotation_x = clamp(rotation_x, deg_to_rad(y_cam_rot_dist), deg_to_rad(x_cam_rot_dist))
 		#rotation_x = clamp(rotation_x, deg_to_rad(-1), deg_to_rad(0))
@@ -38,35 +37,33 @@ func _unhandled_input(event):
 		spring_arm_pivot.rotation.x = rotation_x
 		spring_arm_pivot.rotation.y = rotation_y
 		
-	if Input.is_action_pressed("cam_down"):
-		spring_arm_pivot.rotation.x -= joystick_sensitivity 
-	if Input.is_action_pressed("cam_up"):
+	if Input.get_action_strength("cam_down"):
+		spring_arm_pivot.rotation.x -= joystick_sensitivity
+	if Input.get_action_strength("cam_up"):
 		spring_arm_pivot.rotation.x += joystick_sensitivity 
-	if Input.is_action_pressed("cam_right"):
+	if Input.get_action_strength("cam_right"):
 		spring_arm_pivot.rotation.y -= joystick_sensitivity 
-	if Input.is_action_pressed("cam_left"):
+	if Input.get_action_strength("cam_left"):
 		spring_arm_pivot.rotation.y += joystick_sensitivity 
 
-func apply_shake():
-	shake_strength = randomStrength
 
 func _process(delta: float) -> void:
 	_unhandled_input(delta)
+	followTarget(delta)
 	
-	#if Input.is_action_just_pressed("move_dodge"):
-		#apply_shake()
-
+	if Input.is_action_just_pressed("shake_test"):
+		applyShake()
+	
+	
+func followTarget(delta):
 	if not enabled or not target_node:
 		return
 
 	var new_global_transform = global_transform.interpolate_with(target_node.global_transform, speed * delta)
 	global_transform.origin = new_global_transform.origin
+	
 
-	if shake_strength > 0:
-		shake_strength = max(0, shake_strength - delta * shakeFade)
-		global_transform.origin += randomOffset()
-		# Apply the remaining shake to the camera
+func applyShake():
+	$AnimationPlayer.play("cam_shake")
 
 
-func randomOffset() -> Vector3:
-	return Vector3(rng.randf_range(-shake_strength, shake_strength), rng.randf_range(-shake_strength, shake_strength), 0)

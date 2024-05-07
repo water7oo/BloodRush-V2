@@ -1,3 +1,4 @@
+class_name Pausing
 extends Node3D
 
 

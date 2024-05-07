@@ -1,6 +1,16 @@
 class_name Player
 extends CharacterBody3D
 
+@onready var combatScript = get_node("/root/Combat")
+@onready var health = combatScript.health
+@onready var gameJuice = get_node("/root/GameJuice")
+
+@onready var playerHealthMan = get_node("/root/PlayerHealthManager")
+
+@onready var enemyHealthMan = get_node("/root/EnemyHealthManager")
+
+
+
 var camera = preload("res://Cowboy_Player/PlayerCamera.tscn").instantiate()
 var spring_arm_pivot = camera.get_node("SpringArmPivot")
 var spring_arm = camera.get_node("SpringArmPivot/SpringArm3D")
@@ -9,7 +19,7 @@ var spring_arm = camera.get_node("SpringArmPivot/SpringArm3D")
 @onready var blend_space = $AnimationTree.get('parameters/Combat/Ground_Blend/blend_position')
 @onready var blend_space2 = $AnimationTree.get('parameters/Combat/MoveStrafe/blend_position')
 @onready var Stamina_bar = $"UI Cooldowns"
-@onready var health_label = $player_health_label
+
 
 var current_blend_amount = 0.0
 var target_blend_amount = 0.0
@@ -116,7 +126,8 @@ var direction = Vector3()
 
 #Attacking
 
-@onready var Attack_Box = $RootNode/Armature/Skeleton3D/AttackBox
+@onready var Attack_Box = $RootNode/Armature/Skeleton3D/BoneAttachment3D/AttackBox
+@onready var Hurt_Box = $HurtBox
 var attacklight_1 = Input.is_action_just_pressed("attack_light_1")
 var attacklight1_timer = 0.0
 var attack_cooldown = 0.0
@@ -129,16 +140,12 @@ var is_attacking = false
 var jumping = Input.is_action_pressed("move_jump")
 
 
-var max_health = 10
-var taking_damage = false
-var attack_damage = 1.0
-var health 
+var attack_power = 1.0
+
 
 
 func _ready():
-	health = max_health
-	#print_debug("player: " + str(health))
-
+	$player_health_label.text = str(playerHealthMan.health)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 
@@ -316,7 +323,6 @@ func _proccess_dodge(delta):
 		ACCELERATION = DODGE_ACCELERATION
 		DECELERATION = DODGE_DECELERATION
 		LERP_VAL = DODGE_LERP_VAL
-		hit_stop()
 		Stamina_bar.value -= 20
 		
 #		armature.rotate_y(deg_to_rad(180))
@@ -370,7 +376,6 @@ func _proccess_jump(delta):
 	if Input.is_action_pressed("move_jump") && jump_use != 0:
 		jump_timer += delta
 		air_timer += delta
-		print()
 #		jump_use -= 1
 		
 		
@@ -464,7 +469,6 @@ func _physics_process(delta):
 	dodging = Input.is_action_pressed("move_dodge")
 	jumping = Input.is_action_pressed("move_jump")
 	
-	health_label.text = str(health)
 	if is_on_floor():
 		if sprinting && jumping:
 			velocity.y = JUMP_VELOCITY * RUNJUMP_MULTIPLIER
@@ -473,32 +477,24 @@ func _physics_process(delta):
 
 
 func _on_refill_cooldown_timeout():
-
 	pass # Replace with function body.
 
 
-func hit_stop():
-		Engine.time_scale = 0
-		await get_tree().create_timer(.5, true, false, true).timeout
-		Engine.time_scale = 1
-	
-	
 
-func damage(attack_damage):
-	health -= attack_damage
+func attack(object_health, attack_power):
+	object_health = object_health - attack_power
 	
-	if health <= 0:
-		print("DIED")
-	
-	taking_damage = true
-
+	#Time_Scale, Duration
+	gameJuice.hitPause(0.005, 1)
+	gameJuice.knockback()
 
 #if the attack hitbox collides with a body with the damage method, 
 #run that function and pass the attack damage variable through it
-func _on_attack_box_body_entered(body):
-	if body.has_method("damage"):
-		body.damage(attack_damage)
-		hit_stop()
-		print("Player hit something")
-		
+func _on_attack_box_area_entered(area):
+	if area.has_method("takeDamage"):
+		enemyHealthMan.takeDamage(enemyHealthMan.health , attack_power)
 
+
+#things entering the players hurtbox
+func _on_hurt_box_area_entered(area):
+	pass # Replace with function body.
