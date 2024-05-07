@@ -18,7 +18,7 @@ func attack(object_health, attack_power):
 	object_health = object_health - attack_power
 	
 	#Time_Scale, Duration
-	gameJuice.hitPause(0.005, 1)
+	#gameJuice.hitPause(0.005, 1)
 	gameJuice.knockback()
 
 func callArea(area):

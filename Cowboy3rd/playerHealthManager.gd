@@ -21,8 +21,7 @@ func takeDamage(health, attack_damage):
 	max_health = max_health - attack_damage
 	
 	#Time_Scale, Duration
-	gameJuice.hitPause(0.005, 1)
-	gameJuice.knockback()
+	#gameJuice.hitPause(0.005, 1)
 	
 	print("Player IS TAKING DAMAGE " + str(max_health))
 	taking_damage = true

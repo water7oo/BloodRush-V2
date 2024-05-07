@@ -488,13 +488,33 @@ func attack(object_health, attack_power):
 	gameJuice.hitPause(0.005, 1)
 	gameJuice.knockback()
 
-#if the attack hitbox collides with a body with the damage method, 
-#run that function and pass the attack damage variable through it
+#if the attack hitbox collides with a body with the damage method
 func _on_attack_box_area_entered(area):
-	if area.has_method("takeDamage"):
-		enemyHealthMan.takeDamage(enemyHealthMan.health , attack_power)
+	if area.has_method("takeDamageEnemy"):
+		area.get_parent().pause()
+		gameJuice.hitPause(0.1, 1)
+		await get_tree().create_timer(1).timeout
+		
+		area.get_parent().unpause()
+		
+		#Put function here that pushes area away somehow
+		gameJuice.knockback(area.get_parent())
+		
+		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
 
+
+func pause():
+	process_mode = PROCESS_MODE_DISABLED
+
+func unpause():
+	process_mode = PROCESS_MODE_INHERIT
 
 #things entering the players hurtbox
 func _on_hurt_box_area_entered(area):
+	
+	if area.name == "enemyBox":
+		$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 1)
+		await get_tree().create_timer(0.5).timeout
+		$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
+		
 	pass # Replace with function body.

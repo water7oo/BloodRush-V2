@@ -134,7 +134,7 @@ transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 7.53036, 3.74131, 8.499
 gizmo_extents = 4.42
 
 [node name="Cowboy_3rdPass" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("12_njj0u")]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -2.68715, 1.77491, 3.01181)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.532753, 1.77491, 6.11236)
 
 [node name="DUST5" parent="Preview/SubViewportContainer/SubViewport/Cowboy_3rdPass" instance=ExtResource("13_fmoji")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)

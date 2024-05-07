@@ -3,6 +3,7 @@ extends CharacterBody3D
 
 @onready var playerHealthMan = get_node("/root/PlayerHealthManager")
 @onready var enemyHealthMan = get_node("/root/EnemyHealthManager")
+@onready var gameJuice = get_node("/root/GameJuice")
 
 
 var enemy_default_mesh = preload("res://Cowboy_Player/Enemy.tres")
@@ -31,9 +32,32 @@ func _physics_process(delta):
 	
 	
 
+
+func animations():
+	if enemyHealthMan.takeDamageEnemy:
+		$AnimationPlayer.play("TPOSE")
+
+func pause():
+	process_mode = PROCESS_MODE_DISABLED
+
+func unpause():
+	process_mode = PROCESS_MODE_INHERIT
+
 #Hurtbox
+#If the player touches this make them have hit pause but also put enemy in hit pause by timescale
 func _on_enemy_area_entered(area):
 	if area.has_method("takeDamage"):
+		area.get_parent().pause()
+		gameJuice.hitPause(0.1, 1)
+		await get_tree().create_timer(1).timeout
+		
+		area.get_parent().unpause()
 		playerHealthMan.takeDamage(playerHealthMan.health , attack_power)
+		
+		#Put function here that pushes area away somehow
+		
+		animations()
 		pass
 	
+	
+

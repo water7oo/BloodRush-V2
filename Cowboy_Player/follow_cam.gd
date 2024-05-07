@@ -1,13 +1,13 @@
 extends Node3D
 
 @onready var gameJuice = get_node("/root/GameJuice")
-@onready var gameDamage = gameJuice.knockback()
 @export var target: NodePath
 @export var speed := 1.0
 @export var enabled: bool
 @export var spring_arm_pivot: Node3D
 @export var mouse_sensitivity = 0.005
 @export var joystick_sensitivity = 0.005 
+
 
 var y_cam_rot_dist = -80
 var x_cam_rot_dist = -1
@@ -64,6 +64,7 @@ func followTarget(delta):
 	
 
 func applyShake():
-	$AnimationPlayer.play("cam_shake")
+	print("CAMERA SHAKE")
+	#$AnimationPlayer.play("cam_shake")
 
 

@@ -24,6 +24,7 @@ Combat="*res://Combat.gd"
 GameJuice="*res://gameJuice.gd"
 EnemyHealthManager="*res://Cowboy_Player/enemyHealthManager.gd"
 PlayerHealthManager="*res://Cowboy3rd/playerHealthManager.gd"
+FollowCam="*res://Cowboy_Player/follow_cam.gd"
 
 [display]
 
