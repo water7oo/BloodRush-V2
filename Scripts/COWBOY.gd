@@ -480,31 +480,22 @@ func _on_refill_cooldown_timeout():
 	pass # Replace with function body.
 
 
-
-func attack(object_health, attack_power):
-	object_health = object_health - attack_power
-	
-	#Time_Scale, Duration
-	gameJuice.hitPause(0.005, 1)
-	gameJuice.knockback()
-
 #if the attack hitbox collides with a body with the damage method
 func _on_attack_box_area_entered(area):
 	if area.has_method("takeDamageEnemy"):
 		area.get_parent().pause()
-		gameJuice.hitPause(0.1, 1)
-		await get_tree().create_timer(1).timeout
+		await get_tree().create_timer(.3).timeout
+		gameJuice.knockback(area.get_parent(), Attack_Box, Vector3(-1, 0, 0) , 7)
 		
 		area.get_parent().unpause()
 		
-		#Put function here that pushes area away somehow
-		gameJuice.knockback(area.get_parent())
 		
 		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
 
 
 func pause():
 	process_mode = PROCESS_MODE_DISABLED
+	
 
 func unpause():
 	process_mode = PROCESS_MODE_INHERIT
