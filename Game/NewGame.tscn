@@ -93,6 +93,7 @@ environment = SubResource("Environment_tjwux")
 
 [node name="Floor" type="StaticBody3D" parent="."]
 transform = Transform3D(-3.40497e-08, -64.9223, 0, 0.778967, -2.83784e-06, 0, 0, 0, 59.3641, 0, -0.41, 10)
+visible = false
 disable_mode = 1
 collision_layer = 3
 collision_mask = 3
@@ -107,7 +108,6 @@ mesh = SubResource("BoxMesh_hstq3")
 
 [node name="Ground" type="CSGCombiner3D" parent="."]
 transform = Transform3D(2.92923, 0, 0, 0, 11.035, 0, 0, 0, 1.75446, 0, -0.414, 0)
-visible = false
 material_override = SubResource("StandardMaterial3D_jdeq7")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Ground"]
@@ -249,7 +249,6 @@ mouse_force_pass_scroll_events = false
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -0.71159, -0.185141, 8.79126)
 target = NodePath("../Cowboy_3rdPass/CamTarget")
 speed = 3.0
-enabled = true
 
 [node name="Cowboy_3rdPass" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("12_dxn1b")]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)

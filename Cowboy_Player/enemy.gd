@@ -51,11 +51,16 @@ func unpause():
 #If the player touches this make them have hit pause but also put enemy in hit pause by timescale
 func _on_enemy_area_entered(area):
 	if area.has_method("takeDamage"):
+		pause()
 		area.get_parent().pause()
-		await get_tree().create_timer(.1).timeout
-		gameJuice.knockback(area.get_parent(), enemyBox, Vector3(-1, 0, 0) , 7)
 		
+		
+		await get_tree().create_timer(.1).timeout
+		
+		
+		unpause()
 		area.get_parent().unpause()
+		gameJuice.knockback(area.get_parent(), enemyBox, 10)
 		playerHealthMan.takeDamage(playerHealthMan.health , attack_power)
 		
 		#Put function here that pushes area away somehow
@@ -63,5 +68,9 @@ func _on_enemy_area_entered(area):
 		animations()
 		pass
 	
+	if area.name == "AttackBox" && area.monitoring:
+		print("Player hit me")
 	
+func _on_hurt_box_area_entered(area):
+	pass # Replace with function body.
 

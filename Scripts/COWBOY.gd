@@ -5,6 +5,7 @@ extends CharacterBody3D
 @onready var health = combatScript.health
 @onready var gameJuice = get_node("/root/GameJuice")
 
+
 @onready var playerHealthMan = get_node("/root/PlayerHealthManager")
 
 @onready var enemyHealthMan = get_node("/root/EnemyHealthManager")
@@ -57,6 +58,7 @@ var jump_height = 128
 var jump_use = 1
 
 #Acceleration and Speed
+var can_move = true
 @export var ACCELERATION = 5.0 #the higher the value the faster the acceleration
 @export var DECELERATION = 25.0 #the lower the value the slippier the stop
 var BASE_ACCELERATION = 5
@@ -132,6 +134,9 @@ var attacklight_1 = Input.is_action_just_pressed("attack_light_1")
 var attacklight1_timer = 0.0
 var attack_cooldown = 0.0
 var attacklight2_timer = 0.0
+var attack_signal = false
+
+
 # Hitbox variables
 var hitbox = null
 var hitbox_active = false
@@ -178,7 +183,7 @@ func _proccess_movement(delta):
 	direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
 	
 	
-	if direction:
+	if direction && can_move == true:
 		is_moving = true
 		if current_speed < target_speed:
 			current_speed = move_toward(current_speed, target_speed, ACCELERATION * delta)
@@ -202,7 +207,7 @@ func _proccess_movement(delta):
 #			DECELERATION = BASE_DECELERATION
 
 	
-		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), LERP_VAL)
+		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), 1)
 		
 	elif !direction && is_on_floor():
 			velocity.x = move_toward(velocity.x, 0, DECELERATION * delta)
@@ -212,7 +217,6 @@ func _proccess_movement(delta):
 			$AnimationTree.set("parameters/Ground_Blend2/blend_amount", -1)
 			$AnimationTree.set("parameters/Jump_Blend/blend_amount", -1)
 			$AnimationTree.set("parameters/Blend3/blend_amount", -1)  
-
 
 	for node in dust_trail:
 			var particle_emitter = node.get_node("Dust")
@@ -247,10 +251,9 @@ func _proccess_movement(delta):
 
 func _proccess_sprinting(delta):
 	
-	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint:
+	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true:
 		sprint_timer += delta
 		is_sprinting = true
-		print(target_speed)
 		Stamina_bar.value -= sprinting_deplete_rate * delta
 		
 		
@@ -298,7 +301,6 @@ func _proccess_sprinting(delta):
 			if Stamina_bar.value >= 0:
 				if is_moving:
 					current_speed = STAMINA_DEPLETED_SPEED
-					print("Player is walking with no stamina!")
 		else:
 			sprinting_refill_rate = sprinting_refill_rate
 			
@@ -438,10 +440,15 @@ func _proccess_attack(delta):
 		
 
 		attack_cooldown = 0.2 # Set the cooldown time (0.5 seconds in this case)
+		await get_tree().create_timer(0.3).timeout
+		$AnimationTree.set("parameters/Attack_Shot/request", 2)
+		
+	else:
+		Attack_Box.monitoring = false
+		
 	if Input.is_action_just_released("attack_light_1") && is_on_floor():
 		attacklight1_timer = 0.0
 		attacklight2_timer += delta
-		print(attacklight2_timer)
 		Attack_Box.monitoring = false
 		$AnimationTree.set("parameters/Attack_Shot/request", 2)
 		
@@ -461,7 +468,6 @@ func _physics_process(delta):
 	_proccess_sprinting(delta)
 	
 	_proccess_attack(delta)
-	
 	if Input.is_action_just_pressed("mouse_left"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -483,29 +489,56 @@ func _on_refill_cooldown_timeout():
 #if the attack hitbox collides with a body with the damage method
 func _on_attack_box_area_entered(area):
 	if area.has_method("takeDamageEnemy"):
+		attack_signal = true
+		
+		
+		#$AnimationTree.set("parameters/Attack_Shot2/request", 1)
+		pause()
 		area.get_parent().pause()
-		await get_tree().create_timer(.3).timeout
-		gameJuice.knockback(area.get_parent(), Attack_Box, Vector3(-1, 0, 0) , 7)
 		
+		
+		await get_tree().create_timer(.1).timeout
+		
+		
+		unpause()
 		area.get_parent().unpause()
-		
-		
+		gameJuice.knockback(area.get_parent(), Attack_Box, 6)
+
 		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
 
 
 func pause():
 	process_mode = PROCESS_MODE_DISABLED
+
 	
 
 func unpause():
 	process_mode = PROCESS_MODE_INHERIT
 
+
 #things entering the players hurtbox
 func _on_hurt_box_area_entered(area):
 	
 	if area.name == "enemyBox":
-		$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 1)
-		await get_tree().create_timer(0.5).timeout
-		$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
+		if !is_on_floor():
+			print("got hit in the air")
+			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 1)
+			can_move = false
+			
+			await get_tree().create_timer(0.5).timeout
+			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
+			can_move = true
+		
+		elif is_on_floor():
+			print("got hit in the floor")
+			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 1)
+			can_move = false
+			await get_tree().create_timer(0.6).timeout
+			can_move = true
+			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
+			
+		else:
+			can_move = true
+			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
 		
 	pass # Replace with function body.

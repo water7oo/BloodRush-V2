@@ -19,11 +19,10 @@ func hitPause(timeScale, duration):
 		Engine.time_scale = 1
 		followcam.applyShake()
 		print("HIT PAUSE")
-		impact = true
 
 
 
-func knockback(enemy, target_attack, knockback_distance, knockback_force):
+func knockback(enemy, target_attack, knockback_force):
 	# Get the global transforms of the enemy and the target attack box
 	var enemy_global_transform = enemy.global_transform
 	var target_attack_global_transform = target_attack.global_transform
@@ -39,6 +38,6 @@ func knockback(enemy, target_attack, knockback_distance, knockback_force):
 
 	# Calculate the knockback velocity
 	var knockback_velocity = knockback_direction * knockback_force
-
+	
 	# Apply the knockback velocity to the enemy's velocity
 	enemy.velocity += knockback_velocity
