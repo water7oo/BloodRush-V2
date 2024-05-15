@@ -1,6 +1,7 @@
 extends Node3D
 
 @onready var gameJuice = get_node("/root/GameJuice")
+@onready var enemy = get_node("/root/EnemyHealthManager")
 @export var target: NodePath
 @export var speed := 1.0
 @export var enabled: bool
@@ -8,6 +9,9 @@ extends Node3D
 @export var mouse_sensitivity = 0.005
 @export var joystick_sensitivity = 0.005 
 
+
+@export var period = .04
+@export var magnitude = 0.08
 
 var y_cam_rot_dist = -80
 var x_cam_rot_dist = -1
@@ -50,9 +54,10 @@ func _unhandled_input(event):
 func _process(delta: float) -> void:
 	_unhandled_input(delta)
 	followTarget(delta)
-	
+	playShake()
 	if Input.is_action_just_pressed("shake_test"):
 		applyShake()
+		
 	
 	
 func followTarget(delta):
@@ -64,7 +69,25 @@ func followTarget(delta):
 	
 
 func applyShake():
-	print("CAMERA SHAKE")
-	#$AnimationPlayer.play("cam_shake")
+	var initial_transform = self.transform
+	var elapsed_time = 0.0
+	
+	while elapsed_time < period:
+		var offset = Vector3(
+			randf_range(-magnitude, magnitude),
+			randf_range(-magnitude, magnitude),
+			0.0
+		)
 
+		self.transform.origin = initial_transform.origin + offset
+		elapsed_time += get_process_delta_time()
+		await get_tree().process_frame
+
+	self.transform = initial_transform
+
+func playShake():
+	if EnemyHealthManager.taking_damage == true:
+		applyShake()
+	if PlayerHealthManager.taking_damage == true:
+		applyShake()
 

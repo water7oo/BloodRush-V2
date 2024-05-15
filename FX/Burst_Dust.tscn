@@ -1,4 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://ctudhwisdi64s"]
+[gd_scene load_steps=10 format=3 uid="uid://ctudhwisdi64s"]
+
+[sub_resource type="Gradient" id="Gradient_c744y"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.135135, 0.540541, 1)
+colors = PackedColorArray(0.752573, 0.423166, 1.92523e-07, 1, 1, 0.797446, 0.574508, 1, 0.889074, 0.391592, 7.70092e-07, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pbhda"]
+gradient = SubResource("Gradient_c744y")
+width = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8f8w8"]
 shading_mode = 0
@@ -6,6 +15,7 @@ diffuse_mode = 3
 specular_mode = 1
 disable_ambient_light = true
 albedo_color = Color(0.960784, 0.694118, 0, 1)
+albedo_texture = SubResource("GradientTexture1D_pbhda")
 billboard_mode = 3
 billboard_keep_scale = true
 particles_anim_h_frames = 1
@@ -13,20 +23,29 @@ particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [sub_resource type="Curve" id="Curve_hvm6k"]
-_data = [Vector2(0, 0.705263), 0.0, 0.0, 0, 0, Vector2(0.68, 0.6), -1.29743, -1.29743, 0, 0, Vector2(1, 0.0842105), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.705263), 0.0, 0.0, 0, 0, Vector2(0.911111, 0.714286), -1.29743, -1.29743, 0, 0, Vector2(1, 0.0842105), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_vrli0"]
 curve = SubResource("Curve_hvm6k")
+
+[sub_resource type="Curve" id="Curve_3npsl"]
+max_value = 3.0
+_data = [Vector2(0.0666667, 2.01099), 0.0, 0.0, 0, 0, Vector2(1, 0.758242), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_q3xk7"]
+curve = SubResource("Curve_3npsl")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tq8iu"]
 spread = 180.0
 initial_velocity_max = 15.0
 angular_velocity_max = 20.0
 gravity = Vector3(0, 0, 0)
-scale_min = 0.1
+scale_min = 0.4
 scale_max = 0.5
 scale_curve = SubResource("CurveTexture_vrli0")
+scale_over_velocity_curve = SubResource("CurveTexture_q3xk7")
 
 [sub_resource type="QuadMesh" id="QuadMesh_5fy4s"]
 
@@ -39,10 +58,9 @@ emitting = false
 amount = 20
 lifetime = 0.2
 one_shot = true
-speed_scale = 0.7
 explosiveness = 1.0
 randomness = 1.0
 fixed_fps = 60
-trail_lifetime = 0.5
+trail_lifetime = 2.76
 process_material = SubResource("ParticleProcessMaterial_tq8iu")
 draw_pass_1 = SubResource("QuadMesh_5fy4s")

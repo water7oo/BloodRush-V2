@@ -14,14 +14,14 @@
 [ext_resource type="PackedScene" uid="uid://dq1wojfy8mi7q" path="res://FX/Dust.tscn" id="16_dgh31"]
 
 [sub_resource type="Environment" id="Environment_kag6n"]
-background_mode = 1
 background_color = Color(0.505882, 0.505882, 0.505882, 1)
 background_energy_multiplier = 16.0
+tonemap_mode = 3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ov31c"]
 shader = ExtResource("2_7m6hl")
 shader_parameter/change_color_depth = true
-shader_parameter/target_color_depth = 7
+shader_parameter/target_color_depth = 4
 shader_parameter/dithering = true
 shader_parameter/scale_resolution = true
 shader_parameter/target_resolution_scale = 3
@@ -38,9 +38,9 @@ shader_parameter/dither_size = 2
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.499315, 0.026168, 0, 0.052336, 0.99863, -0.5, 0.864838, -0.0453243, -6.46824, 61.2841, 3.0847)
-light_energy = 2.111
-light_indirect_energy = 0.0
+light_energy = 1.853
 light_volumetric_fog_energy = 0.0
+shadow_enabled = true
 shadow_normal_bias = 2.139
 directional_shadow_mode = 0
 
@@ -151,5 +151,5 @@ transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.045106, 0.224882, 0.133729)
 
 [node name="CamTarget" type="Marker3D" parent="Preview/SubViewportContainer/SubViewport/Cowboy_3rdPass"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.22365, 0.456273, -0.0285964)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203987, 0.456273, -0.0285969)
 gizmo_extents = 4.42

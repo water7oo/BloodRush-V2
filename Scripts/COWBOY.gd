@@ -4,6 +4,7 @@ extends CharacterBody3D
 @onready var combatScript = get_node("/root/Combat")
 @onready var health = combatScript.health
 @onready var gameJuice = get_node("/root/GameJuice")
+@onready var followcam = get_node("/root/FollowCam")
 
 
 @onready var playerHealthMan = get_node("/root/PlayerHealthManager")
@@ -55,7 +56,7 @@ var is_moving = false
 var jump_timer = 0.0
 var jump_tap_timer = 0.1
 var jump_height = 128
-var jump_use = 1
+var jump_counter = 1
 
 #Acceleration and Speed
 var can_move = true
@@ -83,7 +84,7 @@ var dodge_cooldown_timer = 0.0
 var INITIAL_DASH_ACCELERATION = ACCELERATION
 var INITIAL_DASH_DECELERATION = DECELERATION
 var INITIAL_MAX_SPEED = MAX_SPEED
-var SECOND_MAX_SPEED = DASH_MAX_SPEED * 1.2
+var SECOND_MAX_SPEED = DASH_MAX_SPEED * 2
 var is_second_sprint = false
 
 @export var DODGE_ACCELERATION = 50
@@ -121,6 +122,7 @@ var medium_attack1 = false
 var landing_position = Vector3.ZERO
 var can_wall_jump = true
 var has_wall_jumped = false
+var attack_proccessing = false
 
 var fall = Vector3()
 var wall_normal
@@ -244,7 +246,7 @@ func _proccess_movement(delta):
 			
 	for node in burst_dust:
 		var particle_emitter = node.get_node("burst_dust")
-		if particle_emitter && is_on_floor() && dodging && Stamina_bar.value >= 20:
+		if particle_emitter && is_on_floor() && dodging && Stamina_bar.value >= 20 && direction:
 			particle_emitter.set_emitting(true)
 		else:
 			particle_emitter.set_emitting(false)
@@ -276,7 +278,6 @@ func _proccess_sprinting(delta):
 		
 		if Input.is_action_just_released("move_sprint") || sprint_timer >= 3 && jumping || jumping:
 			is_sprinting = false
-			
 			target_speed = BASE_SPEED
 			ACCELERATION = BASE_ACCELERATION
 			DECELERATION = BASE_DECELERATION
@@ -327,7 +328,6 @@ func _proccess_dodge(delta):
 		LERP_VAL = DODGE_LERP_VAL
 		Stamina_bar.value -= 20
 		
-#		armature.rotate_y(deg_to_rad(180))
 		$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 0)
 
 		dodge_cooldown_timer = dodge_cooldown  # Start the cooldown
@@ -360,50 +360,39 @@ func _proccess_cooldown(delta):
 			can_dodge = false
 
 func _proccess_jump(delta):
-	
-	
 	if !is_on_floor():
 		air_timer += delta
 		can_jump = false
 		velocity.y -= custom_gravity * delta
-		
 	elif is_on_floor():
 		can_jump = true
 		$AnimationTree.set("parameters/Jump_Blend/blend_amount", -1)
-
+		jump_counter = 0  # Reset jump counter when landing on the ground
 
 	if velocity.y > 0 && jump_timer >= 0.01:
 		$AnimationTree.set("parameters/Jump_Blend/blend_amount", 1)
-	
-	if Input.is_action_pressed("move_jump") && jump_use != 0:
+
+	if Input.is_action_pressed("move_jump") && jump_counter <= 0:
 		jump_timer += delta
 		air_timer += delta
-#		jump_use -= 1
-		
-		
-		if jump_timer <= 0.2:
+
+		if jump_timer <= 0.3:
 			velocity.y = JUMP_VELOCITY
 			can_jump = false
+			jump_counter += 1  # Increase jump counter when jumping
 		else:
 			velocity.y -= custom_gravity * delta
 			$AnimationTree.set("parameters/Jump_Blend/blend_amount", 0)
 			can_jump = false
-			
-		
-#
-	
-	if !is_on_floor() && jump_timer >= 0.3:
-		jump_timer = 0.3
+
+	if !is_on_floor() && jump_timer >= 0.4:
+		jump_timer = 0.4
 		can_jump = false
-
-
 
 	if Input.is_action_just_pressed("move_jump"):
 		air_timer = 0.0
 		jump_timer = 0.0
 
-
-		
 	if Input.is_action_just_released("move_jump"):
 		air_timer = 0.0
 		jump_timer = 0.0
@@ -435,12 +424,14 @@ func _proccess_attack(delta):
 		is_attacking = false
 	if Input.is_action_just_pressed("attack_light_1") && is_on_floor() && attack_cooldown <= 0.0:
 		$AnimationTree.set("parameters/Attack_Shot/request", 1)
+		followcam.applyShake()
+		current_speed = 0
 		Attack_Box.monitoring = true
 		is_attacking = true
 		
 
 		attack_cooldown = 0.2 # Set the cooldown time (0.5 seconds in this case)
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.2).timeout
 		$AnimationTree.set("parameters/Attack_Shot/request", 2)
 		
 	else:
@@ -468,6 +459,7 @@ func _physics_process(delta):
 	_proccess_sprinting(delta)
 	
 	_proccess_attack(delta)
+	
 	if Input.is_action_just_pressed("mouse_left"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -486,25 +478,25 @@ func _on_refill_cooldown_timeout():
 	pass # Replace with function body.
 
 
-#if the attack hitbox collides with a body with the damage method
+#Attacking objects and enemies
 func _on_attack_box_area_entered(area):
-	if area.has_method("takeDamageEnemy"):
-		attack_signal = true
+	if area.has_method("takeDamageEnemy") && !attack_proccessing:
 		
-		
-		#$AnimationTree.set("parameters/Attack_Shot2/request", 1)
+		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
+		area.get_parent().rotate_y(deg_to_rad(180))
 		pause()
 		area.get_parent().pause()
 		
 		
-		await get_tree().create_timer(.1).timeout
+		await get_tree().create_timer(.15).timeout
 		
 		
+		area.get_parent().rotate_y(deg_to_rad(180))
 		unpause()
 		area.get_parent().unpause()
+		Attack_Box.monitoring = false
 		gameJuice.knockback(area.get_parent(), Attack_Box, 6)
 
-		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
 
 
 func pause():
@@ -525,7 +517,7 @@ func _on_hurt_box_area_entered(area):
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 1)
 			can_move = false
 			
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(0.9).timeout
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
 			can_move = true
 		
@@ -533,12 +525,13 @@ func _on_hurt_box_area_entered(area):
 			print("got hit in the floor")
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 1)
 			can_move = false
-			await get_tree().create_timer(0.6).timeout
+			await get_tree().create_timer(0.9).timeout
 			can_move = true
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
 			
 		else:
 			can_move = true
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
+			
 		
 	pass # Replace with function body.

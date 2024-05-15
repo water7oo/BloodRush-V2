@@ -4,6 +4,7 @@ extends CharacterBody3D
 @onready var playerHealthMan = get_node("/root/PlayerHealthManager")
 @onready var enemyHealthMan = get_node("/root/EnemyHealthManager")
 @onready var gameJuice = get_node("/root/GameJuice")
+@onready var followcam = get_node("/root/FollowCam")
 
 
 var enemy_default_mesh = preload("res://Cowboy_Player/Enemy.tres")
@@ -14,7 +15,7 @@ const JUMP_VELOCITY = 4.5
 
 @onready var enemyBox = $enemyBox
 @onready var enemy_health_label = $health_label
-
+var attack_processing = false
 
 var attack_power = 1
 
@@ -25,21 +26,22 @@ func _ready():
 	pass
 
 func _physics_process(delta):
+	
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
 	velocity.x = move_toward(velocity.x, 0, ENEMY_DECELERATION * delta)
 	velocity.z = move_toward(velocity.z, 0, ENEMY_DECELERATION * delta)
 
-
 	move_and_slide()
-	
-	
+
 
 
 func animations():
 	if enemyHealthMan.takeDamageEnemy:
-		$AnimationPlayer.play("TPOSE")
+		$AnimationTree.set("parameters/Blend2/blend_amount", 1)
+		await get_tree().create_timer(0.5).timeout
+		$AnimationTree.set("parameters/Blend2/blend_amount", 0)
 
 func pause():
 	process_mode = PROCESS_MODE_DISABLED
@@ -50,25 +52,31 @@ func unpause():
 #Hurtbox
 #If the player touches this make them have hit pause but also put enemy in hit pause by timescale
 func _on_enemy_area_entered(area):
-	if area.has_method("takeDamage"):
+	if area.has_method("takeDamage") and not attack_processing:
+		print(enemyBox.monitoring)
+		attack_processing = true
+		enemyBox.monitoring = true
+		playerHealthMan.takeDamage(playerHealthMan.health, attack_power)
 		pause()
 		area.get_parent().pause()
 		
 		
-		await get_tree().create_timer(.1).timeout
-		
-		
+		await get_tree().create_timer(0.1).timeout
 		unpause()
 		area.get_parent().unpause()
-		gameJuice.knockback(area.get_parent(), enemyBox, 10)
-		playerHealthMan.takeDamage(playerHealthMan.health , attack_power)
 		
-		#Put function here that pushes area away somehow
+		
+		gameJuice.knockback(area.get_parent(), enemyBox, 10)
 		
 		animations()
-		pass
-	
-	if area.name == "AttackBox" && area.monitoring:
+		
+		attack_processing = false
+		enemyBox.monitoring = false
+		await get_tree().create_timer(1).timeout
+		enemyBox.monitoring = true
+		print(enemyBox.monitoring)
+		
+	if area.name == "AttackBox" && area.monitoring == true:
 		print("Player hit me")
 	
 func _on_hurt_box_area_entered(area):

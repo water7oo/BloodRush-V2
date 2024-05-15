@@ -25,3 +25,5 @@ func takeDamage(health, attack_damage):
 	
 	print("Player IS TAKING DAMAGE " + str(max_health))
 	taking_damage = true
+	await get_tree().create_timer(.15).timeout
+	taking_damage = false

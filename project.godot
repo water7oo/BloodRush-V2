@@ -26,15 +26,15 @@ EnemyHealthManager="*res://Cowboy_Player/enemyHealthManager.gd"
 PlayerHealthManager="*res://Cowboy3rd/playerHealthManager.gd"
 FollowCam="*res://Cowboy_Player/follow_cam.gd"
 Hitpausing="*res://hitpausing.gd"
+enemy="*res://Cowboy_Player/enemy.gd"
 
 [display]
 
-window/size/borderless=true
 window/stretch/mode="viewport"
 
 [editor]
 
-movie_writer/movie_file="C:/Users/scott/OneDrive/Desktop/Desktop Stuff/Timelapses_Recordings/GODOT_GAME_RECORDINGS/GODOT_RECORD1.mp4"
+movie_writer/movie_file="C:/Users/scott/OneDrive/Desktop/Desktop Stuff/Timelapses_Recordings/GODOT_GAME_RECORDINGS/GODOT_RECORD2.mp4.avi"
 version_control/autoload_on_startup=true
 
 [editor_plugins]

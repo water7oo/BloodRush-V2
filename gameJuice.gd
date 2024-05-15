@@ -17,7 +17,6 @@ func hitPause(timeScale, duration):
 		var timer = get_tree().create_timer(timeScale * duration)
 		await timer.timeout
 		Engine.time_scale = 1
-		followcam.applyShake()
 		print("HIT PAUSE")
 
 
@@ -40,4 +39,4 @@ func knockback(enemy, target_attack, knockback_force):
 	var knockback_velocity = knockback_direction * knockback_force
 	
 	# Apply the knockback velocity to the enemy's velocity
-	enemy.velocity += knockback_velocity
+	enemy.velocity = knockback_velocity
