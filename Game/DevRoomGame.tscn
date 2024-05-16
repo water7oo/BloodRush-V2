@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b2ud3ury8epgi"]
+[gd_scene load_steps=19 format=3 uid="uid://b2ud3ury8epgi"]
 
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://Room.tres" id="1_ewgn2"]
 [ext_resource type="Shader" path="res://Game/TestingShaders3.gdshader" id="2_7m6hl"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://ctudhwisdi64s" path="res://FX/Burst_dust.tscn" id="13_fmoji"]
 [ext_resource type="PackedScene" uid="uid://rlcylvhdacih" path="res://FX/Move_Dust.tscn" id="14_xyb0d"]
 [ext_resource type="PackedScene" uid="uid://d1yu2x7osdqa5" path="res://FX/jump_dust.tscn" id="15_2mw5p"]
+[ext_resource type="PackedScene" uid="uid://dcfrtjlyu7745" path="res://BloodRushPlayer.tscn" id="15_i88xo"]
 [ext_resource type="PackedScene" uid="uid://dq1wojfy8mi7q" path="res://FX/Dust.tscn" id="16_dgh31"]
 
 [sub_resource type="Environment" id="Environment_kag6n"]
@@ -164,3 +165,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.045106, 0.224882, 0.133729
 [node name="CamTarget" type="Marker3D" parent="Preview/SubViewportContainer/SubViewport/Cowboy_3rdPass"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203987, 0.456273, -0.0285969)
 gizmo_extents = 4.42
+
+[node name="3rdPassAnimations" parent="." instance=ExtResource("15_i88xo")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 5.18639, 0.503042, 19.5466)

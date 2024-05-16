@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://b883xedulu0jn"]
+
+[ext_resource type="PackedScene" uid="uid://b8q1sf7plg661" path="res://Blender/BloodKatana.blend" id="1_e7b85"]
+[ext_resource type="Material" uid="uid://dcakvymmosyhp" path="res://Cowboy_Player/COWBOY.tres" id="2_dc6xl"]
+
+[node name="BloodKatana" instance=ExtResource("1_e7b85")]
+
+[node name="Cylinder" parent="." index="0"]
+material_override = ExtResource("2_dc6xl")
+
+[node name="Cube" parent="." index="1"]
+material_override = ExtResource("2_dc6xl")
