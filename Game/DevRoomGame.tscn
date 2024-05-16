@@ -1,13 +1,15 @@
-[gd_scene load_steps=16 format=3 uid="uid://b2ud3ury8epgi"]
+[gd_scene load_steps=18 format=3 uid="uid://b2ud3ury8epgi"]
 
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://Room.tres" id="1_ewgn2"]
 [ext_resource type="Shader" path="res://Game/TestingShaders3.gdshader" id="2_7m6hl"]
+[ext_resource type="Texture2D" uid="uid://c2u2x35i4lrm0" path="res://Cowboy3rd/bayer2tile16 (1).png" id="3_hn20p"]
 [ext_resource type="PackedScene" uid="uid://brejidgy2nq2j" path="res://ui/Pausing.tscn" id="4_x187o"]
 [ext_resource type="PackedScene" uid="uid://byiwrnoah113n" path="res://GameStartANIM.tscn" id="8_muyqj"]
 [ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Cowboy_Player/Enemy.tscn" id="9_38om4"]
 [ext_resource type="Shader" path="res://Game/RETRO.gdshader" id="10_4wx4q"]
 [ext_resource type="PackedScene" uid="uid://7l5yih8w56c3" path="res://Cowboy_Player/PlayerCamera.tscn" id="11_hq17w"]
 [ext_resource type="PackedScene" uid="uid://bgkmd80vrnlao" path="res://Cowboy3rd/cowboy_3rd_pass.tscn" id="12_njj0u"]
+[ext_resource type="PackedScene" uid="uid://dhd2amiuh43lt" path="res://VisualEffectsTest.tscn" id="13_1ni2e"]
 [ext_resource type="PackedScene" uid="uid://ctudhwisdi64s" path="res://FX/Burst_dust.tscn" id="13_fmoji"]
 [ext_resource type="PackedScene" uid="uid://rlcylvhdacih" path="res://FX/Move_Dust.tscn" id="14_xyb0d"]
 [ext_resource type="PackedScene" uid="uid://d1yu2x7osdqa5" path="res://FX/jump_dust.tscn" id="15_2mw5p"]
@@ -17,15 +19,20 @@
 background_color = Color(0.505882, 0.505882, 0.505882, 1)
 background_energy_multiplier = 16.0
 tonemap_mode = 3
+ssil_intensity = 16.0
+volumetric_fog_density = 0.005
+volumetric_fog_emission = Color(1, 1, 1, 1)
+adjustment_saturation = 1.11
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ov31c"]
 shader = ExtResource("2_7m6hl")
 shader_parameter/change_color_depth = true
-shader_parameter/target_color_depth = 4
+shader_parameter/target_color_depth = 6
 shader_parameter/dithering = true
 shader_parameter/scale_resolution = true
-shader_parameter/target_resolution_scale = 3
+shader_parameter/target_resolution_scale = 2
 shader_parameter/enable_recolor = false
+shader_parameter/to_gradient = ExtResource("3_hn20p")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_518tn"]
 shader = ExtResource("10_4wx4q")
@@ -39,10 +46,11 @@ shader_parameter/dither_size = 2
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.499315, 0.026168, 0, 0.052336, 0.99863, -0.5, 0.864838, -0.0453243, -6.46824, 61.2841, 3.0847)
 light_energy = 1.853
-light_volumetric_fog_energy = 0.0
-shadow_enabled = true
+light_angular_distance = 2.4
+shadow_bias = 0.0
 shadow_normal_bias = 2.139
 directional_shadow_mode = 0
+sky_mode = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_kag6n")
@@ -104,6 +112,9 @@ handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
+
+[node name="Root Scene" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("13_1ni2e")]
+transform = Transform3D(1.995, 0, 0, 0, 1.995, 0, 0, 0, 1.995, -7.41469, 1.84622, 4.76837e-07)
 
 [node name="Pausing" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("4_x187o")]
 

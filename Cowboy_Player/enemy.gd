@@ -5,6 +5,7 @@ extends CharacterBody3D
 @onready var enemyHealthMan = get_node("/root/EnemyHealthManager")
 @onready var gameJuice = get_node("/root/GameJuice")
 @onready var followcam = get_node("/root/FollowCam")
+@onready var enemyHealthLabel = $health_label
 
 
 var enemy_default_mesh = preload("res://Cowboy_Player/Enemy.tres")
@@ -12,6 +13,7 @@ var enemy_damage_mesh = preload("res://Cowboy_Player/Enemy_Hit.tres")
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 @export var ENEMY_DECELERATION = 10.0
+@onready var punch_dust = get_tree().get_nodes_in_group("punch_dust")
 
 @onready var enemyBox = $enemyBox
 @onready var enemy_health_label = $health_label
@@ -23,6 +25,8 @@ var attack_power = 1
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func _ready():
+	#enemyHealthMan.health = enemyHealthMan.max_health
+	#$health_label.text = "Testintg"
 	pass
 
 func _physics_process(delta):
@@ -35,7 +39,13 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-
+func particles():
+	for node in punch_dust:
+		var particle_emitter = node.get_node("punch_dust")
+		if particle_emitter :
+			particle_emitter.set_emitting(true)
+		else:
+			particle_emitter.set_emitting(false)
 
 func animations():
 	if enemyHealthMan.takeDamageEnemy:
@@ -52,6 +62,10 @@ func unpause():
 #Hurtbox
 #If the player touches this make them have hit pause but also put enemy in hit pause by timescale
 func _on_enemy_area_entered(area):
+	if area.name == "AttackBox" && area.monitoring == true:
+		print("Player hit me")
+		
+		
 	if area.has_method("takeDamage") and not attack_processing:
 		print(enemyBox.monitoring)
 		attack_processing = true
@@ -59,10 +73,12 @@ func _on_enemy_area_entered(area):
 		playerHealthMan.takeDamage(playerHealthMan.health, attack_power)
 		pause()
 		area.get_parent().pause()
+		area.get_parent().rotate_y(deg_to_rad(180))
 		
 		
 		await get_tree().create_timer(0.1).timeout
 		unpause()
+		area.get_parent().rotate_y(deg_to_rad(180))
 		area.get_parent().unpause()
 		
 		
@@ -76,8 +92,6 @@ func _on_enemy_area_entered(area):
 		enemyBox.monitoring = true
 		print(enemyBox.monitoring)
 		
-	if area.name == "AttackBox" && area.monitoring == true:
-		print("Player hit me")
 	
 func _on_hurt_box_area_entered(area):
 	pass # Replace with function body.

@@ -5,7 +5,7 @@ interpolation_mode = 2
 offsets = PackedFloat32Array(0.135135, 0.540541, 1)
 colors = PackedColorArray(0.752573, 0.423166, 1.92523e-07, 1, 1, 0.797446, 0.574508, 1, 0.889074, 0.391592, 7.70092e-07, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_pbhda"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lclfy"]
 gradient = SubResource("Gradient_c744y")
 width = 1
 
@@ -15,7 +15,7 @@ diffuse_mode = 3
 specular_mode = 1
 disable_ambient_light = true
 albedo_color = Color(0.960784, 0.694118, 0, 1)
-albedo_texture = SubResource("GradientTexture1D_pbhda")
+albedo_texture = SubResource("GradientTexture1D_lclfy")
 billboard_mode = 3
 billboard_keep_scale = true
 particles_anim_h_frames = 1
@@ -26,7 +26,7 @@ particles_anim_loop = false
 _data = [Vector2(0, 0.705263), 0.0, 0.0, 0, 0, Vector2(0.911111, 0.714286), -1.29743, -1.29743, 0, 0, Vector2(1, 0.0842105), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_vrli0"]
+[sub_resource type="CurveTexture" id="CurveTexture_83kbg"]
 curve = SubResource("Curve_hvm6k")
 
 [sub_resource type="Curve" id="Curve_3npsl"]
@@ -34,7 +34,7 @@ max_value = 3.0
 _data = [Vector2(0.0666667, 2.01099), 0.0, 0.0, 0, 0, Vector2(1, 0.758242), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_q3xk7"]
+[sub_resource type="CurveTexture" id="CurveTexture_e6qyx"]
 curve = SubResource("Curve_3npsl")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tq8iu"]
@@ -44,8 +44,8 @@ angular_velocity_max = 20.0
 gravity = Vector3(0, 0, 0)
 scale_min = 0.4
 scale_max = 0.5
-scale_curve = SubResource("CurveTexture_vrli0")
-scale_over_velocity_curve = SubResource("CurveTexture_q3xk7")
+scale_curve = SubResource("CurveTexture_83kbg")
+scale_over_velocity_curve = SubResource("CurveTexture_e6qyx")
 
 [sub_resource type="QuadMesh" id="QuadMesh_5fy4s"]
 

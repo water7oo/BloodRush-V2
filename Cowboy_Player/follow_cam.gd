@@ -88,6 +88,8 @@ func applyShake():
 func playShake():
 	if EnemyHealthManager.taking_damage == true:
 		applyShake()
+		pass
 	if PlayerHealthManager.taking_damage == true:
 		applyShake()
+		pass
 

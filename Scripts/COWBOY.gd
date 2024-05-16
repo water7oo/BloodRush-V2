@@ -35,6 +35,7 @@ var blend_lerp_speed = 10.0  # Adjust the speed of blending
 @onready var move_dust = get_tree().get_nodes_in_group("move_dust")
 @onready var burst_dust = get_tree().get_nodes_in_group("burst_dust")
 @onready var wall_wave = get_tree().get_nodes_in_group("wall_wave")
+@onready var punch_dust = get_tree().get_nodes_in_group("punch_dust")
 @onready var InputBuffer = get_node("/root/InputBuffer")
 
 #Basic Movement
@@ -152,7 +153,6 @@ var attack_power = 1.0
 
 
 func _ready():
-	$player_health_label.text = str(playerHealthMan.health)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 
@@ -212,6 +212,7 @@ func _proccess_movement(delta):
 		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), 1)
 		
 	elif !direction && is_on_floor():
+			is_moving = false
 			velocity.x = move_toward(velocity.x, 0, DECELERATION * delta)
 			velocity.z = move_toward(velocity.z, 0, DECELERATION * delta)
 			current_speed = sqrt(velocity.x * velocity.x + velocity.z * velocity.z)
@@ -253,7 +254,7 @@ func _proccess_movement(delta):
 
 func _proccess_sprinting(delta):
 	
-	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true:
+	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true && is_on_floor():
 		sprint_timer += delta
 		is_sprinting = true
 		Stamina_bar.value -= sprinting_deplete_rate * delta
@@ -320,7 +321,7 @@ func _proccess_sprinting(delta):
 			can_sprint = true
 
 func _proccess_dodge(delta):
-	if dodging && is_on_floor() && can_dodge && Stamina_bar.value > 0:
+	if dodging && is_on_floor() && can_dodge && Stamina_bar.value > 0 && is_moving:
 		is_dodging = true
 		current_speed = DODGE_SPEED
 		ACCELERATION = DODGE_ACCELERATION
@@ -422,15 +423,14 @@ func _proccess_attack(delta):
 		attack_cooldown -= delta
 	if attack_cooldown <= 0.0:
 		is_attacking = false
-	if Input.is_action_just_pressed("attack_light_1") && is_on_floor() && attack_cooldown <= 0.0:
+	if Input.is_action_just_pressed("attack_light_1") && attack_cooldown <= 0.0 && is_on_floor():
 		$AnimationTree.set("parameters/Attack_Shot/request", 1)
-		followcam.applyShake()
 		current_speed = 0
 		Attack_Box.monitoring = true
 		is_attacking = true
 		
 
-		attack_cooldown = 0.2 # Set the cooldown time (0.5 seconds in this case)
+		attack_cooldown = 0.5 # Set the cooldown time (0.5 seconds in this case)
 		await get_tree().create_timer(0.2).timeout
 		$AnimationTree.set("parameters/Attack_Shot/request", 2)
 		
@@ -442,7 +442,7 @@ func _proccess_attack(delta):
 		attacklight2_timer += delta
 		Attack_Box.monitoring = false
 		$AnimationTree.set("parameters/Attack_Shot/request", 2)
-		
+	
 	#if Input.is_action_just_pressed("attack_light_1") && attacklight2_timer >= 0 && is_on_floor():
 		#attacklight1_timer = 0.0
 		#attacklight2_timer = 0.0
@@ -459,6 +459,12 @@ func _physics_process(delta):
 	_proccess_sprinting(delta)
 	
 	_proccess_attack(delta)
+	
+	playerHealthMan.health = playerHealthMan.max_health
+	$player_health_label.text = str(playerHealthMan.health)
+	
+	if Attack_Box.monitoring == true:
+		print(Attack_Box.monitoring)
 	
 	if Input.is_action_just_pressed("mouse_left"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -481,7 +487,6 @@ func _on_refill_cooldown_timeout():
 #Attacking objects and enemies
 func _on_attack_box_area_entered(area):
 	if area.has_method("takeDamageEnemy") && !attack_proccessing:
-		
 		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
 		area.get_parent().rotate_y(deg_to_rad(180))
 		pause()
@@ -493,9 +498,11 @@ func _on_attack_box_area_entered(area):
 		
 		area.get_parent().rotate_y(deg_to_rad(180))
 		unpause()
+		attack_cooldown = 0.1
 		area.get_parent().unpause()
 		Attack_Box.monitoring = false
 		gameJuice.knockback(area.get_parent(), Attack_Box, 6)
+		
 
 
 

@@ -4,6 +4,7 @@ extends Area3D
 @onready var enemy_health_label = $health_label
 @onready var animationPlayer = $AnimationPlayer
 @onready var enemy = get_node("/root/enemy")
+@onready var punch_dust = get_tree().get_nodes_in_group("punch_dust")
 
 var health
 var max_health = 10
@@ -11,8 +12,7 @@ var taking_damage := false
 
 
 func _ready():
-	#var health = max_health
-	#enemy_health_label.text = str(max_health)
+	var health = max_health
 	pass
 	
 func readHealth():
@@ -26,3 +26,12 @@ func takeDamageEnemy(health, attack_damage):
 	await get_tree().create_timer(.15).timeout
 	taking_damage = false
 	
+	
+
+func particles():
+	for node in punch_dust:
+		var particle_emitter = node.get_node("punch_dust")
+		if particle_emitter && taking_damage == true:
+			particle_emitter.set_emitting(true)
+		else:
+			particle_emitter.set_emitting(false)
