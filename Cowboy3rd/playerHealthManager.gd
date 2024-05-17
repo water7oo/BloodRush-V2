@@ -1,7 +1,8 @@
 extends Area3D
 
 @onready var gameJuice = get_node("/root/GameJuice")
-@onready var health_label = $player_health_label
+
+
 
 var health
 var max_health = 10

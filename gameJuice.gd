@@ -38,5 +38,29 @@ func knockback(enemy, target_attack, knockback_force):
 	# Calculate the knockback velocity
 	var knockback_velocity = knockback_direction * knockback_force
 	
-	# Apply the knockback velocity to the enemy's velocity
 	enemy.velocity = knockback_velocity
+
+func hitStop(duration, target):
+		print("PAUSE")
+		target.get_parent().rotate_y(deg_to_rad(180))
+		pause()
+		
+		target.get_parent().pause()
+		target.get_parent().can_move = false
+		target.get_parent().current_speed = 0
+		await get_tree().create_timer(duration).timeout
+		
+		target.get_parent().rotate_y(deg_to_rad(180))
+		print("UNPAUSE")
+		unpause()
+		target.get_parent().unpause()
+		await get_tree().create_timer(.5).timeout
+		target.get_parent().can_move = true
+
+func pause():
+	process_mode = PROCESS_MODE_DISABLED
+
+	
+
+func unpause():
+	process_mode = PROCESS_MODE_INHERIT

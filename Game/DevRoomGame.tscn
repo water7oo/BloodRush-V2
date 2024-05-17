@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b2ud3ury8epgi"]
+[gd_scene load_steps=18 format=3 uid="uid://b2ud3ury8epgi"]
 
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://Room.tres" id="1_ewgn2"]
 [ext_resource type="Shader" path="res://Game/TestingShaders3.gdshader" id="2_7m6hl"]
@@ -6,18 +6,17 @@
 [ext_resource type="PackedScene" uid="uid://brejidgy2nq2j" path="res://ui/Pausing.tscn" id="4_x187o"]
 [ext_resource type="PackedScene" uid="uid://byiwrnoah113n" path="res://GameStartANIM.tscn" id="8_muyqj"]
 [ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Cowboy_Player/Enemy.tscn" id="9_38om4"]
-[ext_resource type="Shader" path="res://Game/RETRO.gdshader" id="10_4wx4q"]
 [ext_resource type="PackedScene" uid="uid://7l5yih8w56c3" path="res://Cowboy_Player/PlayerCamera.tscn" id="11_hq17w"]
 [ext_resource type="PackedScene" uid="uid://bgkmd80vrnlao" path="res://Cowboy3rd/cowboy_3rd_pass.tscn" id="12_njj0u"]
 [ext_resource type="PackedScene" uid="uid://dhd2amiuh43lt" path="res://VisualEffectsTest.tscn" id="13_1ni2e"]
 [ext_resource type="PackedScene" uid="uid://ctudhwisdi64s" path="res://FX/Burst_dust.tscn" id="13_fmoji"]
 [ext_resource type="PackedScene" uid="uid://rlcylvhdacih" path="res://FX/Move_Dust.tscn" id="14_xyb0d"]
 [ext_resource type="PackedScene" uid="uid://d1yu2x7osdqa5" path="res://FX/jump_dust.tscn" id="15_2mw5p"]
+[ext_resource type="AudioStream" uid="uid://dn1alcmrcoqhd" path="res://Sounds/Bayonetta OST - Mysterious Destiny.mp3" id="15_a41v4"]
 [ext_resource type="PackedScene" uid="uid://dcfrtjlyu7745" path="res://BloodRushPlayer.tscn" id="15_i88xo"]
 [ext_resource type="PackedScene" uid="uid://dq1wojfy8mi7q" path="res://FX/Dust.tscn" id="16_dgh31"]
 
 [sub_resource type="Environment" id="Environment_kag6n"]
-background_color = Color(0.505882, 0.505882, 0.505882, 1)
 background_energy_multiplier = 16.0
 tonemap_mode = 3
 ssil_intensity = 16.0
@@ -34,13 +33,6 @@ shader_parameter/scale_resolution = true
 shader_parameter/target_resolution_scale = 2
 shader_parameter/enable_recolor = false
 shader_parameter/to_gradient = ExtResource("3_hn20p")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_518tn"]
-shader = ExtResource("10_4wx4q")
-shader_parameter/enabled = true
-shader_parameter/dithering = true
-shader_parameter/colors = 12
-shader_parameter/dither_size = 2
 
 [node name="Node3D" type="Node3D"]
 
@@ -106,10 +98,10 @@ stretch = true
 metadata/_edit_use_anchors_ = true
 
 [node name="Opener" parent="Preview/SubViewportContainer" instance=ExtResource("8_muyqj")]
-visible = false
 
 [node name="SubViewport" type="SubViewport" parent="Preview/SubViewportContainer"]
 handle_input_locally = false
+scaling_3d_mode = 0
 canvas_item_default_texture_filter = 0
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
@@ -121,7 +113,6 @@ transform = Transform3D(1.995, 0, 0, 0, 1.995, 0, 0, 0, 1.995, -7.41469, 1.84622
 
 [node name="ColorRect" type="ColorRect" parent="Preview/SubViewportContainer/SubViewport"]
 visible = false
-material = SubResource("ShaderMaterial_518tn")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -168,3 +159,8 @@ gizmo_extents = 4.42
 
 [node name="3rdPassAnimations" parent="." instance=ExtResource("15_i88xo")]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 5.18639, 0.503042, 19.5466)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_a41v4")
+volume_db = -15.0
+autoplay = true

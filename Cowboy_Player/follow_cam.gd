@@ -56,7 +56,7 @@ func _process(delta: float) -> void:
 	followTarget(delta)
 	playShake()
 	if Input.is_action_just_pressed("shake_test"):
-		applyShake()
+		applyShake(.04,0.08)
 		
 	
 	
@@ -68,7 +68,7 @@ func followTarget(delta):
 	global_transform.origin = new_global_transform.origin
 	
 
-func applyShake():
+func applyShake(period, magnitude):
 	var initial_transform = self.transform
 	var elapsed_time = 0.0
 	
@@ -87,9 +87,9 @@ func applyShake():
 
 func playShake():
 	if EnemyHealthManager.taking_damage == true:
-		applyShake()
+		applyShake(.02,0.08)
 		pass
 	if PlayerHealthManager.taking_damage == true:
-		applyShake()
+		applyShake(.02,0.08)
 		pass
 

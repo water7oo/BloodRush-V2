@@ -10,8 +10,9 @@ extends CharacterBody3D
 
 var enemy_default_mesh = preload("res://Cowboy_Player/Enemy.tres")
 var enemy_damage_mesh = preload("res://Cowboy_Player/Enemy_Hit.tres")
-const SPEED = 5.0
+var current_speed = 5.0
 const JUMP_VELOCITY = 4.5
+var can_move = true
 @export var ENEMY_DECELERATION = 10.0
 @onready var punch_dust = get_tree().get_nodes_in_group("punch_dust")
 
@@ -67,19 +68,11 @@ func _on_enemy_area_entered(area):
 		
 		
 	if area.has_method("takeDamage") and not attack_processing:
-		print(enemyBox.monitoring)
+		playerHealthMan.takeDamage(playerHealthMan.health, attack_power)
+		$AudioStreamPlayer.play()
 		attack_processing = true
 		enemyBox.monitoring = true
-		playerHealthMan.takeDamage(playerHealthMan.health, attack_power)
-		pause()
-		area.get_parent().pause()
-		area.get_parent().rotate_y(deg_to_rad(180))
-		
-		
-		await get_tree().create_timer(0.1).timeout
-		unpause()
-		area.get_parent().rotate_y(deg_to_rad(180))
-		area.get_parent().unpause()
+		gameJuice.hitStop(0.15, area)
 		
 		
 		gameJuice.knockback(area.get_parent(), enemyBox, 10)

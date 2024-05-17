@@ -21,6 +21,7 @@ var spring_arm = camera.get_node("SpringArmPivot/SpringArm3D")
 @onready var blend_space = $AnimationTree.get('parameters/Combat/Ground_Blend/blend_position')
 @onready var blend_space2 = $AnimationTree.get('parameters/Combat/MoveStrafe/blend_position')
 @onready var Stamina_bar = $"UI Cooldowns"
+@onready var health_bar = $player_health
 
 
 var current_blend_amount = 0.0
@@ -209,7 +210,7 @@ func _proccess_movement(delta):
 #			DECELERATION = BASE_DECELERATION
 
 	
-		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), 1)
+		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), .12)
 		
 	elif !direction && is_on_floor():
 			is_moving = false
@@ -323,6 +324,7 @@ func _proccess_sprinting(delta):
 func _proccess_dodge(delta):
 	if dodging && is_on_floor() && can_dodge && Stamina_bar.value > 0 && is_moving:
 		is_dodging = true
+		$AudioStreamPlayer2.play()
 		current_speed = DODGE_SPEED
 		ACCELERATION = DODGE_ACCELERATION
 		DECELERATION = DODGE_DECELERATION
@@ -339,7 +341,7 @@ func _proccess_dodge(delta):
 			print("UNABLE TO DODGE")
 	if is_dodging:
 		dodge_cooldown_timer -= delta
-		armature.rotate_y(deg_to_rad(180))
+		#armature.rotate_y(deg_to_rad(180))
 		if dodge_cooldown_timer <= 0:
 			is_dodging = false
 			LERP_VAL = 0.2
@@ -376,6 +378,7 @@ func _proccess_jump(delta):
 	if Input.is_action_pressed("move_jump") && jump_counter <= 0:
 		jump_timer += delta
 		air_timer += delta
+		$AudioStreamPlayer3.play()
 
 		if jump_timer <= 0.3:
 			velocity.y = JUMP_VELOCITY
@@ -457,12 +460,13 @@ func _physics_process(delta):
 	_proccess_dodge(delta)
 	_proccess_cooldown(delta)
 	_proccess_sprinting(delta)
-	
 	_proccess_attack(delta)
 	
 	playerHealthMan.health = playerHealthMan.max_health
-	$player_health_label.text = str(playerHealthMan.health)
+	$player_health_label.value = playerHealthMan.health
+	$player_health_label.max_value = playerHealthMan.max_health
 	
+	print(can_move)
 	if Attack_Box.monitoring == true:
 		print(Attack_Box.monitoring)
 	
@@ -488,32 +492,20 @@ func _on_refill_cooldown_timeout():
 func _on_attack_box_area_entered(area):
 	if area.has_method("takeDamageEnemy") && !attack_proccessing:
 		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
-		area.get_parent().rotate_y(deg_to_rad(180))
-		pause()
-		area.get_parent().pause()
-		
-		
-		await get_tree().create_timer(.15).timeout
-		
-		
-		area.get_parent().rotate_y(deg_to_rad(180))
-		unpause()
+		$AudioStreamPlayer.play()
+		gameJuice.hitStop(0.15, area)
 		attack_cooldown = 0.1
-		area.get_parent().unpause()
+		
 		Attack_Box.monitoring = false
 		gameJuice.knockback(area.get_parent(), Attack_Box, 6)
 		
 
 
-
 func pause():
 	process_mode = PROCESS_MODE_DISABLED
 
-	
-
 func unpause():
 	process_mode = PROCESS_MODE_INHERIT
-
 
 #things entering the players hurtbox
 func _on_hurt_box_area_entered(area):
