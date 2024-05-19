@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://bhmnvd6tdg5ji"]
+
+[ext_resource type="PackedScene" uid="uid://ddjbtujkjhgrf" path="res://GroundSpark.fbx" id="1_bwn7w"]
+[ext_resource type="Texture2D" uid="uid://daumcwqijkndg" path="res://GroundSpark-cc3007a03dc2f47d0f191ca2ae90c8fc_Slashing_Texture3.png" id="2_s0tj5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5hjve"]
+resource_name = "Material.005"
+transparency = 4
+cull_mode = 2
+shading_mode = 0
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 1, 1, 1)
+albedo_texture = ExtResource("2_s0tj5")
+texture_filter = 2
+
+[sub_resource type="Animation" id="Animation_r67ga"]
+resource_name = "PLAY"
+tracks/0/type = "scale_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RootNode/Cylinder_002")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array()
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cxb15"]
+_data = {
+"PLAY": SubResource("Animation_r67ga")
+}
+
+[node name="Root Scene" instance=ExtResource("1_bwn7w")]
+
+[node name="Cylinder_002" parent="RootNode" index="0"]
+transform = Transform3D(69.7915, -71.618, -3.13052e-06, 4.46824e-13, -4.37114e-06, 100, -71.618, -69.7916, -3.05069e-06, -0.603196, 0, -0.0117244)
+material_override = SubResource("StandardMaterial3D_5hjve")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_cxb15")
+}

@@ -45,11 +45,11 @@ angular_velocity_max = 20.0
 gravity = Vector3(0, 0, 0)
 radial_accel_max = 100.0
 damping_max = 100.0
-scale_min = 0.0
-scale_max = 0.2
+scale_min = 0.9
+scale_max = 0.9
 scale_curve = SubResource("CurveTexture_ym3tt")
 
-[sub_resource type="BoxMesh" id="BoxMesh_dev0b"]
+[sub_resource type="QuadMesh" id="QuadMesh_ge08c"]
 
 [node name="DUST3" type="Node3D" groups=["jump_dust"]]
 
@@ -58,11 +58,11 @@ transform = Transform3D(2.22643, 0, 0, 0, 0.492198, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_wvicg")
 emitting = false
 amount = 30
-lifetime = 0.1
+lifetime = 0.28
 speed_scale = 0.7
 explosiveness = 1.0
 randomness = 1.0
 fixed_fps = 60
 trail_lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_q746a")
-draw_pass_1 = SubResource("BoxMesh_dev0b")
+draw_pass_1 = SubResource("QuadMesh_ge08c")

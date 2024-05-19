@@ -6,6 +6,12 @@ extends CharacterBody3D
 @onready var gameJuice = get_node("/root/GameJuice")
 @onready var followcam = get_node("/root/FollowCam")
 
+var last_ground_position = Vector3()
+var waveEffect = preload("res://DustWave2.tscn")
+var AirWaveEffect = preload("res://AirDustWave2.tscn")
+var GroundSpark = preload("res://FX/GroundSPark.tscn")
+
+@onready var AirWavePos = $AirWavePos
 
 @onready var playerHealthMan = get_node("/root/PlayerHealthManager")
 
@@ -64,8 +70,8 @@ var jump_counter = 1
 var can_move = true
 @export var ACCELERATION = 5.0 #the higher the value the faster the acceleration
 @export var DECELERATION = 25.0 #the lower the value the slippier the stop
-var BASE_ACCELERATION = 5
-var BASE_DECELERATION = 15.0 
+@export var BASE_ACCELERATION = 5
+@export var BASE_DECELERATION = 15.0 
 @export var DASH_ACCELERATION = 20
 @export var DASH_DECELERATION = 20
 var DASH_MAX_SPEED = BASE_SPEED * 3
@@ -89,7 +95,7 @@ var INITIAL_MAX_SPEED = MAX_SPEED
 var SECOND_MAX_SPEED = DASH_MAX_SPEED * 2
 var is_second_sprint = false
 
-@export var DODGE_ACCELERATION = 50
+@export var DODGE_ACCELERATION = 100
 @export var DODGE_DECELERATION = 5
 
 
@@ -113,7 +119,7 @@ var custom_gravity = 25.0 #The lower the value the floatier
 var sprinting = false
 var dodging = false
 var dodge_timer = 0.0
-@export var dodge_cooldown = 5
+@export var dodge_cooldown = .1
 var is_in_air = false
 var can_jump = true
 
@@ -139,6 +145,7 @@ var attacklight1_timer = 0.0
 var attack_cooldown = 0.0
 var attacklight2_timer = 0.0
 var attack_signal = false
+var can_attack = true
 
 
 # Hitbox variables
@@ -210,7 +217,7 @@ func _proccess_movement(delta):
 #			DECELERATION = BASE_DECELERATION
 
 	
-		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), .12)
+		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), .07)
 		
 	elif !direction && is_on_floor():
 			is_moving = false
@@ -254,7 +261,14 @@ func _proccess_movement(delta):
 			particle_emitter.set_emitting(false)
 
 func _proccess_sprinting(delta):
-	
+	if Input.is_action_just_pressed("move_sprint"):
+			var GroundSpark = GroundSpark.instantiate()
+			print("spark")
+			get_parent().add_child(GroundSpark)
+			GroundSpark.global_transform.origin = last_ground_position
+			await get_tree().create_timer(.4).timeout
+			GroundSpark.queue_free()
+			
 	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true && is_on_floor():
 		sprint_timer += delta
 		is_sprinting = true
@@ -285,6 +299,9 @@ func _proccess_sprinting(delta):
 			DECELERATION = BASE_DECELERATION
 			sprint_timer = 0.0
 			$AnimationTree.set("parameters/Jump_Blend/blend_amount", 1)
+			
+		
+		
 
 
 	
@@ -325,16 +342,24 @@ func _proccess_dodge(delta):
 	if dodging && is_on_floor() && can_dodge && Stamina_bar.value > 0 && is_moving:
 		is_dodging = true
 		$AudioStreamPlayer2.play()
+		last_ground_position = global_transform.origin 
 		current_speed = DODGE_SPEED
 		ACCELERATION = DODGE_ACCELERATION
 		DECELERATION = DODGE_DECELERATION
 		LERP_VAL = DODGE_LERP_VAL
-		Stamina_bar.value -= 20
+		Stamina_bar.value -= 30
 		
 		$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 0)
-
+		
 		dodge_cooldown_timer = dodge_cooldown  # Start the cooldown
 		can_dodge = false  # Disable dodging until cooldown finishes
+		
+		var AirWaveEffect = AirWaveEffect.instantiate()
+		get_parent().add_child(AirWaveEffect)
+		AirWaveEffect.global_transform.origin = last_ground_position + Vector3(0,1,0)
+		await get_tree().create_timer(.4).timeout
+		AirWaveEffect.queue_free()
+		
 		if Stamina_bar.value <= 0 && is_dodging:
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
 			current_speed = BASE_SPEED
@@ -371,6 +396,7 @@ func _proccess_jump(delta):
 		can_jump = true
 		$AnimationTree.set("parameters/Jump_Blend/blend_amount", -1)
 		jump_counter = 0  # Reset jump counter when landing on the ground
+		last_ground_position = global_transform.origin 
 
 	if velocity.y > 0 && jump_timer >= 0.01:
 		$AnimationTree.set("parameters/Jump_Blend/blend_amount", 1)
@@ -384,6 +410,18 @@ func _proccess_jump(delta):
 			velocity.y = JUMP_VELOCITY
 			can_jump = false
 			jump_counter += 1  # Increase jump counter when jumping
+			
+			# Instantiate the wind shockwave at the last ground position
+			var waveEffect = waveEffect.instantiate()
+			var GroundSpark = GroundSpark.instantiate()
+			get_parent().add_child(waveEffect)
+			get_parent().add_child(GroundSpark)
+			waveEffect.global_transform.origin = last_ground_position
+			GroundSpark.global_transform.origin = last_ground_position
+			await get_tree().create_timer(.4).timeout
+			waveEffect.queue_free()
+			GroundSpark.queue_free()
+
 		else:
 			velocity.y -= custom_gravity * delta
 			$AnimationTree.set("parameters/Jump_Blend/blend_amount", 0)
@@ -426,7 +464,7 @@ func _proccess_attack(delta):
 		attack_cooldown -= delta
 	if attack_cooldown <= 0.0:
 		is_attacking = false
-	if Input.is_action_just_pressed("attack_light_1") && attack_cooldown <= 0.0 && is_on_floor():
+	if Input.is_action_just_pressed("attack_light_1") && attack_cooldown <= 0.0 && is_on_floor() && can_attack:
 		$AnimationTree.set("parameters/Attack_Shot/request", 1)
 		current_speed = 0
 		Attack_Box.monitoring = true
@@ -474,7 +512,7 @@ func _physics_process(delta):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 	sprinting = Input.is_action_pressed("move_sprint")
-	dodging = Input.is_action_pressed("move_dodge")
+	dodging = Input.is_action_just_pressed("move_dodge")
 	jumping = Input.is_action_pressed("move_jump")
 	
 	if is_on_floor():
@@ -490,7 +528,7 @@ func _on_refill_cooldown_timeout():
 
 #Attacking objects and enemies
 func _on_attack_box_area_entered(area):
-	if area.has_method("takeDamageEnemy") && !attack_proccessing:
+	if area.has_method("takeDamageEnemy") && !attack_proccessing && can_attack:
 		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
 		$AudioStreamPlayer.play()
 		gameJuice.hitStop(0.15, area)
@@ -509,16 +547,19 @@ func unpause():
 
 #things entering the players hurtbox
 func _on_hurt_box_area_entered(area):
-	
 	if area.name == "enemyBox":
 		if !is_on_floor():
 			print("got hit in the air")
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 1)
 			can_move = false
+			can_sprint = false
+			can_attack = false
 			
 			await get_tree().create_timer(0.9).timeout
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
 			can_move = true
+			can_sprint = true
+			can_attack = true
 		
 		elif is_on_floor():
 			print("got hit in the floor")
