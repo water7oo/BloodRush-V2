@@ -8,7 +8,7 @@ extends CharacterBody3D
 
 var last_ground_position = Vector3()
 var waveEffect = preload("res://DustWave2.tscn")
-var AirWaveEffect = preload("res://AirDustWave2.tscn")
+var AirWave = preload("res://AirDustWave2.tscn")
 var GroundSpark = preload("res://FX/GroundSPark.tscn")
 
 @onready var AirWavePos = $AirWavePos
@@ -158,7 +158,7 @@ var jumping = Input.is_action_pressed("move_jump")
 
 var attack_power = 1.0
 
-
+var current_ground_spark = null
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -260,16 +260,47 @@ func _proccess_movement(delta):
 		else:
 			particle_emitter.set_emitting(false)
 
-func _proccess_sprinting(delta):
-	if Input.is_action_just_pressed("move_sprint"):
-			var GroundSpark = GroundSpark.instantiate()
-			print("spark")
-			get_parent().add_child(GroundSpark)
-			GroundSpark.global_transform.origin = last_ground_position
+
+func GroundSParkEffect():
+		var GroundSpark = GroundSpark.instantiate()
+		get_parent().add_child(GroundSpark)
+		GroundSpark.global_transform.origin = last_ground_position
+		await get_tree().create_timer(.4).timeout
+		GroundSpark.queue_free()
+		
+
+func AirWaveEffect():
+		var AirWave = AirWave.instantiate()
+		get_parent().add_child(AirWave)
+		AirWave.global_transform.origin = last_ground_position + Vector3(0,1,0)
+		await get_tree().create_timer(.4).timeout
+		AirWave.queue_free()
+		
+func GeneralwaveEffect():
+		# Instantiate the wind shockwave at the last ground position
+		var waveEffect = waveEffect.instantiate()
+		get_parent().add_child(waveEffect)
+		waveEffect.global_transform.origin = last_ground_position
+		await get_tree().create_timer(.4).timeout
+		waveEffect.queue_free()
+
+
+func LandingGroundEffect():
+	if is_on_floor():
+		if (is_in_air == true):
+			is_in_air = false
+			var waveEffect = waveEffect.instantiate()
+			get_parent().add_child(waveEffect)
+			waveEffect.global_transform.origin = last_ground_position
 			await get_tree().create_timer(.4).timeout
-			GroundSpark.queue_free()
-			
-	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true && is_on_floor():
+			waveEffect.queue_free()
+	else:
+		is_in_air = true
+
+
+
+func _proccess_sprinting(delta):
+	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true:
 		sprint_timer += delta
 		is_sprinting = true
 		Stamina_bar.value -= sprinting_deplete_rate * delta
@@ -347,29 +378,26 @@ func _proccess_dodge(delta):
 		ACCELERATION = DODGE_ACCELERATION
 		DECELERATION = DODGE_DECELERATION
 		LERP_VAL = DODGE_LERP_VAL
-		Stamina_bar.value -= 30
-		
+		Stamina_bar.value -= 10
+		print("DRAHON BALLLLL")
 		$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 0)
 		
-		dodge_cooldown_timer = dodge_cooldown  # Start the cooldown
+		dodge_cooldown_timer = dodge_cooldown  
 		can_dodge = false  # Disable dodging until cooldown finishes
 		
-		var AirWaveEffect = AirWaveEffect.instantiate()
-		get_parent().add_child(AirWaveEffect)
-		AirWaveEffect.global_transform.origin = last_ground_position + Vector3(0,1,0)
-		await get_tree().create_timer(.4).timeout
-		AirWaveEffect.queue_free()
+		AirWaveEffect()
 		
 		if Stamina_bar.value <= 0 && is_dodging:
-			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
+			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 1)
 			current_speed = BASE_SPEED
 			print("UNABLE TO DODGE")
 	if is_dodging:
 		dodge_cooldown_timer -= delta
-		#armature.rotate_y(deg_to_rad(180))
+		
 		if dodge_cooldown_timer <= 0:
 			is_dodging = false
-			LERP_VAL = 0.2
+			print("wpooooooooooo")
+			LERP_VAL = .2
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", -1)
 
 func _proccess_cooldown(delta):
@@ -406,21 +434,12 @@ func _proccess_jump(delta):
 		air_timer += delta
 		$AudioStreamPlayer3.play()
 
-		if jump_timer <= 0.3:
+		if jump_timer <= 0.5:
 			velocity.y = JUMP_VELOCITY
 			can_jump = false
 			jump_counter += 1  # Increase jump counter when jumping
 			
-			# Instantiate the wind shockwave at the last ground position
-			var waveEffect = waveEffect.instantiate()
-			var GroundSpark = GroundSpark.instantiate()
-			get_parent().add_child(waveEffect)
-			get_parent().add_child(GroundSpark)
-			waveEffect.global_transform.origin = last_ground_position
-			GroundSpark.global_transform.origin = last_ground_position
-			await get_tree().create_timer(.4).timeout
-			waveEffect.queue_free()
-			GroundSpark.queue_free()
+			GeneralwaveEffect()
 
 		else:
 			velocity.y -= custom_gravity * delta
@@ -499,14 +518,14 @@ func _physics_process(delta):
 	_proccess_cooldown(delta)
 	_proccess_sprinting(delta)
 	_proccess_attack(delta)
+	LandingGroundEffect()
 	
 	playerHealthMan.health = playerHealthMan.max_health
 	$player_health_label.value = playerHealthMan.health
 	$player_health_label.max_value = playerHealthMan.max_health
 	
-	print(can_move)
-	if Attack_Box.monitoring == true:
-		print(Attack_Box.monitoring)
+	#if Attack_Box.monitoring == true:
+		#print(Attack_Box.monitoring)
 	
 	if Input.is_action_just_pressed("mouse_left"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -518,7 +537,11 @@ func _physics_process(delta):
 	if is_on_floor():
 		if sprinting && jumping:
 			velocity.y = JUMP_VELOCITY * RUNJUMP_MULTIPLIER
-		
+	
+	
+	
+	
+
 	move_and_slide()
 
 
