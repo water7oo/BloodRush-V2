@@ -19,13 +19,12 @@ texture_filter = 2
 
 [sub_resource type="Animation" id="Animation_qab4h"]
 resource_name = "PLAY"
-length = 0.6
 loop_mode = 1
 tracks/0/type = "scale_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("RootNode/Cylinder_001")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array()
 tracks/1/type = "bezier"
@@ -36,8 +35,8 @@ tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(37.305, -0.25, 0, 0.25, 0, 150, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.6)
+"points": PackedFloat32Array(50, -0.25, 0, 0.625583, 98, 170, -0.2, -17, 0.2, -60),
+"times": PackedFloat32Array(0, 1)
 }
 tracks/2/type = "bezier"
 tracks/2/imported = false
@@ -47,8 +46,8 @@ tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(37.305, -0.25, 0, 0.25, 0, 150, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.6)
+"points": PackedFloat32Array(50, -0.25, 0, 0.525582, 82, 170, -0.3, -19, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
 }
 tracks/3/type = "bezier"
 tracks/3/imported = false
@@ -58,8 +57,8 @@ tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(37.305, -0.25, 0, 0.25, 0, 150, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.6)
+"points": PackedFloat32Array(77.778, -0.25, 0, 0.25, 0, 170, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
 }
 tracks/4/type = "bezier"
 tracks/4/imported = false
@@ -70,7 +69,7 @@ tracks/4/loop_wrap = true
 tracks/4/keys = {
 "handle_modes": PackedInt32Array(0, 0),
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0.365, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.6)
+"times": PackedFloat32Array(0, 1)
 }
 tracks/5/type = "bezier"
 tracks/5/imported = false
@@ -81,7 +80,7 @@ tracks/5/loop_wrap = true
 tracks/5/keys = {
 "handle_modes": PackedInt32Array(0, 0),
 "points": PackedFloat32Array(0.045, -0.25, 0, 0.25, 0, -0.51, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.6)
+"times": PackedFloat32Array(0, 1)
 }
 tracks/6/type = "bezier"
 tracks/6/imported = false
@@ -92,7 +91,7 @@ tracks/6/loop_wrap = true
 tracks/6/keys = {
 "handle_modes": PackedInt32Array(0, 0),
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -1.22, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.6)
+"times": PackedFloat32Array(0, 1)
 }
 tracks/7/type = "bezier"
 tracks/7/imported = false

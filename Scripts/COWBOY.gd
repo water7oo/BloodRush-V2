@@ -265,6 +265,7 @@ func GroundSParkEffect():
 		var GroundSpark = GroundSpark.instantiate()
 		get_parent().add_child(GroundSpark)
 		GroundSpark.global_transform.origin = last_ground_position
+		GroundSpark.global_transform.basis = global_transform.basis
 		await get_tree().create_timer(.4).timeout
 		GroundSpark.queue_free()
 		
@@ -281,7 +282,7 @@ func GeneralwaveEffect():
 		var waveEffect = waveEffect.instantiate()
 		get_parent().add_child(waveEffect)
 		waveEffect.global_transform.origin = last_ground_position
-		await get_tree().create_timer(.4).timeout
+		await get_tree().create_timer(.7).timeout
 		waveEffect.queue_free()
 
 
@@ -292,7 +293,7 @@ func LandingGroundEffect():
 			var waveEffect = waveEffect.instantiate()
 			get_parent().add_child(waveEffect)
 			waveEffect.global_transform.origin = last_ground_position
-			await get_tree().create_timer(.4).timeout
+			await get_tree().create_timer(.7).timeout
 			waveEffect.queue_free()
 	else:
 		is_in_air = true
@@ -304,7 +305,6 @@ func _proccess_sprinting(delta):
 		sprint_timer += delta
 		is_sprinting = true
 		Stamina_bar.value -= sprinting_deplete_rate * delta
-		
 		
 		target_speed = MAX_SPEED
 		ACCELERATION = DASH_ACCELERATION
@@ -330,8 +330,7 @@ func _proccess_sprinting(delta):
 			DECELERATION = BASE_DECELERATION
 			sprint_timer = 0.0
 			$AnimationTree.set("parameters/Jump_Blend/blend_amount", 1)
-			
-		
+			GroundSParkEffect()
 		
 
 
@@ -386,6 +385,7 @@ func _proccess_dodge(delta):
 		can_dodge = false  # Disable dodging until cooldown finishes
 		
 		AirWaveEffect()
+		GroundSParkEffect()
 		
 		if Stamina_bar.value <= 0 && is_dodging:
 			$AnimationTree.set("parameters/Ground_Blend3/blend_amount", 1)
