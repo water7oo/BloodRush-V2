@@ -10,7 +10,6 @@ cull_mode = 2
 shading_mode = 0
 diffuse_mode = 3
 specular_mode = 1
-albedo_color = Color(1, 1, 1, 1)
 albedo_texture = ExtResource("2_s0tj5")
 texture_filter = 2
 

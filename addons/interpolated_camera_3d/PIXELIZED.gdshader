@@ -1,6 +1,6 @@
 shader_type canvas_item;
 
-uniform int pixelSize = 4;
+uniform int pixelSize = 2;
 
 void fragment()
 {

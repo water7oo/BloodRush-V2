@@ -30,7 +30,6 @@ turbulence_noise_scale = 4.81
 [node name="Dust" type="GPUParticles3D" parent="."]
 transform = Transform3D(2.22643, 0, 0, 0, 0.492198, 0, 0, 0, 1, 0, 0, 0)
 material_override = ExtResource("1_nlbt2")
-emitting = false
 amount = 10
 lifetime = 0.5
 randomness = 1.0

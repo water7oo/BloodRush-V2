@@ -7,9 +7,8 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_307wq"]
 render_priority = 0
 shader = ExtResource("1_g0gtm")
-shader_parameter/enable = true
-shader_parameter/outline_thickness = 11.195
-shader_parameter/color = Color(0, 0, 0, 1)
+shader_parameter/outline_color = null
+shader_parameter/outline_width = 1.0
 
 [resource]
 render_priority = 0

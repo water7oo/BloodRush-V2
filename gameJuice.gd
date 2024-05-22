@@ -9,6 +9,7 @@ var knockback_force = 1000  # Example knockback force
 
 var impact = true
 func _ready():
+
 	pass
 	
 
@@ -60,7 +61,8 @@ func hitStop(duration, target):
 func pause():
 	process_mode = PROCESS_MODE_DISABLED
 
-	
-
 func unpause():
 	process_mode = PROCESS_MODE_INHERIT
+
+
+

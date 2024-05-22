@@ -2,14 +2,13 @@
 
 [ext_resource type="Shader" path="res://Shaders/OUTLINES.gdshader" id="1_vv201"]
 [ext_resource type="Shader" path="res://Shaders/PS1VertexWobble.gdshader" id="2_oy5gm"]
-[ext_resource type="Texture2D" uid="uid://bdkrvec3wh6qh" path="res://My Textures/TextureGrid_32_devLight.png" id="3_7edqp"]
+[ext_resource type="Texture2D" uid="uid://bsbog7ybh3xoi" path="res://addons/kenney_prototype_textures/light/texture_09.png" id="3_c8pdh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w36hw"]
 render_priority = 0
 shader = ExtResource("1_vv201")
-shader_parameter/enable = true
-shader_parameter/outline_thickness = 0.15
-shader_parameter/color = Color(0, 0, 0, 1)
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_width = 3.46
 
 [resource]
 render_priority = 0
@@ -19,4 +18,4 @@ shader_parameter/affine_mapping = false
 shader_parameter/alpha_scissor = 0.0
 shader_parameter/jitter = 0.59
 shader_parameter/resolution = Vector2i(320, 240)
-shader_parameter/albedo = ExtResource("3_7edqp")
+shader_parameter/albedo = ExtResource("3_c8pdh")

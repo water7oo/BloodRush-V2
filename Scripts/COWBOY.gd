@@ -274,7 +274,7 @@ func AirWaveEffect():
 		var AirWave = AirWave.instantiate()
 		get_parent().add_child(AirWave)
 		AirWave.global_transform.origin = last_ground_position + Vector3(0,1,0)
-		await get_tree().create_timer(.4).timeout
+		await get_tree().create_timer(.6).timeout
 		AirWave.queue_free()
 		
 func GeneralwaveEffect():
@@ -290,11 +290,13 @@ func LandingGroundEffect():
 	if is_on_floor():
 		if (is_in_air == true):
 			is_in_air = false
-			var waveEffect = waveEffect.instantiate()
-			get_parent().add_child(waveEffect)
-			waveEffect.global_transform.origin = last_ground_position
-			await get_tree().create_timer(.7).timeout
-			waveEffect.queue_free()
+			if air_timer >= 0.2:
+				var waveEffect = waveEffect.instantiate()
+				get_parent().add_child(waveEffect)
+				waveEffect.global_transform.origin = last_ground_position
+				await get_tree().create_timer(.7).timeout
+				waveEffect.queue_free()
+		air_timer = 0.0
 	else:
 		is_in_air = true
 
@@ -416,6 +418,7 @@ func _proccess_cooldown(delta):
 			can_dodge = false
 
 func _proccess_jump(delta):
+
 	if !is_on_floor():
 		air_timer += delta
 		can_jump = false
@@ -434,7 +437,7 @@ func _proccess_jump(delta):
 		air_timer += delta
 		$AudioStreamPlayer3.play()
 
-		if jump_timer <= 0.5:
+		if jump_timer <= 0.4:
 			velocity.y = JUMP_VELOCITY
 			can_jump = false
 			jump_counter += 1  # Increase jump counter when jumping
@@ -447,7 +450,7 @@ func _proccess_jump(delta):
 			can_jump = false
 
 	if !is_on_floor() && jump_timer >= 0.4:
-		jump_timer = 0.4
+		jump_timer = 0.0
 		can_jump = false
 
 	if Input.is_action_just_pressed("move_jump"):
@@ -520,6 +523,7 @@ func _physics_process(delta):
 	_proccess_attack(delta)
 	LandingGroundEffect()
 	
+	print(jump_timer)
 	playerHealthMan.health = playerHealthMan.max_health
 	$player_health_label.value = playerHealthMan.health
 	$player_health_label.max_value = playerHealthMan.max_health

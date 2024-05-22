@@ -8,6 +8,7 @@ extends CharacterBody3D
 @onready var enemyHealthLabel = $health_label
 
 
+
 var enemy_default_mesh = preload("res://Cowboy_Player/Enemy.tres")
 var enemy_damage_mesh = preload("res://Cowboy_Player/Enemy_Hit.tres")
 var current_speed = 5.0
@@ -88,4 +89,5 @@ func _on_enemy_area_entered(area):
 	
 func _on_hurt_box_area_entered(area):
 	pass # Replace with function body.
+
 

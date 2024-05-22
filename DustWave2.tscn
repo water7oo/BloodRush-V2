@@ -19,7 +19,6 @@ texture_filter = 2
 
 [sub_resource type="Animation" id="Animation_qab4h"]
 resource_name = "PLAY"
-loop_mode = 1
 tracks/0/type = "scale_3d"
 tracks/0/imported = false
 tracks/0/enabled = true

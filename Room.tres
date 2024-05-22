@@ -1,11 +1,11 @@
 [gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dcuvjs33ebpe3"]
 
-[ext_resource type="Texture2D" uid="uid://dx0vwoe766a8c" path="res://addons/kenney_prototype_textures/dark/texture_08.png" id="1_3q6tk"]
+[ext_resource type="Texture2D" uid="uid://bknh5febfwrw6" path="res://addons/kenney_prototype_textures/dark/texture_13.png" id="1_wqoh0"]
 
 [resource]
 shading_mode = 0
 diffuse_mode = 3
 specular_mode = 2
-albedo_texture = ExtResource("1_3q6tk")
+albedo_texture = ExtResource("1_wqoh0")
 uv1_scale = Vector3(6.42, 6.42, 6.42)
-texture_filter = 0
+texture_filter = 4
