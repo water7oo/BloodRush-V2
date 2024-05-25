@@ -73,7 +73,7 @@ func _on_enemy_area_entered(area):
 		$AudioStreamPlayer.play()
 		attack_processing = true
 		enemyBox.monitoring = true
-		gameJuice.hitStop(0.15, area)
+		gameJuice.hitStop(0.25, area)
 		
 		
 		gameJuice.knockback(area.get_parent(), enemyBox, 10)

@@ -1,5 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://b2ud3ury8epgi"]
 
+[ext_resource type="Environment" uid="uid://cadv2uehcxqkc" path="res://Game/NewGame.tres" id="1_c0qo6"]
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://Room.tres" id="1_ewgn2"]
 [ext_resource type="Shader" path="res://Game/TestingShaders3.gdshader" id="2_7m6hl"]
 [ext_resource type="Texture2D" uid="uid://b3ih2bf077rm8" path="res://Billboards/Construction/TrimSheet_Testing-Buildings.png" id="3_immg1"]
@@ -17,18 +18,10 @@
 [ext_resource type="PackedScene" uid="uid://dcfrtjlyu7745" path="res://BloodRushPlayer.tscn" id="15_i88xo"]
 [ext_resource type="PackedScene" uid="uid://dq1wojfy8mi7q" path="res://FX/Dust.tscn" id="16_dgh31"]
 
-[sub_resource type="Environment" id="Environment_kag6n"]
-background_energy_multiplier = 16.0
-tonemap_mode = 3
-ssil_intensity = 16.0
-volumetric_fog_density = 0.005
-volumetric_fog_emission = Color(1, 1, 1, 1)
-adjustment_saturation = 1.11
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ov31c"]
 shader = ExtResource("2_7m6hl")
 shader_parameter/change_color_depth = true
-shader_parameter/target_color_depth = 6
+shader_parameter/target_color_depth = 3
 shader_parameter/dithering = true
 shader_parameter/scale_resolution = true
 shader_parameter/target_resolution_scale = 3
@@ -44,15 +37,13 @@ shader_parameter/clipPosition = 0.2
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.499315, 0.026168, 0, 0.052336, 0.99863, -0.5, 0.864838, -0.0453243, -6.46824, 61.2841, 3.0847)
-light_energy = 1.853
 light_angular_distance = 2.4
 shadow_bias = 0.0
 shadow_normal_bias = 2.139
 directional_shadow_mode = 0
-sky_mode = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_kag6n")
+environment = ExtResource("1_c0qo6")
 
 [node name="Floor" type="CSGCombiner3D" parent="."]
 transform = Transform3D(-3.40497e-08, -35.6877, 0, 0.778967, -1.55995e-06, 0, 0, 0, 44.9384, 0, 1.15208, 10)
@@ -123,6 +114,7 @@ visible = false
 [node name="Pausing" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("4_x187o")]
 
 [node name="ColorRect" type="ColorRect" parent="Preview/SubViewportContainer/SubViewport"]
+visible = false
 material = SubResource("ShaderMaterial_md3uv")
 anchors_preset = 15
 anchor_right = 1.0
@@ -143,7 +135,7 @@ transform = Transform3D(-1.31134e-07, 0, 0.6, 0, 0.6, 0, -0.6, 0, -1.31134e-07, 
 transform = Transform3D(1.83587e-07, 0, -0.6, 0, 0.6, 0, 0.6, 0, 1.83587e-07, 12.1141, 0.780326, -2.72438)
 
 [node name="CameraSet" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("11_hq17w")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35539, 1.77179, 3.14396)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35539, 1.77179, 13.061)
 target = NodePath("../Cowboy_3rdPass/CamTarget")
 speed = 4.0
 
@@ -152,7 +144,7 @@ transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 7.53036, 3.74131, 8.499
 gizmo_extents = 4.42
 
 [node name="Cowboy_3rdPass" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("12_njj0u")]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.532753, 0.538897, 6.11236)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 1.2809, 0.538897, -0.930841)
 
 [node name="DUST5" parent="Preview/SubViewportContainer/SubViewport/Cowboy_3rdPass" instance=ExtResource("13_fmoji")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)

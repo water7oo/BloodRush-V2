@@ -6,6 +6,7 @@
 shading_mode = 0
 diffuse_mode = 3
 specular_mode = 2
+disable_ambient_light = true
 albedo_texture = ExtResource("1_wqoh0")
-uv1_scale = Vector3(6.42, 6.42, 6.42)
+uv1_scale = Vector3(7.295, 7.295, 7.295)
 texture_filter = 4

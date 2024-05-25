@@ -40,6 +40,7 @@ func knockback(enemy, target_attack, knockback_force):
 	var knockback_velocity = knockback_direction * knockback_force
 	
 	enemy.velocity = knockback_velocity
+	enemy.velocity.y = 0
 
 func hitStop(duration, target):
 		print("PAUSE")

@@ -4,7 +4,7 @@
 [ext_resource type="Material" uid="uid://dcakvymmosyhp" path="res://Cowboy_Player/COWBOY.tres" id="2_75j4o"]
 [ext_resource type="PackedScene" uid="uid://b883xedulu0jn" path="res://Weapons/blood_katana.tscn" id="3_v8jso"]
 
-[sub_resource type="Animation" id="Animation_q6uos"]
+[sub_resource type="Animation" id="Animation_ppedh"]
 resource_name = "AIRPUNCH1"
 length = 0.001
 loop_mode = 1
@@ -77,14 +77,14 @@ tracks/9/enabled = true
 tracks/9/path = NodePath("Armature/Skeleton3D:mixamorig_Head")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
-tracks/9/keys = PackedFloat32Array(0, 1, 0.490143, -0.828793, 0.260565, 0.070477)
+tracks/9/keys = PackedFloat32Array(0, 1, 0.362909, -0.396505, -0.313675, 0.782744)
 tracks/10/type = "rotation_3d"
 tracks/10/imported = true
 tracks/10/enabled = true
 tracks/10/path = NodePath("Armature/Skeleton3D:mixamorig_HeadTop_End")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
-tracks/10/keys = PackedFloat32Array(0, 1, 1.16415e-10, -8.33778e-08, 4.65661e-10, 1)
+tracks/10/keys = PackedFloat32Array(0, 1, 1.86264e-09, -8.20172e-08, 1.11759e-08, 1)
 tracks/11/type = "position_3d"
 tracks/11/imported = true
 tracks/11/enabled = true
@@ -296,7 +296,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, 0.327796, 0.0307754, -0.0106843, 0.944187)
 
-[sub_resource type="Animation" id="Animation_yfnpl"]
+[sub_resource type="Animation" id="Animation_04hjn"]
 resource_name = "AIRPUNCH2"
 length = 0.001
 loop_mode = 1
@@ -588,7 +588,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, -1.77636e-15, 2.69697e-29, 8.03606e-22, 1)
 
-[sub_resource type="Animation" id="Animation_o1sj8"]
+[sub_resource type="Animation" id="Animation_2a3bc"]
 resource_name = "AIRPUNCH3"
 length = 0.966667
 loop_mode = 1
@@ -880,7 +880,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, 0.327796, 0.0307754, -0.0106843, 0.944187)
 
-[sub_resource type="Animation" id="Animation_7ffxa"]
+[sub_resource type="Animation" id="Animation_5kp3d"]
 resource_name = "FALLING"
 length = 0.001
 loop_mode = 1
@@ -1172,7 +1172,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, 0.327796, 0.0307754, -0.0106843, 0.944187)
 
-[sub_resource type="Animation" id="Animation_d62hl"]
+[sub_resource type="Animation" id="Animation_35bc3"]
 resource_name = "IDLE"
 length = 4.56667
 loop_mode = 1
@@ -1464,7 +1464,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, -8.00297e-22, 1, -1.77636e-15, 7.54979e-08)
 
-[sub_resource type="Animation" id="Animation_b0ien"]
+[sub_resource type="Animation" id="Animation_t4mkd"]
 resource_name = "JUMP"
 length = 0.001
 loop_mode = 1
@@ -1756,7 +1756,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, 0.327796, 0.0307754, -0.0106843, 0.944187)
 
-[sub_resource type="Animation" id="Animation_4s4sf"]
+[sub_resource type="Animation" id="Animation_dt11m"]
 resource_name = "PUNCH1"
 length = 0.001
 loop_mode = 1
@@ -2048,7 +2048,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, 0.325985, 0.00337955, -0.00116535, 0.945368)
 
-[sub_resource type="Animation" id="Animation_xtwmq"]
+[sub_resource type="Animation" id="Animation_igo16"]
 resource_name = "PUNCH2"
 length = 0.001
 loop_mode = 1
@@ -2340,7 +2340,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, -1.77636e-15, 2.69697e-29, 8.03606e-22, 1)
 
-[sub_resource type="Animation" id="Animation_xfs2a"]
+[sub_resource type="Animation" id="Animation_ggrw8"]
 resource_name = "PUNCH3"
 length = 0.966667
 loop_mode = 1
@@ -2632,7 +2632,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, 0.327796, 0.0307754, -0.0106843, 0.944187)
 
-[sub_resource type="Animation" id="Animation_16t06"]
+[sub_resource type="Animation" id="Animation_62p5u"]
 resource_name = "RESET"
 length = 0.001
 loop_mode = 1
@@ -2924,7 +2924,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, -1.77636e-15, 2.69697e-29, 8.03606e-22, 1)
 
-[sub_resource type="Animation" id="Animation_hiawq"]
+[sub_resource type="Animation" id="Animation_fhc1p"]
 resource_name = "RUNNING"
 length = 0.633333
 loop_mode = 1
@@ -3216,7 +3216,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, -8.00297e-22, 1, -1.77636e-15, 7.54979e-08)
 
-[sub_resource type="Animation" id="Animation_q7tjy"]
+[sub_resource type="Animation" id="Animation_pus1w"]
 resource_name = "SPIN_ATTACK"
 length = 1.26667
 loop_mode = 1
@@ -3508,7 +3508,7 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, -8.00297e-22, 1, -1.77636e-15, 7.54979e-08)
 
-[sub_resource type="Animation" id="Animation_f0xh1"]
+[sub_resource type="Animation" id="Animation_72pxl"]
 resource_name = "WALKING"
 length = 1.1
 loop_mode = 1
@@ -3800,33 +3800,33 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, -8.00297e-22, 1, -1.77636e-15, 7.54979e-08)
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_tc0gm"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fbfyf"]
 _data = {
-"AIRPUNCH1": SubResource("Animation_q6uos"),
-"AIRPUNCH2": SubResource("Animation_yfnpl"),
-"AIRPUNCH3": SubResource("Animation_o1sj8"),
-"FALLING": SubResource("Animation_7ffxa"),
-"IDLE": SubResource("Animation_d62hl"),
-"JUMP": SubResource("Animation_b0ien"),
-"PUNCH1": SubResource("Animation_4s4sf"),
-"PUNCH2": SubResource("Animation_xtwmq"),
-"PUNCH3": SubResource("Animation_xfs2a"),
-"RESET": SubResource("Animation_16t06"),
-"RUNNING": SubResource("Animation_hiawq"),
-"SPIN_ATTACK": SubResource("Animation_q7tjy"),
-"WALKING": SubResource("Animation_f0xh1")
+"AIRPUNCH1": SubResource("Animation_ppedh"),
+"AIRPUNCH2": SubResource("Animation_04hjn"),
+"AIRPUNCH3": SubResource("Animation_2a3bc"),
+"FALLING": SubResource("Animation_5kp3d"),
+"IDLE": SubResource("Animation_35bc3"),
+"JUMP": SubResource("Animation_t4mkd"),
+"PUNCH1": SubResource("Animation_dt11m"),
+"PUNCH2": SubResource("Animation_igo16"),
+"PUNCH3": SubResource("Animation_ggrw8"),
+"RESET": SubResource("Animation_62p5u"),
+"RUNNING": SubResource("Animation_fhc1p"),
+"SPIN_ATTACK": SubResource("Animation_pus1w"),
+"WALKING": SubResource("Animation_72pxl")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kvin3"]
 animation = &"PUNCH1"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vuswx"]
-animation = &"IDLE"
+animation = &"AIRPUNCH1"
 
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_p7tkf"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_s42dr"]
-graph_offset = Vector2(-509.376, 28.6295)
+graph_offset = Vector2(-529.794, 65.0058)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_vuswx")
 nodes/Animation/position = Vector2(-300, 180)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_kvin3")
@@ -3842,6 +3842,7 @@ node_connections = [&"Blend2", 0, &"Animation 2", &"Blend2", 1, &"Animation", &"
 bones/0/position = Vector3(0.0576209, 21.3171, -67.3631)
 bones/0/rotation = Quaternion(-0.000437451, -0.70711, 0.707103, -0.000422315)
 bones/1/rotation = Quaternion(0.27038, -0.000174691, -0.000582452, 0.962753)
+bones/1/scale = Vector3(1, 1, 1)
 bones/4/position = Vector3(1.13533e-09, 21.643, -1.77124e-06)
 bones/6/rotation = Quaternion(3.55017e-15, -7.54979e-08, -1.61177e-15, 1)
 bones/7/position = Vector3(-12.7649, 20.0824, 0.79783)
@@ -3902,11 +3903,11 @@ material_override = ExtResource("2_75j4o")
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 libraries = {
-"": SubResource("AnimationLibrary_tc0gm")
+"": SubResource("AnimationLibrary_fbfyf")
 }
 tree_root = SubResource("AnimationNodeBlendTree_s42dr")
 anim_player = NodePath("../AnimationPlayer")
-parameters/Blend2/blend_amount = 0.0
+parameters/Blend2/blend_amount = 1.0
 
 [node name="BloodKatana" parent="." index="3" instance=ExtResource("3_v8jso")]
 transform = Transform3D(0.0323837, 0.0993048, -1.23057, -1.13348, -0.485471, -0.0690051, -0.489281, 1.13123, 0.078412, -0.748233, 1.24184, -1.11864)

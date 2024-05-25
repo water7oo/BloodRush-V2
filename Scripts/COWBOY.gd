@@ -558,7 +558,7 @@ func _on_attack_box_area_entered(area):
 	if area.has_method("takeDamageEnemy") && !attack_proccessing && can_attack:
 		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
 		$AudioStreamPlayer.play()
-		gameJuice.hitStop(0.15, area)
+		gameJuice.hitStop(0.25, area)
 		attack_cooldown = 0.1
 		
 		Attack_Box.monitoring = false

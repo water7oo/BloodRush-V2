@@ -20,6 +20,7 @@ texture_filter = 2
 [sub_resource type="Animation" id="Animation_qab4h"]
 resource_name = "PLAY"
 length = 0.8
+loop_mode = 1
 tracks/0/type = "scale_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -239,7 +240,6 @@ _data = {
 animation = &"PLAY"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_oli77"]
-graph_offset = Vector2(-168.536, 272.501)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_2tmdn")
 nodes/Animation/position = Vector2(40, 180)
 node_connections = [&"output", 0, &"Animation"]

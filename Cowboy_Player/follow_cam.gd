@@ -34,7 +34,6 @@ func _unhandled_input(event):
 		var rotation_y = spring_arm_pivot.rotation.y - event.relative.x * mouse_sensitivity
 		
 		
-
 		rotation_x = clamp(rotation_x, deg_to_rad(y_cam_rot_dist), deg_to_rad(x_cam_rot_dist))
 		#rotation_x = clamp(rotation_x, deg_to_rad(-1), deg_to_rad(0))
 		
