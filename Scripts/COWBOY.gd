@@ -7,19 +7,18 @@ extends CharacterBody3D
 @onready var followcam = get_node("/root/FollowCam")
 
 var last_ground_position = Vector3()
-var waveEffect = preload("res://DustWave2.tscn")
-var AirWave = preload("res://AirDustWave2.tscn")
+var waveEffect = preload("res://FX/DustWave2.tscn")
+var AirWave = preload("res://FX/AirDustWave2.tscn")
 var GroundSpark = preload("res://FX/GroundSPark.tscn")
 
 @onready var AirWavePos = $AirWavePos
 
 @onready var playerHealthMan = get_node("/root/PlayerHealthManager")
-
 @onready var enemyHealthMan = get_node("/root/EnemyHealthManager")
 
 
 
-var camera = preload("res://Cowboy_Player/PlayerCamera.tscn").instantiate()
+var camera = preload("res://Player/PlayerCamera.tscn").instantiate()
 var spring_arm_pivot = camera.get_node("SpringArmPivot")
 var spring_arm = camera.get_node("SpringArmPivot/SpringArm3D")
 @onready var dodge_node_timer = $Dodge_Cooldown
@@ -228,11 +227,15 @@ func _proccess_movement(delta):
 			$AnimationTree.set("parameters/Ground_Blend2/blend_amount", -1)
 			$AnimationTree.set("parameters/Jump_Blend/blend_amount", -1)
 			$AnimationTree.set("parameters/Blend3/blend_amount", -1)  
+			
+	particle_emitt(input_dir)
 
+
+func particle_emitt(input_dir):
 	for node in dust_trail:
 			var particle_emitter = node.get_node("Dust")
 			if particle_emitter && input_dir != Vector2.ZERO && is_on_floor():
-				var should_emit_particles = is_sprinting && !is_in_air && current_speed >= MAX_SPEED || dodging
+				var should_emit_particles = is_sprinting && !is_in_air && current_speed >= MAX_SPEED || is_dodging
 				particle_emitter.set_emitting(should_emit_particles)
 				
 			if jumping || velocity.y > 0:
@@ -259,7 +262,7 @@ func _proccess_movement(delta):
 			particle_emitter.set_emitting(true)
 		else:
 			particle_emitter.set_emitting(false)
-
+			
 
 func GroundSParkEffect():
 		var GroundSpark = GroundSpark.instantiate()
@@ -285,7 +288,6 @@ func GeneralwaveEffect():
 		await get_tree().create_timer(.7).timeout
 		waveEffect.queue_free()
 
-
 func LandingGroundEffect():
 	if is_on_floor():
 		if (is_in_air == true):
@@ -299,8 +301,6 @@ func LandingGroundEffect():
 		air_timer = 0.0
 	else:
 		is_in_air = true
-
-
 
 func _proccess_sprinting(delta):
 	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true:
@@ -480,7 +480,6 @@ func _process_walljump(delta):
 							if node.has_node("AnimationPlayer"):
 								node.get_node("AnimationPlayer").play("Landing_strong_001|CircleAction_002")
 
-
 func _proccess_attack(delta):
 	if is_attacking:
 		attack_cooldown -= delta
@@ -510,9 +509,9 @@ func _proccess_attack(delta):
 		#attacklight1_timer = 0.0
 		#attacklight2_timer = 0.0
 		#print("SECOND LIGHT ATTACK")
-##		$AnimationTree.set("parameters/Attack_Shot2/request", 2)
+		#$AnimationTree.set("parameters/Attack_Shot2/request", 2)
 
-			
+
 func _physics_process(delta):
 	_proccess_movement(delta)
 	_proccess_jump(delta)
@@ -523,13 +522,9 @@ func _physics_process(delta):
 	_proccess_attack(delta)
 	LandingGroundEffect()
 	
-	print(jump_timer)
 	playerHealthMan.health = playerHealthMan.max_health
 	$player_health_label.value = playerHealthMan.health
 	$player_health_label.max_value = playerHealthMan.max_health
-	
-	#if Attack_Box.monitoring == true:
-		#print(Attack_Box.monitoring)
 	
 	if Input.is_action_just_pressed("mouse_left"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

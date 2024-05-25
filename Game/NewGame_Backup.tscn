@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://dtqqgn8ge3e5d"]
 
 [ext_resource type="Sky" uid="uid://btm7cnvle7iqe" path="res://Game/SKY_Chill.tres" id="1_5acc6"]
-[ext_resource type="Material" uid="uid://bh76i2pakjs" path="res://Game/GAME_PS1.tres" id="2_hq4hb"]
-[ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Cowboy_Player/Enemy.tscn" id="3_mlshc"]
+[ext_resource type="Material" uid="uid://bh76i2pakjs" path="res://MaterialTextures/GAME_PS1.tres" id="2_hq4hb"]
+[ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Enemy/Enemy2.tscn" id="3_mlshc"]
 
 [sub_resource type="Environment" id="Environment_tjwux"]
 background_mode = 2

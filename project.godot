@@ -19,14 +19,14 @@ run/stretch/scale=1.0
 
 [autoload]
 
-InputBuffer="*res://addons/InputBuffer.gd"
-Combat="*res://Combat.gd"
-GameJuice="*res://gameJuice.gd"
-EnemyHealthManager="*res://Cowboy_Player/enemyHealthManager.gd"
-PlayerHealthManager="*res://Cowboy3rd/playerHealthManager.gd"
-FollowCam="*res://Cowboy_Player/follow_cam.gd"
-Hitpausing="*res://hitpausing.gd"
-enemy="*res://Cowboy_Player/enemy.gd"
+InputBuffer="*res://TRASH/InputBuffer.gd"
+Combat="*res://Scripts/Combat.gd"
+GameJuice="*res://Scripts/gameJuice.gd"
+EnemyHealthManager="*res://Scripts/enemyHealthManager.gd"
+PlayerHealthManager="*res://Scripts/playerHealthManager.gd"
+FollowCam="*res://Scripts/follow_cam.gd"
+Hitpausing="*res://Scripts/hitpausing.gd"
+enemy="*res://Scripts/enemy.gd"
 
 [display]
 
@@ -36,10 +36,6 @@ window/stretch/mode="viewport"
 
 movie_writer/movie_file="C:/Users/scott/OneDrive/Desktop/Desktop Stuff/Timelapses_Recordings/GODOT_GAME_RECORDINGS/GODOT_RECORD2.mp4.avi"
 version_control/autoload_on_startup=true
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/interpolated_camera_3d/plugin.cfg", "res://addons/proto_shape/plugin.cfg")
 
 [input]
 

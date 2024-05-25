@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://brejidgy2nq2j"]
 
-[ext_resource type="Script" path="res://ui/Pausing.gd" id="1_u37fi"]
+[ext_resource type="Script" path="res://Scripts/Pausing.gd" id="1_u37fi"]
 
 [node name="Pausing" type="Node3D"]
 process_mode = 3

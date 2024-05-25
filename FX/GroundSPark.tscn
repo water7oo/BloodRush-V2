@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://bhmnvd6tdg5ji"]
 
-[ext_resource type="PackedScene" uid="uid://ddjbtujkjhgrf" path="res://GroundSpark.fbx" id="1_bwn7w"]
-[ext_resource type="Texture2D" uid="uid://daumcwqijkndg" path="res://GroundSpark-cc3007a03dc2f47d0f191ca2ae90c8fc_Slashing_Texture3.png" id="2_s0tj5"]
+[ext_resource type="PackedScene" uid="uid://ddjbtujkjhgrf" path="res://FX/GroundSpark.fbx" id="1_bwn7w"]
+[ext_resource type="Texture2D" uid="uid://daumcwqijkndg" path="res://My Textures/GroundSpark-cc3007a03dc2f47d0f191ca2ae90c8fc_Slashing_Texture3.png" id="2_w1o52"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5hjve"]
 resource_name = "Material.005"
@@ -10,7 +10,7 @@ cull_mode = 2
 shading_mode = 0
 diffuse_mode = 3
 specular_mode = 1
-albedo_texture = ExtResource("2_s0tj5")
+albedo_texture = ExtResource("2_w1o52")
 texture_filter = 2
 
 [sub_resource type="Animation" id="Animation_r67ga"]

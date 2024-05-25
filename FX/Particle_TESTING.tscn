@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://yvubcfwm01vp"]
 
-[ext_resource type="Material" uid="uid://cx0dsad2my6ud" path="res://Shaders/Dust.tres" id="1_ghkre"]
+[ext_resource type="Material" uid="uid://cx0dsad2my6ud" path="res://MaterialTextures/Dust.tres" id="1_ghkre"]
 [ext_resource type="Shader" path="res://Shaders/OUTLINES.gdshader" id="2_kgh3d"]
-[ext_resource type="Shader" path="res://PS1.gdshader" id="3_bsrmy"]
+[ext_resource type="Shader" path="res://Shaders/PS1.gdshader" id="3_bsrmy"]
 
 [sub_resource type="Curve" id="Curve_i0rx6"]
 min_value = 1.0

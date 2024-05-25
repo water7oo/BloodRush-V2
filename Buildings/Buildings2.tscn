@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://brs8ux0562mri"]
 
-[ext_resource type="Material" uid="uid://mpycckwjukao" path="res://Game/Buildings.tres" id="1_wlj80"]
+[ext_resource type="Material" uid="uid://mpycckwjukao" path="res://MaterialTextures/Buildings.tres" id="1_wlj80"]
 
 [node name="Buildings2" type="Node3D"]
 

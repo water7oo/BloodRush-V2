@@ -1,10 +1,10 @@
 [gd_scene load_steps=27 format=3 uid="uid://da2icq52660iu"]
 
-[ext_resource type="Material" uid="uid://cgmslcknann3o" path="res://Game/Buildings3.tres" id="1_7fb1d"]
-[ext_resource type="Material" uid="uid://b3w27kep0nbga" path="res://Game/Buildings2.tres" id="2_g4oac"]
-[ext_resource type="Material" uid="uid://mpycckwjukao" path="res://Game/Buildings.tres" id="3_qmhab"]
-[ext_resource type="PackedScene" uid="uid://cch03gmig4hys" path="res://Billboards/BIllboards1.tscn" id="4_3v66p"]
-[ext_resource type="PackedScene" uid="uid://dordn2c1222of" path="res://Billboards/Billboards2.tscn" id="5_eryo4"]
+[ext_resource type="Material" uid="uid://cgmslcknann3o" path="res://MaterialTextures/Buildings3.tres" id="1_7fb1d"]
+[ext_resource type="Material" uid="uid://b3w27kep0nbga" path="res://MaterialTextures/Buildings2.tres" id="2_g4oac"]
+[ext_resource type="Material" uid="uid://mpycckwjukao" path="res://MaterialTextures/Buildings.tres" id="3_qmhab"]
+[ext_resource type="PackedScene" uid="uid://cch03gmig4hys" path="res://Enviroment/Billboards/BIllboards1.tscn" id="4_3v66p"]
+[ext_resource type="PackedScene" uid="uid://dordn2c1222of" path="res://Enviroment/Billboards/Billboards2.tscn" id="5_eryo4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_53tum"]
 resource_name = "BUILDING_C"
