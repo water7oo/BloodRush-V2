@@ -47,7 +47,7 @@ spring_arm_pivot = NodePath("SpringArmPivot")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0353532, 0.005)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.946006, 0.735816, 0, -0.324148, 2.14743, 0.00799954, 0.0505664, 0.100976)
+transform = Transform3D(1, 0, 0, 0, 0.946006, 0.735815, 0, -0.324148, 2.14743, 0.00799954, 0.0505664, 0.100976)
 collision_mask = 255
 spring_length = 0.03
 

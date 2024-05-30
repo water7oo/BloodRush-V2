@@ -1,21 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://doffovudw757j"]
+[gd_scene load_steps=8 format=3 uid="uid://doffovudw757j"]
 
 [ext_resource type="PackedScene" uid="uid://ds8v5374rd1s7" path="res://FX/Dust_Wave2.fbx" id="1_8hvdb"]
-[ext_resource type="Texture2D" uid="uid://bilphu4f2woud" path="res://FX/Dust_Wave2-e8432e9fa40c58d5df7e1588c66db668_DustLanding.png" id="2_hwti2"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5mnac"]
-resource_name = "Material.004"
-transparency = 1
-blend_mode = 1
-cull_mode = 2
-depth_draw_mode = 1
-shading_mode = 0
-diffuse_mode = 3
-specular_mode = 1
-albedo_texture = ExtResource("2_hwti2")
-uv1_scale = Vector3(0.975, 0.975, 0.975)
-uv1_offset = Vector3(0, 0.1, 0)
-texture_filter = 2
+[ext_resource type="Material" uid="uid://dltyulci0fcbh" path="res://MaterialTextures/AirDustWave.tres" id="2_uksdv"]
 
 [sub_resource type="Animation" id="Animation_qab4h"]
 resource_name = "PLAY"
@@ -252,7 +238,7 @@ transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 
 
 [node name="Cylinder_001" parent="RootNode" index="0"]
 transform = Transform3D(26.245, 0, 0, 0, -1.14721e-06, 26.245, 0, -26.245, -1.14721e-06, 0, 0, -0.00535369)
-material_override = SubResource("StandardMaterial3D_5mnac")
+material_override = ExtResource("2_uksdv")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
 libraries = {

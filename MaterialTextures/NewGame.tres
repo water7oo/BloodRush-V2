@@ -4,9 +4,12 @@
 
 [resource]
 background_mode = 1
-background_color = Color(1, 1, 1, 1)
+background_color = Color(0, 0.666667, 0.823529, 1)
 sky = ExtResource("1_23phk")
 sky_rotation = Vector3(0, 5.34943, 0)
+ambient_light_source = 3
+ambient_light_color = Color(0.92549, 0.92549, 0.937255, 1)
+ambient_light_sky_contribution = 0.0
 reflected_light_source = 1
 tonemap_mode = 3
 tonemap_exposure = 0.76

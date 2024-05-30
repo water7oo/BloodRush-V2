@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b2ud3ury8epgi"]
+[gd_scene load_steps=19 format=3 uid="uid://b2ud3ury8epgi"]
 
 [ext_resource type="Environment" uid="uid://cadv2uehcxqkc" path="res://MaterialTextures/NewGame.tres" id="1_c0qo6"]
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://MaterialTextures/Room.tres" id="1_ewgn2"]
@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://byiwrnoah113n" path="res://ui/GameStartANIM.tscn" id="8_muyqj"]
 [ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Enemy/Enemy2.tscn" id="9_38om4"]
 [ext_resource type="PackedScene" uid="uid://7l5yih8w56c3" path="res://Player/PlayerCamera.tscn" id="11_hq17w"]
-[ext_resource type="PackedScene" uid="uid://bgkmd80vrnlao" path="res://Player/cowboy_3rd_pass.tscn" id="12_njj0u"]
 [ext_resource type="PackedScene" uid="uid://ctudhwisdi64s" path="res://FX/Burst_dust.tscn" id="13_fmoji"]
 [ext_resource type="PackedScene" uid="uid://rlcylvhdacih" path="res://FX/Move_Dust.tscn" id="14_xyb0d"]
 [ext_resource type="PackedScene" uid="uid://d1yu2x7osdqa5" path="res://FX/jump_dust.tscn" id="15_2mw5p"]
@@ -24,7 +23,7 @@ shader_parameter/change_color_depth = true
 shader_parameter/target_color_depth = 3
 shader_parameter/dithering = true
 shader_parameter/scale_resolution = true
-shader_parameter/target_resolution_scale = 3
+shader_parameter/target_resolution_scale = 2
 shader_parameter/enable_recolor = false
 shader_parameter/to_gradient = ExtResource("3_immg1")
 
@@ -41,6 +40,7 @@ light_angular_distance = 2.4
 shadow_bias = 0.0
 shadow_normal_bias = 2.139
 directional_shadow_mode = 0
+sky_mode = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_c0qo6")
@@ -56,7 +56,7 @@ collision_mask = 3
 transform = Transform3D(1.76656e-15, -2.38742e-12, -42.6991, 8.82136e-10, 0.80708, -2.84217e-14, 0.0160266, -2.80164e-08, 1.41419e-15, -11.6091, -0.00179779, -0.576119)
 
 [node name="MeshInstance3D3" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(0.740151, -2.27374e-12, 0, 6.10623e-16, 0.80708, 0, 0, 0, 0.924571, 9.82115, -0.00179781, -0.00154649)
+transform = Transform3D(0.740151, -2.38742e-12, 0, 4.996e-16, 0.80708, 0, 0, 0, 0.924571, 19.3341, -0.00179782, -0.00154649)
 visible = false
 
 [node name="MeshInstance3D" type="CSGBox3D" parent="Floor"]
@@ -73,10 +73,15 @@ visible = false
 
 [node name="MeshInstance3D6" type="CSGBox3D" parent="Floor"]
 transform = Transform3D(1.76656e-15, -2.38742e-12, 42.6991, 8.82136e-10, 0.807079, 2.84217e-14, -0.0160266, 2.80163e-08, 1.41419e-15, -10.6511, -0.0571915, 0.495654)
+visible = false
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, -1.05093, -0.512103, 0.0632526)
-size = Vector3(14.375, 0.100136, 0.069458)
+transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, -2.93946, -0.490331, 0.350119)
+size = Vector3(16.3524, 0.233662, 0.149689)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, -1.82029, -0.490331, 0.248159)
+size = Vector3(16.3524, 0.233662, 0.149689)
 
 [node name="Preview" type="Control" parent="."]
 layout_mode = 3
@@ -136,35 +141,33 @@ transform = Transform3D(1.83587e-07, 0, -0.6, 0, 0.6, 0, 0.6, 0, 1.83587e-07, 12
 
 [node name="CameraSet" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("11_hq17w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35539, 1.77179, 13.061)
-target = NodePath("../Cowboy_3rdPass/CamTarget")
+target = NodePath("../Player2/CamTarget")
 speed = 4.0
 
 [node name="CamTarget2" type="Marker3D" parent="Preview/SubViewportContainer/SubViewport"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 7.53036, 3.74131, 8.49949)
 gizmo_extents = 4.42
 
-[node name="Cowboy_3rdPass" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("12_njj0u")]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 1.2809, 0.538897, -0.930841)
+[node name="Player2" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("15_i88xo")]
+transform = Transform3D(-0.6, 0, -9.05975e-08, 0, 0.6, 0, 9.05975e-08, 0, -0.6, 1.281, 0.539, -0.931)
 
-[node name="DUST5" parent="Preview/SubViewportContainer/SubViewport/Cowboy_3rdPass" instance=ExtResource("13_fmoji")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+[node name="DUST5" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("13_fmoji")]
+transform = Transform3D(-2.5, 0, 3.77489e-07, 0, 2.5, 0, -3.77489e-07, 0, -2.5, 0.000166655, -0.000171661, -0.000264883)
 visible = false
 
-[node name="DUST4" parent="Preview/SubViewportContainer/SubViewport/Cowboy_3rdPass" instance=ExtResource("14_xyb0d")]
+[node name="DUST4" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("14_xyb0d")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0.000166655, -0.000171661, -0.000264883)
 
-[node name="DUST3" parent="Preview/SubViewportContainer/SubViewport/Cowboy_3rdPass" instance=ExtResource("15_2mw5p")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+[node name="DUST3" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("15_2mw5p")]
+transform = Transform3D(-2.5, 0, 3.77489e-07, 0, 2.5, 0, -3.77489e-07, 0, -2.5, 0.000166655, -0.000171661, -0.000264883)
 visible = false
 
-[node name="DUST2" parent="Preview/SubViewportContainer/SubViewport/Cowboy_3rdPass" instance=ExtResource("16_dgh31")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.045106, 0.224882, 0.133729)
+[node name="DUST2" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("16_dgh31")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0.0452724, 0.22471, -0.133994)
 
-[node name="CamTarget" type="Marker3D" parent="Preview/SubViewportContainer/SubViewport/Cowboy_3rdPass"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203987, 0.456273, -0.0285969)
+[node name="CamTarget" type="Marker3D" parent="Preview/SubViewportContainer/SubViewport/Player2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.204153, 0.456101, 0.0283322)
 gizmo_extents = 4.42
-
-[node name="3rdPassAnimations" parent="." instance=ExtResource("15_i88xo")]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 5.18639, 0.503042, 19.5466)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("15_a41v4")

@@ -10,7 +10,7 @@ var attack_power
 var taking_damage = false
 
 func _ready():
-	var object_health = health
+	var _object_health = health
 	pass
 
 #When living thing takes damage do this
