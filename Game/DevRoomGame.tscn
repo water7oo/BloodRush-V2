@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b2ud3ury8epgi"]
+[gd_scene load_steps=18 format=3 uid="uid://b2ud3ury8epgi"]
 
 [ext_resource type="Environment" uid="uid://cadv2uehcxqkc" path="res://MaterialTextures/NewGame.tres" id="1_c0qo6"]
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://MaterialTextures/Room.tres" id="1_ewgn2"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://brejidgy2nq2j" path="res://ui/Pausing.tscn" id="4_x187o"]
 [ext_resource type="PackedScene" uid="uid://b1cetjognw8y6" path="res://FX/DustWave2.tscn" id="6_krkag"]
 [ext_resource type="Shader" path="res://Shaders/uhhhhh.gdshader" id="7_kt4n2"]
-[ext_resource type="PackedScene" uid="uid://byiwrnoah113n" path="res://ui/GameStartANIM.tscn" id="8_muyqj"]
 [ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Enemy/Enemy2.tscn" id="9_38om4"]
 [ext_resource type="PackedScene" uid="uid://7l5yih8w56c3" path="res://Player/PlayerCamera.tscn" id="11_hq17w"]
 [ext_resource type="PackedScene" uid="uid://ctudhwisdi64s" path="res://FX/Burst_dust.tscn" id="13_fmoji"]
@@ -20,7 +19,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ov31c"]
 shader = ExtResource("2_7m6hl")
 shader_parameter/change_color_depth = true
-shader_parameter/target_color_depth = 3
+shader_parameter/target_color_depth = 6
 shader_parameter/dithering = true
 shader_parameter/scale_resolution = true
 shader_parameter/target_resolution_scale = 2
@@ -102,8 +101,6 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 metadata/_edit_use_anchors_ = true
-
-[node name="Opener" parent="Preview/SubViewportContainer" instance=ExtResource("8_muyqj")]
 
 [node name="SubViewport" type="SubViewport" parent="Preview/SubViewportContainer"]
 handle_input_locally = false

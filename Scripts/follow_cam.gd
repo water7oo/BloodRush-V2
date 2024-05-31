@@ -40,14 +40,14 @@ func _unhandled_input(event):
 		spring_arm_pivot.rotation.x = rotation_x
 		spring_arm_pivot.rotation.y = rotation_y
 		
-	if Input.get_action_strength("cam_down"):
-		print(Input.get_action_strength("cam_down"))
-	if Input.get_action_strength("cam_up"):
-		print(Input.get_action_strength("cam_up")) 
-	if Input.get_action_strength("cam_right"):
-		print(Input.get_action_strength("cam_right")) 
-	if Input.get_action_strength("cam_left"):
-		print(Input.get_action_strength("cam_left")) 
+	#if Input.get_action_strength("cam_down"):
+		#spring_arm_pivot.rotation.x -= joystick_sensitivity
+	#if Input.get_action_strength("cam_up"):
+		#spring_arm_pivot.rotation.x += joystick_sensitivity 
+	#if Input.get_action_strength("cam_right"):
+		#spring_arm_pivot.rotation.y -= joystick_sensitivity 
+	#if Input.get_action_strength("cam_left"):
+		#spring_arm_pivot.rotation.y += joystick_sensitivity 
 
 
 func _process(delta: float) -> void:

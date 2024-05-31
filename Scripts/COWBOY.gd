@@ -27,6 +27,7 @@ var spring_arm = camera.get_node("SpringArmPivot/SpringArm3D")
 #@onready var blend_space2 = Animationtree.get('parameters/Combat/MoveStrafe/blend_position')
 @onready var Stamina_bar = $"UI Cooldowns"
 @onready var health_bar = $player_health
+@onready var controllerDebug = $ControllerDebug
 
 
 var current_blend_amount = 0.0
@@ -68,6 +69,7 @@ var jump_counter = 1
 
 #Acceleration and Speed
 var can_move = true
+var can_process_input = true
 @export var ACCELERATION = 50.0 #the higher the value the faster the acceleration
 @export var DECELERATION = 25.0 #the lower the value the slippier the stop
 @export var BASE_ACCELERATION = 50
@@ -75,6 +77,8 @@ var can_move = true
 @export var DASH_ACCELERATION = 30
 @export var DASH_DECELERATION = 15
 var DASH_MAX_SPEED = BASE_SPEED * 3
+@export var momentum_deceleration = 1
+@export var momentum_acceleration = 1
 
 @export var stamina = 100
 @export var sprinting_deplete_rate = 10
@@ -89,7 +93,7 @@ var dodge_cooldown_timer = 0.0
 @export var SPIN_DODGE_SPEED = DODGE_SPEED * 1.05
 
 var spinDodge_timer_cooldown = 0.0
-var spinDodge_reset = 0.8
+@export var spinDodge_reset = .8
 var air_spin = false
 
 @export var dash_duration = 0.04
@@ -98,7 +102,7 @@ var air_spin = false
 var INITIAL_DASH_ACCELERATION = ACCELERATION
 var INITIAL_DASH_DECELERATION = DECELERATION
 var INITIAL_MAX_SPEED = MAX_SPEED
-var SECOND_MAX_SPEED = DASH_MAX_SPEED * 1.1
+var SECOND_MAX_SPEED = MAX_SPEED + 1.5
 var is_second_sprint = false
 
 @export var DODGE_ACCELERATION = 100
@@ -137,6 +141,9 @@ var landing_position = Vector3.ZERO
 var can_wall_jump = true
 var has_wall_jumped = false
 var attack_proccessing = false
+var cancel_timer = 0.0
+var cancel_timer_reset = 0.3
+
 
 var fall = Vector3()
 var wall_normal
@@ -167,8 +174,10 @@ var jumping = Input.is_action_pressed("move_jump")
 
 
 var attack_power = 1.0
-
 var current_ground_spark = null
+
+var is_controller = false
+var is_key = false
 
 func _ready():
 	playerEditInstance = playerEditScene.instantiate()
@@ -176,6 +185,8 @@ func _ready():
 	Attack_Box = playerEditInstance.get_node("Armature/Skeleton3D/BoneAttachment3D/AttackBox")
 	armature = playerEditInstance.get_node("Armature")
 	Animationtree = playerEditInstance.get_node("AnimationTree")
+	
+	controllerDebug.text = "Keyboard Connected"
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
@@ -195,57 +206,138 @@ func _unhandled_input(event):
 		spring_arm_pivot.rotation.y = rotation_y
 		
 	if Input.is_action_pressed("cam_down"):
-		spring_arm_pivot.rotation.x -= 1
+		spring_arm_pivot.rotation.x -= joystick_sensitivity
 	if Input.is_action_pressed("cam_up"):
-		spring_arm_pivot.rotation.x += 1
+		spring_arm_pivot.rotation.x += joystick_sensitivity
 	if Input.is_action_pressed("cam_right"):
-		spring_arm_pivot.rotation.y -= 1
+		spring_arm_pivot.rotation.y -= joystick_sensitivity
 	if Input.is_action_pressed("cam_left"):
-		spring_arm_pivot.rotation.y += 1
+		spring_arm_pivot.rotation.y += joystick_sensitivity
+		
 
-func _proccess_movement(delta):
+func controller_switch(delta):
+	if is_controller:
+		_proccess_controller_movement(delta)
+	elif is_key:
+		_proccess_movement(delta)
+
+func _input(event):
+	# Check for controller input
+	if event is InputEventJoypadButton:
+		is_controller = true
+		is_key = false
+		controllerDebug.text = "Controller Connected"
+	
+	# Check for keyboard or mouse input
+	elif event is InputEventKey || event is InputEventMouseMotion:
+		is_controller = false
+		is_key = true
+		controllerDebug.text = "Keyboard Connected"
+
+func _proccess_controller_movement(delta):
+	if not can_process_input:
+		return  # Do not process any movement if input is disabled
+
+	# Get keyboard input
 	var input_dir = Input.get_vector("move_right", "move_left", "move_back", "move_forward")
+
+	# Get joystick input from the left stick (assuming the first controller)
+	var joy_x = Input.get_joy_axis(0, JOY_AXIS_LEFT_X)
+	var joy_y = Input.get_joy_axis(0, JOY_AXIS_LEFT_Y)
+
+	# Convert joystick input to a Vector2
+	var joy_dir = Vector2(joy_x, joy_y)  # Invert Y-axis
+
+	# Combine joystick input with keyboard input
+	input_dir += joy_dir
+
+	# Normalize the direction vector
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
-	
-	
-	if direction && can_move == true:
+
+	if direction and can_move:
 		is_moving = true
 		if current_speed < target_speed:
 			current_speed = move_toward(current_speed, target_speed, ACCELERATION * delta)
 		else:
 			current_speed = move_toward(current_speed, target_speed, DECELERATION * delta)
-	
+
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
-		
-		if direction && !is_sprinting && is_on_floor():
+
+		if direction and not is_sprinting and is_on_floor():
 			target_blend_amount = 0.0
 			current_blend_amount = lerp(current_blend_amount, target_blend_amount, blend_lerp_speed * delta)
 			Animationtree.set("parameters/Ground_Blend/blend_amount", 0)
 		else:
 			target_blend_amount = -1.0
-		
 
-		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), .07)
-		
-	elif !direction && is_on_floor():
-			is_moving = false
-			velocity.x = move_toward(velocity.x, 0, DECELERATION * delta)
-			velocity.z = move_toward(velocity.z, 0, DECELERATION * delta)
-			current_speed = sqrt(velocity.x * velocity.x + velocity.z * velocity.z)
-			Animationtree.set("parameters/Ground_Blend/blend_amount", -1) 
-			Animationtree.set("parameters/Ground_Blend2/blend_amount", -1)
-			Animationtree.set("parameters/Jump_Blend/blend_amount", -1)
-			Animationtree.set("parameters/Blend3/blend_amount", -1)  
-			
-			
-			
-	#if !is_moving:
-		#print("player is not moving")
+		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), 0.07)
+	elif not direction and is_on_floor():
+		is_moving = false
+		velocity.x = move_toward(velocity.x, 0, DECELERATION * delta)
+		velocity.z = move_toward(velocity.z, 0, DECELERATION * delta)
+		current_speed = sqrt(velocity.x * velocity.x + velocity.z * velocity.z)
+		Animationtree.set("parameters/Ground_Blend/blend_amount", -1)
+		Animationtree.set("parameters/Ground_Blend2/blend_amount", -1)
+		Animationtree.set("parameters/Jump_Blend/blend_amount", -1)
+		Animationtree.set("parameters/Blend3/blend_amount", -1)
+
 	particle_emitt(input_dir)
 
+func _proccess_movement(delta):
+	if not can_process_input:
+		return
 
+	var input_dir = Input.get_vector("move_right", "move_left", "move_back", "move_forward")
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
+
+	if direction != Vector3.ZERO and can_move:
+		is_moving = true
+		if velocity.dot(direction) < 0:  # Check if changing direction
+			current_speed = move_toward(current_speed, 0, momentum_deceleration * delta)  # Decelerate quickly
+			if current_speed == 0:
+				ACCELERATION = momentum_acceleration  # Lower acceleration when changing direction
+
+		if current_speed < target_speed:
+			current_speed = move_toward(current_speed, target_speed, ACCELERATION * delta)
+		else:
+			current_speed = move_toward(current_speed, target_speed, DECELERATION * delta)
+
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
+
+		if direction and not is_sprinting and is_on_floor():
+			Animationtree.set("parameters/Ground_Blend/blend_amount", 0)
+		else:
+			Animationtree.set("parameters/Ground_Blend/blend_amount", -1)
+
+		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), 0.1)
+
+	elif direction == Vector3.ZERO and is_on_floor():
+		is_moving = false
+		velocity.x = move_toward(velocity.x, 0, BASE_DECELERATION * delta)
+		velocity.z = move_toward(velocity.z, 0, BASE_DECELERATION * delta)
+		current_speed = sqrt(velocity.x * velocity.x + velocity.z * velocity.z)
+		Animationtree.set("parameters/Ground_Blend/blend_amount", -1)
+		Animationtree.set("parameters/Ground_Blend2/blend_amount", -1)
+		Animationtree.set("parameters/Jump_Blend/blend_amount", -1)
+		Animationtree.set("parameters/Blend3/blend_amount", -1)
+
+	particle_emitt(input_dir)
+
+	if not is_on_floor():
+		print(velocity)
+
+func disable_inputs():
+	can_process_input = false
+	print("cannot move")
+
+func enable_inputs():
+	can_process_input = true
+	print("can move")
+	
 func particle_emitt(input_dir):
 	for node in dust_trail:
 			var particle_emitter = node.get_node("Dust")
@@ -318,7 +410,7 @@ func LandingGroundEffect():
 		is_in_air = true
 
 func _proccess_sprinting(delta):
-	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true:
+	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true && is_on_floor():
 		sprint_timer += delta
 		is_sprinting = true
 		Stamina_bar.value -= sprinting_deplete_rate * delta
@@ -330,9 +422,9 @@ func _proccess_sprinting(delta):
 		current_blend_amount = lerp(current_blend_amount, target_blend_amount, blend_lerp_speed * delta)
 		
 		if sprint_timer >= 0.2:
-			Animationtree.set("parameters/Ground_Blend/blend_amount", 1)
+			Animationtree.set("parameters/Ground_Blend/blend_damount", 1)
 		
-		if sprint_timer >= 2:
+		if sprint_timer >= 4.5:
 			DASH_ACCELERATION = SECOND_DASH_ACCELERATION
 			DASH_DECELERATION = SECOND_DASH_DECELERATION
 			target_speed = SECOND_MAX_SPEED
@@ -348,22 +440,13 @@ func _proccess_sprinting(delta):
 			sprint_timer = 0.0
 			Animationtree.set("parameters/Jump_Blend/blend_amount", 1)
 			GroundSParkEffect()
-		
 
-
-	
 		if Stamina_bar.value <= 0:
 			is_sprinting = false
 			can_sprint = false
 			sprinting_refill_rate = sprinting_refill_rate_zero
 			sprint_timer = 0.0
 			
-#			if sprinting:
-#				print("YOU CANNOT SPRINT")
-#				is_sprinting = false
-#				sprinting_deplete_rate = 0
-#				Animationtree.set("parameters/Ground_Blend2/blend_amount", -1)
-#
 			
 			if Stamina_bar.value >= 0:
 				if is_moving:
@@ -400,7 +483,7 @@ func _proccess_dodge(delta):
 		Stamina_bar.value -= 10
 		dodge_cooldown_timer = dodge_cooldown  
 		can_dodge = false  # Disable dodging until cooldown finishes
-		
+		#disable_inputs()
 		AirWaveEffect()
 		GroundSParkEffect()
 		Animationtree.set("parameters/Ground_Blend3/blend_amount", 0)
@@ -412,23 +495,25 @@ func _proccess_dodge(delta):
 			
 	if is_dodging && is_moving:
 		dodge_cooldown_timer -= delta
-		await get_tree().create_timer(.1).timeout
+		await get_tree().create_timer(.2).timeout
 		spinDodge_timer_cooldown -= delta
 
 		if dodge_cooldown_timer <= 0:
-			await get_tree().create_timer(.1).timeout
+			enable_inputs()
+			can_move = true
+			LERP_VAL = .2
 			is_dodging = false
 			spinDodge_timer_cooldown = spinDodge_reset
-			LERP_VAL = .2
-			can_move = true
+			await get_tree().create_timer(.1).timeout
 			Animationtree.set("parameters/Ground_Blend3/blend_amount", -1)
 		
 		if spinDodge_timer_cooldown <= 0 && dodge_cooldown_timer <= 0:
 			spinDodge_timer_cooldown = spinDodge_reset
+			
 		
 	if spinDodge_timer_cooldown <= spinDodge_reset && !air_spin && dodging && is_moving:
 		Animationtree.set("parameters/Ground_Blend3/blend_amount", 1)
-		velocity.y = 9
+		velocity.y = 6
 		air_spin = true
 		print("yea")
 		current_speed = SPIN_DODGE_SPEED
@@ -437,6 +522,7 @@ func _proccess_dodge(delta):
 		LERP_VAL = DODGE_LERP_VAL
 		Stamina_bar.value -= 10
 		can_move = false
+		can_jump = false
 			
 	if is_on_floor():
 		if is_in_air:
@@ -447,6 +533,7 @@ func _proccess_dodge(delta):
 					spinDodge_timer_cooldown = spinDodge_reset
 					print("Player has landed after spin dodge")
 					can_move = true
+					can_jump = true
 					ACCELERATION = BASE_ACCELERATION
 					DECELERATION = BASE_DECELERATION
 			air_timer = 0.0
@@ -545,36 +632,29 @@ func _proccess_attack(delta):
 		current_speed = 0
 		Attack_Box.monitoring = true
 		is_attacking = true
-		
-
 		attack_cooldown = 0.5 # Set the cooldown time (0.5 seconds in this case)
-		await get_tree().create_timer(0.2).timeout
+		await get_tree().create_timer(0.5).timeout
 		Animationtree.set("parameters/Attack_Shot/request", 2)
 		
 	else:
 		Attack_Box.monitoring = false
 		
 	if Input.is_action_just_released("attack_light_1") && is_on_floor():
-		attacklight1_timer = 0.0
-		attacklight2_timer += delta
 		Attack_Box.monitoring = false
 		Animationtree.set("parameters/Attack_Shot/request", 2)
 	
-	#if Input.is_action_just_pressed("attack_light_1") && attacklight2_timer >= 0 && is_on_floor():
-		#attacklight1_timer = 0.0
-		#attacklight2_timer = 0.0
-		#print("SECOND LIGHT ATTACK")
-		#Animationtree.set("parameters/Attack_Shot2/request", 2)
 
 
 func _physics_process(delta):
-	_proccess_movement(delta)
 	_proccess_jump(delta)
 	_unhandled_input(delta)
 	_proccess_dodge(delta)
 	_proccess_cooldown(delta)
 	_proccess_sprinting(delta)
 	_proccess_attack(delta)
+	
+	controller_switch(delta)
+	
 	LandingGroundEffect()
 	
 	speedDebug.value = current_speed
