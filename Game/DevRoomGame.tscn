@@ -1,11 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://b2ud3ury8epgi"]
+[gd_scene load_steps=17 format=3 uid="uid://b2ud3ury8epgi"]
 
 [ext_resource type="Environment" uid="uid://cadv2uehcxqkc" path="res://MaterialTextures/NewGame.tres" id="1_c0qo6"]
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://MaterialTextures/Room.tres" id="1_ewgn2"]
 [ext_resource type="Shader" path="res://Shaders/TestingShaders3.gdshader" id="2_7m6hl"]
 [ext_resource type="Texture2D" uid="uid://b3ih2bf077rm8" path="res://Enviroment/Billboards/Construction/TrimSheet_Testing-Buildings.png" id="3_immg1"]
 [ext_resource type="PackedScene" uid="uid://brejidgy2nq2j" path="res://ui/Pausing.tscn" id="4_x187o"]
-[ext_resource type="PackedScene" uid="uid://b1cetjognw8y6" path="res://FX/DustWave2.tscn" id="6_krkag"]
 [ext_resource type="Shader" path="res://Shaders/uhhhhh.gdshader" id="7_kt4n2"]
 [ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Enemy/Enemy2.tscn" id="9_38om4"]
 [ext_resource type="PackedScene" uid="uid://7l5yih8w56c3" path="res://Player/PlayerCamera.tscn" id="11_hq17w"]
@@ -19,7 +18,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ov31c"]
 shader = ExtResource("2_7m6hl")
 shader_parameter/change_color_depth = true
-shader_parameter/target_color_depth = 6
+shader_parameter/target_color_depth = 4
 shader_parameter/dithering = true
 shader_parameter/scale_resolution = true
 shader_parameter/target_resolution_scale = 2
@@ -31,7 +30,7 @@ shader = ExtResource("7_kt4n2")
 shader_parameter/speedScale = 50.0
 shader_parameter/clipPosition = 0.2
 
-[node name="Node3D" type="Node3D"]
+[node name="TRAINING" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.499315, 0.026168, 0, 0.052336, 0.99863, -0.5, 0.864838, -0.0453243, -6.46824, 61.2841, 3.0847)
@@ -46,25 +45,58 @@ environment = ExtResource("1_c0qo6")
 
 [node name="Floor" type="CSGCombiner3D" parent="."]
 transform = Transform3D(-3.40497e-08, -35.6877, 0, 0.778967, -1.55995e-06, 0, 0, 0, 44.9384, 0, 1.15208, 10)
-material_override = ExtResource("1_ewgn2")
+material_overlay = ExtResource("1_ewgn2")
 use_collision = true
 collision_layer = 3
 collision_mask = 3
 
-[node name="MeshInstance3D2" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(1.76656e-15, -2.38742e-12, -42.6991, 8.82136e-10, 0.80708, -2.84217e-14, 0.0160266, -2.80164e-08, 1.41419e-15, -11.6091, -0.00179779, -0.576119)
+[node name="MeshInstance3D7" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(-2.32411e-11, -3.55271e-14, -2.41311, 2.92654e-11, 0.0114111, -7.36655e-12, 0.000531693, -6.28087e-10, -1.0548e-07, 2.85619, 1.41345, -1.27191)
+size = Vector3(2688.42, 204.717, 24.0763)
 
-[node name="MeshInstance3D3" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(0.740151, -2.38742e-12, 0, 4.996e-16, 0.80708, 0, 0, 0, 0.924571, 19.3341, -0.00179782, -0.00154649)
-visible = false
+[node name="MeshInstance3D13" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(-2.32411e-11, -3.55271e-14, -2.41311, 2.92654e-11, 0.0114111, -7.35256e-12, 0.000531693, -6.28087e-10, -1.0548e-07, 28.8165, 3.54376, -3.02427)
+size = Vector3(8171.78, 187.328, 45.5924)
+
+[node name="MeshInstance3D10" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(-2.3241e-11, -3.55271e-14, -1.81209, 2.92654e-11, 0.0114111, -5.54878e-12, 0.000531693, -6.28087e-10, -7.92089e-08, 22.9798, 2.42378, -0.271898)
+size = Vector3(3015.63, 231.891, 46.2867)
+
+[node name="MeshInstance3D12" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(-2.3241e-11, -3.55271e-14, -1.81209, 2.92654e-11, 0.0114111, -5.5187e-12, 0.000531693, -6.28087e-10, -7.92089e-08, -6.77075, 2.42378, -4.31325)
+size = Vector3(3015.63, 231.891, 13.4511)
+
+[node name="MeshInstance3D11" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(-2.3241e-11, -3.55271e-14, -1.81209, 2.92654e-11, 0.0114111, -5.5479e-12, 0.000531693, -6.28087e-10, -7.92089e-08, 22.9798, -2.22429, -0.271898)
+size = Vector3(3015.63, 231.891, 46.2867)
+
+[node name="MeshInstance3D8" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(-2.32411e-11, -3.55271e-14, -2.41311, 2.92654e-11, 0.0114111, -7.36256e-12, 0.000531693, -6.28087e-10, -1.0548e-07, 2.85618, -1.46014, -1.09357)
+size = Vector3(2017.57, 231.59, 24.0763)
+
+[node name="MeshInstance3D9" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(-8.71129e-11, -3.55271e-14, -1.81209, 1.09694e-10, 0.0114111, -5.51792e-12, 0.00199291, -6.28087e-10, -7.92089e-08, 23.9296, -0.531785, -1.349)
+size = Vector3(845.143, 371.116, 8.92601)
 
 [node name="MeshInstance3D" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(1.428, -5.83874e-16, 0, 5.35499e-16, 1.557, 0, 0, 0, 1.785, -1.52742, -0.0378563, -0.00154649)
-size = Vector3(1, 1.58838, 1)
+transform = Transform3D(11.342, 0, 0, 1.77636e-15, 9.38252, 0, 0, 0, 8.72365, -154.369, -0.222031, -2.19475)
+size = Vector3(27.131, 0.730957, 0.574463)
 
 [node name="MeshInstance3D4" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(3.52785e-08, -1.85154e-06, 42.6991, 0.0176164, -1.39606e-07, -4.07393e-08, 2.11243e-09, 0.734244, 3.2353e-08, -10.6511, -0.333517, -0.0688021)
-visible = false
+transform = Transform3D(6.39158e-09, -1.77944e-07, 4.014, 0.00319167, -1.12415e-08, -8.03841e-06, 5.20006e-10, 0.069, 1.03517e-05, -1.31426, -0.906931, -0.413)
+size = Vector3(49.6816, 1.13229, 2.06354)
+
+[node name="MeshInstance3D14" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(6.39159e-09, -1.77944e-07, 4.014, 0.00319167, -1.12415e-08, -8.03841e-06, 5.20006e-10, 0.069, 1.03517e-05, -0.59299, -0.906933, -0.259388)
+size = Vector3(49.6816, 1.03659, 1.70416)
+
+[node name="MeshInstance3D15" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(6.39158e-09, -1.77944e-07, 4.014, 0.00319167, -1.12415e-08, -8.03841e-06, 5.20006e-10, 0.069, 1.03517e-05, -0.60377, -0.906933, -0.12162)
+size = Vector3(49.6816, 1.06332, 1.70953)
+
+[node name="MeshInstance3D16" type="CSGBox3D" parent="Floor"]
+transform = Transform3D(6.39158e-09, -1.77944e-07, 4.014, 0.00319167, -1.12415e-08, -8.03841e-06, 5.20006e-10, 0.069, 1.03517e-05, -0.837005, -0.906932, 0.036904)
+size = Vector3(49.6816, 1.25729, 1.82574)
 
 [node name="MeshInstance3D5" type="CSGBox3D" parent="Floor"]
 transform = Transform3D(3.52785e-08, -1.85154e-06, 42.6991, 0.0176164, -1.39606e-07, -4.07393e-08, 2.11243e-09, 0.734244, 3.2353e-08, -10.6511, 0.340188, -0.0115905)
@@ -75,12 +107,12 @@ transform = Transform3D(1.76656e-15, -2.38742e-12, 42.6991, 8.82136e-10, 0.80707
 visible = false
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, -2.93946, -0.490331, 0.350119)
-size = Vector3(16.3524, 0.233662, 0.149689)
+transform = Transform3D(0.355, -1.76215e-12, 1.58821e-09, -1.77991e-12, 0.354999, 0.000793077, -1.58821e-09, -0.000793077, 0.354999, 0.527902, -0.250225, -0.392755)
+size = Vector3(27.8148, 0.306772, 0.229263)
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, -1.82029, -0.490331, 0.248159)
-size = Vector3(16.3524, 0.233662, 0.149689)
+transform = Transform3D(0.605, -2.84217e-12, 2.70666e-09, -3.0333e-12, 0.604999, 0.00135158, -2.70666e-09, -0.00135158, 0.604998, -3.06741, -1.09248, -0.561424)
+size = Vector3(14.7093, 2.22376, 0.149689)
 
 [node name="Preview" type="Control" parent="."]
 layout_mode = 3
@@ -109,10 +141,6 @@ canvas_item_default_texture_filter = 0
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
-[node name="LAND_DUST" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("6_krkag")]
-transform = Transform3D(1.995, 0, 0, 0, 1.995, 0, 0, 0, 1.995, -7.41469, 0.791028, 3.23957)
-visible = false
-
 [node name="Pausing" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("4_x187o")]
 
 [node name="ColorRect" type="ColorRect" parent="Preview/SubViewportContainer/SubViewport"]
@@ -128,25 +156,25 @@ mouse_force_pass_scroll_events = false
 color = Color(0, 0, 0, 1)
 
 [node name="Enemy" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("9_38om4")]
-transform = Transform3D(0.6, 0, 1.04907e-07, 0, 0.6, 0, -1.04907e-07, 0, 0.6, -0.41856, 0.780326, -11.2596)
+transform = Transform3D(0.7, 0, 1.22391e-07, 0, 0.7, 0, -1.22391e-07, 0, 0.7, -0.41856, 0.780326, -11.2596)
 
 [node name="Enemy2" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("9_38om4")]
-transform = Transform3D(-1.31134e-07, 0, 0.6, 0, 0.6, 0, -0.6, 0, -1.31134e-07, -11.8859, 0.780326, -2.72438)
+transform = Transform3D(-1.14044e-07, 0, 0.7, 0, 0.7, 0, -0.7, 0, -1.14044e-07, -11.8859, 0.780326, -2.72438)
 
 [node name="Enemy3" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("9_38om4")]
-transform = Transform3D(1.83587e-07, 0, -0.6, 0, 0.6, 0, 0.6, 0, 1.83587e-07, 12.1141, 0.780326, -2.72438)
+transform = Transform3D(2.19742e-07, 0, -0.7, 0, 0.7, 0, 0.7, 0, 2.19742e-07, 12.1141, 0.780326, -2.72438)
 
 [node name="CameraSet" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("11_hq17w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35539, 1.77179, 13.061)
 target = NodePath("../Player2/CamTarget")
-speed = 4.0
+speed = 2.5
 
 [node name="CamTarget2" type="Marker3D" parent="Preview/SubViewportContainer/SubViewport"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 7.53036, 3.74131, 8.49949)
 gizmo_extents = 4.42
 
 [node name="Player2" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("15_i88xo")]
-transform = Transform3D(-0.6, 0, -9.05975e-08, 0, 0.6, 0, 9.05975e-08, 0, -0.6, 1.281, 0.539, -0.931)
+transform = Transform3D(-0.7, 0, -1.05697e-07, 0, 0.7, 0, 1.05697e-07, 0, -0.7, 1.281, 0.539, -0.931)
 
 [node name="DUST5" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("13_fmoji")]
 transform = Transform3D(-2.5, 0, 3.77489e-07, 0, 2.5, 0, -3.77489e-07, 0, -2.5, 0.000166655, -0.000171661, -0.000264883)

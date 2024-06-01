@@ -14,6 +14,7 @@ config/name="BLOOD RUSH! V2"
 config/tags=PackedStringArray("3d", "bloodrush", "thirdperson")
 run/main_scene="res://Game/DevRoomGame.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+boot_splash/bg_color=Color(0, 0, 0, 1)
 run/scale=0.5
 run/stretch/scale=1.0
 

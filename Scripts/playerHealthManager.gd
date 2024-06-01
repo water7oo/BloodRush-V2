@@ -5,7 +5,7 @@ extends Area3D
 
 
 var health
-var max_health = 10
+var max_health = 100
 var taking_damage := false
 
 

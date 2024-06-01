@@ -6,7 +6,12 @@ extends CharacterBody3D
 @onready var gameJuice = get_node("/root/GameJuice")
 @onready var followcam = get_node("/root/FollowCam")
 
+@onready var fps_label = $FPS_LABEL
+var FPS = Engine.get_frames_per_second()
+
 var last_ground_position = Vector3()
+var last_ground_rotation = Basis()
+
 var waveEffect = preload("res://FX/DustWave2.tscn")
 var AirWave = preload("res://FX/AirDustWave2.tscn")
 var GroundSpark = preload("res://FX/GroundSPark.tscn")
@@ -28,6 +33,7 @@ var spring_arm = camera.get_node("SpringArmPivot/SpringArm3D")
 @onready var Stamina_bar = $"UI Cooldowns"
 @onready var health_bar = $player_health
 @onready var controllerDebug = $ControllerDebug
+@onready var playerHealthLabel = $player_health_label
 
 
 var current_blend_amount = 0.0
@@ -70,6 +76,9 @@ var jump_counter = 1
 #Acceleration and Speed
 var can_move = true
 var can_process_input = true
+@export var armature_default_rot_speed = 0.1
+var armature_rot_speed 
+@export var armature_turn = 0.07
 @export var ACCELERATION = 50.0 #the higher the value the faster the acceleration
 @export var DECELERATION = 25.0 #the lower the value the slippier the stop
 @export var BASE_ACCELERATION = 50
@@ -79,6 +88,7 @@ var can_process_input = true
 var DASH_MAX_SPEED = BASE_SPEED * 3
 @export var momentum_deceleration = 1
 @export var momentum_acceleration = 1
+@export var speed_threshold = BASE_SPEED - 3
 
 @export var stamina = 100
 @export var sprinting_deplete_rate = 10
@@ -125,7 +135,7 @@ var LERP_VAL = 0.2
 var DODGE_LERP_VAL = 1
 var wall_jump_position = Vector3.ZERO
 
-var custom_gravity = 25.0 #The lower the value the floatier
+var custom_gravity = 30.0 #The lower the value the floatier
 var sprinting = false
 var dodging = false
 var dodge_timer = 0.0
@@ -185,8 +195,9 @@ func _ready():
 	Attack_Box = playerEditInstance.get_node("Armature/Skeleton3D/BoneAttachment3D/AttackBox")
 	armature = playerEditInstance.get_node("Armature")
 	Animationtree = playerEditInstance.get_node("AnimationTree")
-	
+	armature_rot_speed = armature_default_rot_speed
 	controllerDebug.text = "Keyboard Connected"
+	playerHealthLabel.value = playerHealthMan.max_health
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
@@ -217,7 +228,7 @@ func _unhandled_input(event):
 
 func controller_switch(delta):
 	if is_controller:
-		_proccess_controller_movement(delta)
+		_proccess_movement(delta)
 	elif is_key:
 		_proccess_movement(delta)
 
@@ -293,12 +304,26 @@ func _proccess_movement(delta):
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
 
-	if direction != Vector3.ZERO and can_move:
+	var speed_threshold = 3.0  # Define your speed threshold here
+
+	if direction != Vector3.ZERO && can_move:
 		is_moving = true
-		if velocity.dot(direction) < 0:  # Check if changing direction
+		if velocity.dot(direction) < 0 && current_speed > speed_threshold:
+			print("player is changing directions")
 			current_speed = move_toward(current_speed, 0, momentum_deceleration * delta)  # Decelerate quickly
-			if current_speed == 0:
-				ACCELERATION = momentum_acceleration  # Lower acceleration when changing direction
+			if current_speed >= 0:
+				#move_toward(BASE_ACCELERATION, 0, delta)
+				#move_toward(BASE_DECELERATION, 100, delta)
+				armature_rot_speed = armature_turn
+				print(armature_rot_speed)
+				current_speed = 0
+				print(current_speed)
+			if current_speed == 0 && direction:
+				print(armature_rot_speed)
+				move_toward(ACCELERATION, BASE_ACCELERATION, delta)
+				move_toward(DECELERATION, BASE_ACCELERATION, delta)
+				await get_tree().create_timer(.2).timeout
+				armature_rot_speed = armature_default_rot_speed
 
 		if current_speed < target_speed:
 			current_speed = move_toward(current_speed, target_speed, ACCELERATION * delta)
@@ -308,14 +333,14 @@ func _proccess_movement(delta):
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
 
-		if direction and not is_sprinting and is_on_floor():
+		if direction && !is_sprinting && is_on_floor():
 			Animationtree.set("parameters/Ground_Blend/blend_amount", 0)
 		else:
 			Animationtree.set("parameters/Ground_Blend/blend_amount", -1)
 
-		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), 0.1)
+		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), armature_rot_speed)
 
-	elif direction == Vector3.ZERO and is_on_floor():
+	elif direction == Vector3.ZERO && is_on_floor():
 		is_moving = false
 		velocity.x = move_toward(velocity.x, 0, BASE_DECELERATION * delta)
 		velocity.z = move_toward(velocity.z, 0, BASE_DECELERATION * delta)
@@ -327,16 +352,17 @@ func _proccess_movement(delta):
 
 	particle_emitt(input_dir)
 
-	if not is_on_floor():
-		print(velocity)
+	if !is_on_floor():
+		armature_rot_speed = armature_default_rot_speed
+		pass
 
 func disable_inputs():
 	can_process_input = false
-	print("cannot move")
+	#print("cannot move")
 
 func enable_inputs():
 	can_process_input = true
-	print("can move")
+	#print("can move")
 	
 func particle_emitt(input_dir):
 	for node in dust_trail:
@@ -384,6 +410,7 @@ func AirWaveEffect():
 		var AirWave = AirWave.instantiate()
 		get_parent().add_child(AirWave)
 		AirWave.global_transform.origin = last_ground_position + Vector3(0,1,0)
+		AirWave.global_transform.basis = last_ground_rotation.basis
 		await get_tree().create_timer(.6).timeout
 		AirWave.queue_free()
 		
@@ -395,12 +422,13 @@ func GeneralwaveEffect():
 		await get_tree().create_timer(.7).timeout
 		waveEffect.queue_free()
 
-func LandingGroundEffect():
+func LandingGroundEffect(delta):
 	if is_on_floor():
 		if (is_in_air == true):
 			is_in_air = false
 			if air_timer >= 0.2:
 				var waveEffect = waveEffect.instantiate()
+				$AudioStreamPlayer4.play()
 				get_parent().add_child(waveEffect)
 				waveEffect.global_transform.origin = last_ground_position
 				await get_tree().create_timer(.7).timeout
@@ -475,6 +503,7 @@ func _proccess_dodge(delta):
 	if dodging && is_on_floor() && can_dodge && Stamina_bar.value > 0 && current_speed >= 3 && is_moving:
 		is_dodging = true
 		$AudioStreamPlayer2.play()
+		armature_rot_speed = 1
 		last_ground_position = global_transform.origin 
 		current_speed = DODGE_SPEED
 		ACCELERATION = DODGE_ACCELERATION
@@ -512,10 +541,11 @@ func _proccess_dodge(delta):
 			
 		
 	if spinDodge_timer_cooldown <= spinDodge_reset && !air_spin && dodging && is_moving:
-		Animationtree.set("parameters/Ground_Blend3/blend_amount", 1)
+		#Animationtree.set("parameters/Ground_Blend3/blend_amount", 1)
+		armature_rot_speed = armature_default_rot_speed
 		velocity.y = 6
 		air_spin = true
-		print("yea")
+		jump_counter = 1
 		current_speed = SPIN_DODGE_SPEED
 		ACCELERATION = DODGE_ACCELERATION
 		DECELERATION = DODGE_DECELERATION
@@ -559,16 +589,31 @@ func _proccess_cooldown(delta):
 			can_dodge = false
 
 func _proccess_jump(delta):
-
+	print(current_speed)
 	if !is_on_floor():
 		air_timer += delta
 		can_jump = false
 		velocity.y -= custom_gravity * delta
-	elif is_on_floor():
+		
+		if !direction:
+			current_speed -= 20 *  delta
+			if current_speed <= -1:
+				current_speed = 0
+			print("working")
+			
+	elif is_on_floor(): 
 		can_jump = true
 		Animationtree.set("parameters/Jump_Blend/blend_amount", -1)
 		jump_counter = 0  # Reset jump counter when landing on the ground
 		last_ground_position = global_transform.origin 
+		
+		if air_timer >= 0.2:
+			var waveEffect = waveEffect.instantiate()
+			$AudioStreamPlayer4.play()
+			get_parent().add_child(waveEffect)
+			waveEffect.global_transform.origin = last_ground_position
+			await get_tree().create_timer(.7).timeout
+			waveEffect.queue_free()
 
 	if velocity.y > 0 && jump_timer >= 0.01:
 		Animationtree.set("parameters/Jump_Blend/blend_amount", 1)
@@ -577,12 +622,12 @@ func _proccess_jump(delta):
 		jump_timer += delta
 		air_timer += delta
 		$AudioStreamPlayer3.play()
+		LandingGroundEffect(delta)
 
 		if jump_timer <= 0.4:
 			velocity.y = JUMP_VELOCITY
 			can_jump = false
 			jump_counter += 1  # Increase jump counter when jumping
-			
 			GeneralwaveEffect()
 
 		else:
@@ -654,13 +699,27 @@ func _physics_process(delta):
 	_proccess_attack(delta)
 	
 	controller_switch(delta)
+	LandingGroundEffect(delta)
 	
-	LandingGroundEffect()
+
+	fps_label.text = ("FPS: " + str(Engine.get_frames_per_second()))
 	
+	if is_on_floor():
+		if is_in_air:
+			is_in_air = false
+			if air_timer >= 0.2:
+				print("landing")
+			air_timer = 0.0
+	else:
+		is_in_air = true
+		air_timer += delta
+	
+	if is_on_floor():
+		last_ground_position = global_transform.origin
+		last_ground_rotation = global_transform
+		
 	speedDebug.value = current_speed
-	playerHealthMan.health = playerHealthMan.max_health
-	$player_health_label.value = playerHealthMan.health
-	$player_health_label.max_value = playerHealthMan.max_health
+	playerHealthLabel.value = playerHealthMan.max_health
 	
 	if Input.is_action_just_pressed("mouse_left"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

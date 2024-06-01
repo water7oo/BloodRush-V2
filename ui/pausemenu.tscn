@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://calkwg7q3s3vk"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jhd5i"]
+blend_mode = 3
+
+[sub_resource type="QuadMesh" id="QuadMesh_pxkic"]
+
+[node name="PAUSEMENU" type="Node2D"]
+visible = false
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+texture_filter = 1
+material = SubResource("CanvasItemMaterial_jhd5i")
+position = Vector2(580.25, 327.25)
+scale = Vector2(1161.5, 655.5)
+mesh = SubResource("QuadMesh_pxkic")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="MeshInstance2D"]
+use_parent_material = true
+color = Color(0.584314, 0.584314, 0.584314, 1)
