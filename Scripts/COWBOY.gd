@@ -76,15 +76,17 @@ var jump_counter = 1
 #Acceleration and Speed
 var can_move = true
 var can_process_input = true
-@export var armature_default_rot_speed = 0.1
+@export var armature_default_rot_speed = 0.09
 var armature_rot_speed 
 @export var armature_turn = 0.07
 @export var ACCELERATION = 50.0 #the higher the value the faster the acceleration
 @export var DECELERATION = 25.0 #the lower the value the slippier the stop
 @export var BASE_ACCELERATION = 50
 @export var BASE_DECELERATION = 25
-@export var DASH_ACCELERATION = 30
-@export var DASH_DECELERATION = 15
+@export var BASE_DASH_ACCELERATION = 45
+@export var BASE_DASH_DECELERATION = 30
+@export var DASH_ACCELERATION = 45
+@export var DASH_DECELERATION = 30
 var DASH_MAX_SPEED = BASE_SPEED * 3
 @export var momentum_deceleration = 1
 @export var momentum_acceleration = 1
@@ -304,26 +306,30 @@ func _proccess_movement(delta):
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
 
-	var speed_threshold = 3.0  # Define your speed threshold here
+	var speed_threshold = 5.0  # Define your speed threshold here
 
 	if direction != Vector3.ZERO && can_move:
 		is_moving = true
 		if velocity.dot(direction) < 0 && current_speed > speed_threshold:
 			print("player is changing directions")
-			current_speed = move_toward(current_speed, 0, momentum_deceleration * delta)  # Decelerate quickly
+			current_speed = move_toward(current_speed, 0, momentum_deceleration * delta)  
 			if current_speed >= 0:
-				#move_toward(BASE_ACCELERATION, 0, delta)
-				#move_toward(BASE_DECELERATION, 100, delta)
 				armature_rot_speed = armature_turn
-				print(armature_rot_speed)
+				
 				current_speed = 0
-				print(current_speed)
 			if current_speed == 0 && direction:
-				print(armature_rot_speed)
 				move_toward(ACCELERATION, BASE_ACCELERATION, delta)
 				move_toward(DECELERATION, BASE_ACCELERATION, delta)
 				await get_tree().create_timer(.2).timeout
 				armature_rot_speed = armature_default_rot_speed
+			
+			if sprinting && current_speed >= 11:
+				print("SKID")
+				DASH_DECELERATION = momentum_deceleration
+				DASH_ACCELERATION = momentum_acceleration
+			else:
+				DASH_DECELERATION = BASE_DASH_DECELERATION
+				DASH_ACCELERATION = BASE_DASH_ACCELERATION
 
 		if current_speed < target_speed:
 			current_speed = move_toward(current_speed, target_speed, ACCELERATION * delta)
@@ -441,8 +447,8 @@ func _proccess_sprinting(delta):
 	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true && is_on_floor():
 		sprint_timer += delta
 		is_sprinting = true
+		Animationtree.set("parameters/Jump_Blend/blend_amount", 1)
 		Stamina_bar.value -= sprinting_deplete_rate * delta
-		
 		target_speed = MAX_SPEED
 		ACCELERATION = DASH_ACCELERATION
 		DECELERATION = DASH_DECELERATION
@@ -450,7 +456,7 @@ func _proccess_sprinting(delta):
 		current_blend_amount = lerp(current_blend_amount, target_blend_amount, blend_lerp_speed * delta)
 		
 		if sprint_timer >= 0.2:
-			Animationtree.set("parameters/Ground_Blend/blend_damount", 1)
+			Animationtree.set("parameters/Ground_Blend2/blend_amount", 0)
 		
 		if sprint_timer >= 4.5:
 			DASH_ACCELERATION = SECOND_DASH_ACCELERATION
@@ -483,6 +489,7 @@ func _proccess_sprinting(delta):
 			sprinting_refill_rate = sprinting_refill_rate
 			
 			
+			
 	else:
 		is_sprinting = false
 		target_speed = BASE_SPEED
@@ -495,6 +502,9 @@ func _proccess_sprinting(delta):
 			
 		if Stamina_bar.value == stamina:
 			can_sprint = true
+			
+		if velocity.dot(direction) < 0 && is_sprinting:
+			print("working on sprinting")
 
 func _proccess_dodge(delta):
 	#print("SpinDodge Timer " + str(spinDodge_timer_cooldown))
@@ -540,7 +550,7 @@ func _proccess_dodge(delta):
 			spinDodge_timer_cooldown = spinDodge_reset
 			
 		
-	if spinDodge_timer_cooldown <= spinDodge_reset && !air_spin && dodging && is_moving:
+	if spinDodge_timer_cooldown <= spinDodge_reset && !air_spin && dodging && is_moving && is_on_floor():
 		#Animationtree.set("parameters/Ground_Blend3/blend_amount", 1)
 		armature_rot_speed = armature_default_rot_speed
 		velocity.y = 6
@@ -589,17 +599,16 @@ func _proccess_cooldown(delta):
 			can_dodge = false
 
 func _proccess_jump(delta):
-	print(current_speed)
 	if !is_on_floor():
 		air_timer += delta
 		can_jump = false
 		velocity.y -= custom_gravity * delta
 		
-		if !direction:
-			current_speed -= 20 *  delta
-			if current_speed <= -1:
-				current_speed = 0
-			print("working")
+		#if !direction:
+			#current_speed -= 20 *  delta
+			#if current_speed <= -1:
+				#current_speed = 0
+			#print("working")
 			
 	elif is_on_floor(): 
 		can_jump = true
