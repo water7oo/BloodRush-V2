@@ -444,6 +444,12 @@ func LandingGroundEffect(delta):
 		is_in_air = true
 
 func _proccess_sprinting(delta):
+	if sprinting:
+		if Input.is_action_just_pressed("move_jump"):
+			is_in_air = true
+			if is_on_floor():
+				current_speed -= 1
+			
 	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true && is_on_floor():
 		sprint_timer += delta
 		is_sprinting = true

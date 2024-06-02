@@ -59,10 +59,11 @@ func _unhandled_input(event):
 	#if Input.get_action_strength("cam_left"):
 		#spring_arm_pivot.rotation.y += joystick_sensitivity 
 
+func _physics_process(delta):
+	followTarget(delta)
 
 func _process(delta: float) -> void:
 	_unhandled_input(delta)
-	followTarget(delta)
 	playShake()
 	if Input.is_action_just_pressed("shake_test"):
 		applyShake(.04,0.08)

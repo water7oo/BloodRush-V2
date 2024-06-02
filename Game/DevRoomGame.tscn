@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b2ud3ury8epgi"]
+[gd_scene load_steps=15 format=3 uid="uid://b2ud3ury8epgi"]
 
 [ext_resource type="Environment" uid="uid://cadv2uehcxqkc" path="res://MaterialTextures/NewGame.tres" id="1_c0qo6"]
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://MaterialTextures/Room.tres" id="1_ewgn2"]
@@ -8,9 +8,7 @@
 [ext_resource type="Shader" path="res://Shaders/uhhhhh.gdshader" id="7_kt4n2"]
 [ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Enemy/Enemy2.tscn" id="9_38om4"]
 [ext_resource type="PackedScene" uid="uid://7l5yih8w56c3" path="res://Player/PlayerCamera.tscn" id="11_hq17w"]
-[ext_resource type="PackedScene" uid="uid://ctudhwisdi64s" path="res://FX/Burst_dust.tscn" id="13_fmoji"]
 [ext_resource type="PackedScene" uid="uid://rlcylvhdacih" path="res://FX/Move_Dust.tscn" id="14_xyb0d"]
-[ext_resource type="PackedScene" uid="uid://d1yu2x7osdqa5" path="res://FX/jump_dust.tscn" id="15_2mw5p"]
 [ext_resource type="AudioStream" uid="uid://dn1alcmrcoqhd" path="res://Sounds/Bayonetta OST - Mysterious Destiny.mp3" id="15_a41v4"]
 [ext_resource type="PackedScene" uid="uid://dcfrtjlyu7745" path="res://Player/BloodRushPlayer.tscn" id="15_i88xo"]
 [ext_resource type="PackedScene" uid="uid://dq1wojfy8mi7q" path="res://FX/Dust.tscn" id="16_dgh31"]
@@ -34,7 +32,6 @@ shader_parameter/clipPosition = 0.2
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.499315, 0.026168, 0, 0.052336, 0.99863, -0.5, 0.864838, -0.0453243, -6.46824, 61.2841, 3.0847)
-light_angular_distance = 2.4
 shadow_bias = 0.0
 shadow_normal_bias = 2.139
 directional_shadow_mode = 0
@@ -167,7 +164,7 @@ transform = Transform3D(2.19742e-07, 0, -0.7, 0, 0.7, 0, 0.7, 0, 2.19742e-07, 12
 [node name="CameraSet" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("11_hq17w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35539, 1.77179, 13.061)
 target = NodePath("../Player2/CamTarget")
-speed = 3.0
+speed = 3.5
 
 [node name="CamTarget2" type="Marker3D" parent="Preview/SubViewportContainer/SubViewport"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 7.53036, 3.74131, 8.49949)
@@ -176,14 +173,8 @@ gizmo_extents = 4.42
 [node name="Player2" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("15_i88xo")]
 transform = Transform3D(-0.7, 0, -1.05697e-07, 0, 0.7, 0, 1.05697e-07, 0, -0.7, 1.281, 0.539, -0.931)
 
-[node name="DUST5" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("13_fmoji")]
-transform = Transform3D(-2.5, 0, 3.77489e-07, 0, 2.5, 0, -3.77489e-07, 0, -2.5, 0.000166655, -0.000171661, -0.000264883)
-
 [node name="DUST4" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("14_xyb0d")]
 transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0.000166655, -0.000171661, -0.000264883)
-
-[node name="DUST3" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("15_2mw5p")]
-transform = Transform3D(-2.5, 0, 3.77489e-07, 0, 2.5, 0, -3.77489e-07, 0, -2.5, 0.000166655, -0.000171661, -0.000264883)
 
 [node name="DUST2" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("16_dgh31")]
 transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0.0452724, 0.22471, -0.133994)
@@ -194,5 +185,5 @@ gizmo_extents = 4.42
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("15_a41v4")
-volume_db = -15.0
+volume_db = -21.679
 autoplay = true

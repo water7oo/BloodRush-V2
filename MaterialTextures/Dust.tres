@@ -5,7 +5,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ernjt"]
 render_priority = 0
 shader = ExtResource("1_snj04")
-shader_parameter/border_width = 0.735
+shader_parameter/border_width = 0.325
 shader_parameter/color = Color(0, 0, 0, 1)
 shader_parameter/pattern = null
 shader_parameter/line_number = null
@@ -21,7 +21,7 @@ render_priority = 1
 next_pass = SubResource("ShaderMaterial_ernjt")
 blend_mode = 1
 cull_mode = 2
-no_depth_test = true
+depth_draw_mode = 2
 shading_mode = 0
 diffuse_mode = 3
 specular_mode = 1

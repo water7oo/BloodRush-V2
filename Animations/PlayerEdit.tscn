@@ -2253,14 +2253,11 @@ bones/16/scale = Vector3(1, 1, 1)
 bones/17/rotation = Quaternion(0.0567006, 0.795909, -0.550294, 0.245949)
 bones/17/scale = Vector3(1, 1, 1)
 bones/18/rotation = Quaternion(0.350875, -0.163907, 0.0625211, 0.919844)
-bones/18/scale = Vector3(1, 1, 1)
 bones/20/rotation = Quaternion(-0.00120437, -0.0434415, 0.99903, -0.00713321)
 bones/20/scale = Vector3(1, 1, 1.00003)
 bones/21/rotation = Quaternion(0.196224, -0.00153166, -0.0209873, 0.980333)
-bones/21/scale = Vector3(1, 1, 1)
 bones/22/rotation = Quaternion(-0.0599857, 0.797559, -0.548493, -0.243837)
 bones/22/scale = Vector3(1, 1, 1)
-bones/23/scale = Vector3(1, 1, 1)
 
 [node name="BELT" parent="Armature/Skeleton3D" index="0"]
 surface_material_override/0 = ExtResource("1_6p5pg")
@@ -2284,7 +2281,7 @@ surface_material_override/0 = ExtResource("1_6p5pg")
 surface_material_override/0 = ExtResource("1_6p5pg")
 
 [node name="SwordBone" type="BoneAttachment3D" parent="Armature/Skeleton3D" index="7"]
-transform = Transform3D(-0.246481, -0.646058, 0.722396, 0.906519, 0.109915, 0.407604, -0.342739, 0.755332, 0.558572, -60.2993, -7.15387, -84.6654)
+transform = Transform3D(-0.238495, -0.647394, 0.723879, 0.911113, 0.108843, 0.397525, -0.336145, 0.754343, 0.563891, -59.1396, -6.8201, -85.5079)
 bone_name = "mixamorig_RightHand"
 bone_idx = 14
 
@@ -2300,7 +2297,7 @@ transform = Transform3D(-37.665, 41.8695, -59.5466, -22.7462, 64.8995, 77.8348, 
 shape = SubResource("BoxShape3D_713ht")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Armature/Skeleton3D" index="8"]
-transform = Transform3D(-0.246481, -0.646058, 0.722396, 0.906519, 0.109915, 0.407604, -0.342739, 0.755332, 0.558572, -60.2993, -7.15387, -84.6654)
+transform = Transform3D(-0.238495, -0.647394, 0.723879, 0.911113, 0.108843, 0.397525, -0.336145, 0.754343, 0.563891, -59.1396, -6.8201, -85.5079)
 visible = false
 bone_name = "mixamorig_RightHand"
 bone_idx = 14

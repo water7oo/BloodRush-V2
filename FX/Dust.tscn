@@ -23,16 +23,18 @@ anim_speed_max = 4.46
 turbulence_noise_strength = 0.03
 turbulence_noise_scale = 4.81
 
-[sub_resource type="BoxMesh" id="BoxMesh_yot3f"]
+[sub_resource type="SphereMesh" id="SphereMesh_wwj4s"]
+radial_segments = 8
+rings = 3
 
 [node name="DUST2" type="Node3D" groups=["dust_trail"]]
 
 [node name="Dust" type="GPUParticles3D" parent="."]
 transform = Transform3D(2.22643, 0, 0, 0, 0.492198, 0, 0, 0, 1, 0, 0, 0)
 material_override = ExtResource("1_nlbt2")
-amount = 10
+amount = 20
 lifetime = 0.5
 randomness = 1.0
 trail_lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_x4vu0")
-draw_pass_1 = SubResource("BoxMesh_yot3f")
+draw_pass_1 = SubResource("SphereMesh_wwj4s")
