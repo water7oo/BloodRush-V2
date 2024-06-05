@@ -3,6 +3,9 @@ extends CharacterBody3D
 
 @onready var playerHealthMan = get_node("/root/PlayerHealthManager")
 @onready var enemyHealthMan = get_node("/root/EnemyHealthManager")
+
+#@onready var playerEditScene = preload("res://Animations/PlayerEdit.tscn")
+#@onready var armature = playerEditScene.get_node("Armature")
 @onready var gameJuice = get_node("/root/GameJuice")
 @onready var followcam = get_node("/root/FollowCam")
 @onready var enemyHealthLabel = $health_label
@@ -68,13 +71,14 @@ func _on_enemy_area_entered(area):
 		print("Player hit me")
 		
 		
-	if area.has_method("takeDamage") and not attack_processing:
+	if area.has_method("takeDamage") && !attack_processing:
 		playerHealthMan.takeDamage(playerHealthMan.health, attack_power)
 		$AudioStreamPlayer.play()
 		attack_processing = true
 		enemyBox.monitoring = true
 		gameJuice.hitStop(0.25, area)
-		
+		gameJuice.objectShake(area.get_parent(),0.08,.7)
+		("Hit player")
 		
 		gameJuice.knockback(area.get_parent(), enemyBox, 10)
 		
@@ -84,7 +88,7 @@ func _on_enemy_area_entered(area):
 		enemyBox.monitoring = false
 		await get_tree().create_timer(1).timeout
 		enemyBox.monitoring = true
-		print(enemyBox.monitoring)
+		#print(enemyBox.monitoring)
 		
 	
 func _on_hurt_box_area_entered(area):

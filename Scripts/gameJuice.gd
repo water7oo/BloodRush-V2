@@ -6,6 +6,8 @@ var knockback_direction = Vector3(-1, 0, 0)  # Example knockback direction (left
 var knockback_distance = 2  # Example knockback distance
 var knockback_force = 1000  # Example knockback force
 
+@export var period = .04
+@export var magnitude = 0.08
 
 var impact = true
 func _ready():
@@ -18,9 +20,14 @@ func hitPause(timeScale, duration):
 		var timer = get_tree().create_timer(timeScale * duration)
 		await timer.timeout
 		Engine.time_scale = 1
-		print("HIT PAUSE")
+		#print("HIT PAUSE")
 
-
+func find_skeleton(node):
+	while node:
+		if node is Skeleton3D:
+			return node
+		node = node.get_parent()
+	return null
 
 func knockback(enemy, target_attack, knockback_force):
 	# Get the global transforms of the enemy and the target attack box
@@ -43,8 +50,9 @@ func knockback(enemy, target_attack, knockback_force):
 	enemy.velocity.y = 0
 
 func hitStop(duration, target):
-		print("PAUSE")
-		target.get_parent().rotate_y(deg_to_rad(180))
+		#print("PAUSE")
+		#HitPause
+		#target.get_parent().rotate_y(deg_to_rad(180))
 		pause()
 		
 		target.get_parent().pause()
@@ -52,8 +60,10 @@ func hitStop(duration, target):
 		target.get_parent().current_speed = 0
 		await get_tree().create_timer(duration).timeout
 		
-		target.get_parent().rotate_y(deg_to_rad(180))
-		print("UNPAUSE")
+		#target.get_parent().rotate_y(deg_to_rad(180))
+		
+		#Hit UNpause
+		#print("UNPAUSE")
 		unpause()
 		target.get_parent().unpause()
 		await get_tree().create_timer(.5).timeout
@@ -64,6 +74,24 @@ func pause():
 
 func unpause():
 	process_mode = PROCESS_MODE_INHERIT
+	
+	
+func objectShake(target, period, magnitude):
+	var initial_transform = target.transform
+	var elapsed_time = 0.0
+	
+	while elapsed_time < period:
+		var offset = Vector3(
+			randf_range(-magnitude, magnitude),
+			randf_range(-magnitude, magnitude),
+			0.0
+		)
+
+		target.transform.origin = initial_transform.origin + offset
+		elapsed_time += get_process_delta_time()
+		await get_tree().process_frame
+
+	target.transform = initial_transform
 
 
 

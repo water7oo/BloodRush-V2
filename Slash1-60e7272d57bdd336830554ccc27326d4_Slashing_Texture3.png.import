@@ -2,17 +2,18 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wj536ylnijqm"
-path.s3tc="res://.godot/imported/texture_13.png-891332ffbf32d9b94212aaf3a11a15a9.s3tc.ctex"
+uid="uid://da0ax14d878w7"
+path.s3tc="res://.godot/imported/Slash1-60e7272d57bdd336830554ccc27326d4_Slashing_Texture3.png-4696e6f989e2a2966645940503b157b3.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={}
 
 [deps]
 
-source_file="res://addons/kenney_prototype_textures/red/texture_13.png"
-dest_files=["res://.godot/imported/texture_13.png-891332ffbf32d9b94212aaf3a11a15a9.s3tc.ctex"]
+source_file="res://Slash1-60e7272d57bdd336830554ccc27326d4_Slashing_Texture3.png"
+dest_files=["res://.godot/imported/Slash1-60e7272d57bdd336830554ccc27326d4_Slashing_Texture3.png-4696e6f989e2a2966645940503b157b3.s3tc.ctex"]
 
 [params]
 

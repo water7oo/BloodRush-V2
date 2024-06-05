@@ -4,7 +4,9 @@ render_mode blend_mix,
 	depth_prepass_alpha,
 	shadows_disabled,
 	specular_disabled,
+	unshaded,
 	vertex_lighting;
+
 
 uniform bool affine_mapping = false;
 uniform sampler2D albedo : source_color, filter_nearest;
@@ -45,6 +47,7 @@ void fragment()
 	vec4 texture_color = texture(albedo, UV);
 
 	ALBEDO = (color_base * texture_color).rgb;
+	
 	ALPHA = texture_color.a * color_base.a;
 	ALPHA_SCISSOR_THRESHOLD = alpha_scissor;
 }

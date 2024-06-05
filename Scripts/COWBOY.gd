@@ -193,16 +193,19 @@ var is_key = false
 
 func _ready():
 	playerEditInstance = playerEditScene.instantiate()
-	add_child(playerEditInstance)
-	Attack_Box = playerEditInstance.get_node("Armature/Skeleton3D/BoneAttachment3D/AttackBox")
+	add_child(playerEditInstance) 
+	Attack_Box = playerEditInstance.get_node("Armature/Skeleton3D/BoneAttachment3D/Attack_Box")
 	armature = playerEditInstance.get_node("Armature")
 	Animationtree = playerEditInstance.get_node("AnimationTree")
 	armature_rot_speed = armature_default_rot_speed
 	controllerDebug.text = "Keyboard Connected"
 	playerHealthLabel.value = playerHealthMan.max_health
 	
+	var animation_player = playerEditInstance.get_node("$AnimationPlayer")
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
+func _on_custom_animation_finished(anim_name):
+	print("Custom signal received for animation:", anim_name)
 
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("quit_game"):
@@ -306,7 +309,8 @@ func _proccess_movement(delta):
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
 
-	var speed_threshold = 5.0  # Define your speed threshold here
+	var speed_threshold = 5.0
+	var max_speed_threshold = MAX_SPEED  # Define your speed threshold here
 
 	if direction != Vector3.ZERO && can_move:
 		is_moving = true
@@ -315,7 +319,6 @@ func _proccess_movement(delta):
 			current_speed = move_toward(current_speed, 0, momentum_deceleration * delta)  
 			if current_speed >= 0:
 				armature_rot_speed = armature_turn
-				
 				current_speed = 0
 			if current_speed == 0 && direction:
 				move_toward(ACCELERATION, BASE_ACCELERATION, delta)
@@ -324,13 +327,12 @@ func _proccess_movement(delta):
 				armature_rot_speed = armature_default_rot_speed
 			
 			if sprinting && current_speed >= 11:
-				print("SKID")
 				DASH_DECELERATION = momentum_deceleration
 				DASH_ACCELERATION = momentum_acceleration
 			else:
 				DASH_DECELERATION = BASE_DASH_DECELERATION
 				DASH_ACCELERATION = BASE_DASH_ACCELERATION
-
+				
 		if current_speed < target_speed:
 			current_speed = move_toward(current_speed, target_speed, ACCELERATION * delta)
 		else:
@@ -605,6 +607,7 @@ func _proccess_cooldown(delta):
 			can_dodge = false
 
 func _proccess_jump(delta):
+		
 	if !is_on_floor():
 		air_timer += delta
 		can_jump = false
@@ -643,7 +646,7 @@ func _proccess_jump(delta):
 			velocity.y = JUMP_VELOCITY
 			can_jump = false
 			jump_counter += 1  # Increase jump counter when jumping
-			GeneralwaveEffect()
+			#GeneralwaveEffect()
 
 		else:
 			velocity.y -= custom_gravity * delta
@@ -687,14 +690,14 @@ func _proccess_attack(delta):
 	if attack_cooldown <= 0.0:
 		is_attacking = false
 	if Input.is_action_just_pressed("attack_light_1") && attack_cooldown <= 0.0 && is_on_floor() && can_attack:
-		Animationtree.set("parameters/Attack_Shot/request", 1)
+		Animationtree.set("parameters/Attack_Shot/blend_amount", 0)
 		print("Attack")
 		current_speed = 0
 		Attack_Box.monitoring = true
 		is_attacking = true
 		attack_cooldown = 0.5 # Set the cooldown time (0.5 seconds in this case)
-		await get_tree().create_timer(0.5).timeout
-		Animationtree.set("parameters/Attack_Shot/request", 2)
+		await get_tree().create_timer(1).timeout
+		Animationtree.set("parameters/Attack_Shot/blend_amount", 1)
 		
 	else:
 		Attack_Box.monitoring = false
@@ -716,7 +719,7 @@ func _physics_process(delta):
 	controller_switch(delta)
 	LandingGroundEffect(delta)
 	
-
+			
 	fps_label.text = ("FPS: " + str(Engine.get_frames_per_second()))
 	
 	if is_on_floor():
@@ -775,31 +778,23 @@ func unpause():
 
 #things entering the players hurtbox
 func _on_hurt_box_area_entered(area):
-	if area.name == "enemyBox":
-		if !is_on_floor():
-			print("got hit in the air")
-			Animationtree.set("parameters/Ground_Blend3/blend_amount", 1)
-			can_move = false
-			can_sprint = false
-			can_attack = false
-			
-			await get_tree().create_timer(0.9).timeout
-			Animationtree.set("parameters/Ground_Blend3/blend_amount", -1)
-			can_move = true
-			can_sprint = true
-			can_attack = true
-		
-		elif is_on_floor():
-			print("got hit in the floor")
-			Animationtree.set("parameters/Ground_Blend3/blend_amount", 1)
-			can_move = false
-			await get_tree().create_timer(0.9).timeout
-			can_move = true
-			Animationtree.set("parameters/Ground_Blend3/blend_amount", -1)
-			
-		else:
-			can_move = true
-			Animationtree.set("parameters/Ground_Blend3/blend_amount", -1)
-			
-		
-	pass # Replace with function body.
+		#if area.name != "HurtBox" || "Attack_Box":
+			#if !is_on_floor():
+				#print("got hit in the air")
+				#disable_inputs()
+				#can_jump = false
+				#await get_tree().create_timer(.5).timeout
+				#can_jump = true
+				#enable_inputs()
+			#
+			#elif is_on_floor():
+				#print("got hit in the floor")
+				#disable_inputs()
+				#can_jump = false
+				#await get_tree().create_timer(.5).timeout
+				#can_jump = true
+				#enable_inputs()
+				#
+			#else:
+				#enable_inputs()
+		pass

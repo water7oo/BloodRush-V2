@@ -5,15 +5,18 @@ extends Area3D
 @onready var animationPlayer = $AnimationPlayer
 @onready var enemy = get_node("/root/enemy")
 @onready var punch_dust = get_tree().get_nodes_in_group("punch_dust")
-
+@onready var enemyHealthBar = load("res://Enemy/Enemy2.tscn::ShaderMaterial_ra2eo")
 var health
-var max_health = 10
+var max_health = 10.0
 var taking_damage := false
 
 
 func _ready():
 	var health = max_health
+	enemyHealthBar.set_shader_parameter('progress', health)
+	
 	pass
+	
 	
 func readHealth():
 	print("Enemy health is currently " + str(health))

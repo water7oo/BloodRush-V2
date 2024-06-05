@@ -5,7 +5,7 @@ extends Area3D
 
 
 var health
-var max_health = 100
+var max_health = 10
 var taking_damage := false
 
 
@@ -15,13 +15,14 @@ func _ready():
 
 
 func readHealth():
-	print("Player health is currently " + str(health))
+	#print("Player health is currently " + str(health))
+	pass
 
 
 func takeDamage(health, attack_damage):
 	max_health = max_health - attack_damage
 	
-	print("Player IS TAKING DAMAGE " + str(max_health))
+	#print("Player IS TAKING DAMAGE " + str(max_health))
 	taking_damage = true
 	await get_tree().create_timer(.15).timeout
 	taking_damage = false
