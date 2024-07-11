@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b2ud3ury8epgi"]
+[gd_scene load_steps=16 format=3 uid="uid://b2ud3ury8epgi"]
 
 [ext_resource type="Environment" uid="uid://cadv2uehcxqkc" path="res://MaterialTextures/NewGame.tres" id="1_c0qo6"]
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://MaterialTextures/Room.tres" id="1_ewgn2"]
@@ -8,8 +8,9 @@
 [ext_resource type="Shader" path="res://Shaders/uhhhhh.gdshader" id="7_kt4n2"]
 [ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Enemy/Enemy2.tscn" id="9_38om4"]
 [ext_resource type="PackedScene" uid="uid://7l5yih8w56c3" path="res://Player/PlayerCamera.tscn" id="11_hq17w"]
+[ext_resource type="AudioStream" uid="uid://b6ntep1rwaq7e" path="res://Sounds/Doku.mp3" id="12_yhw42"]
+[ext_resource type="PackedScene" uid="uid://da2icq52660iu" path="res://Buildings/BUILDINGS_2.tscn" id="13_b0rkl"]
 [ext_resource type="PackedScene" uid="uid://rlcylvhdacih" path="res://FX/Move_Dust.tscn" id="14_xyb0d"]
-[ext_resource type="AudioStream" uid="uid://dn1alcmrcoqhd" path="res://Sounds/Bayonetta OST - Mysterious Destiny.mp3" id="15_a41v4"]
 [ext_resource type="PackedScene" uid="uid://dcfrtjlyu7745" path="res://Player/BloodRushPlayer.tscn" id="15_i88xo"]
 [ext_resource type="PackedScene" uid="uid://dq1wojfy8mi7q" path="res://FX/Dust.tscn" id="16_dgh31"]
 
@@ -31,7 +32,7 @@ shader_parameter/clipPosition = 0.2
 [node name="TRAINING" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.499315, 0.026168, 0, 0.052336, 0.99863, -0.5, 0.864838, -0.0453243, -6.46824, 61.2841, 3.0847)
+transform = Transform3D(-0.916113, -0.373826, -0.14488, 0.130719, -0.620135, 0.773528, -0.37901, 0.6897, 0.61698, -6.46824, 61.2841, 3.0847)
 shadow_bias = 0.0
 shadow_normal_bias = 2.139
 directional_shadow_mode = 0
@@ -76,8 +77,8 @@ transform = Transform3D(-8.71129e-11, -3.55271e-14, -1.81209, 1.09694e-10, 0.011
 size = Vector3(845.143, 371.116, 8.92601)
 
 [node name="MeshInstance3D" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(11.342, 0, 0, 1.77636e-15, 9.38252, 0, 0, 0, 8.72365, -154.369, -0.222031, -2.19475)
-size = Vector3(27.131, 0.730957, 0.574463)
+transform = Transform3D(11.342, 6.91216e-11, 0, 1.77636e-15, 9.38252, 0, 0, 0, 8.72365, -154.369, -0.222031, -1.93092)
+size = Vector3(27.131, 0.730957, 0.634949)
 
 [node name="MeshInstance3D4" type="CSGBox3D" parent="Floor"]
 transform = Transform3D(6.39158e-09, -1.77944e-07, 4.014, 0.00319167, -1.12415e-08, -8.03841e-06, 5.20006e-10, 0.069, 1.03517e-05, -1.31426, -0.906931, -0.413)
@@ -174,16 +175,21 @@ gizmo_extents = 4.42
 transform = Transform3D(-0.7, 0, -1.05697e-07, 0, 0.7, 0, 1.05697e-07, 0, -0.7, 1.281, 0.539, -0.931)
 
 [node name="DUST4" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("14_xyb0d")]
-transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0.000166655, -0.000171661, -0.000264883)
+transform = Transform3D(-0.7, 0, 1.05697e-07, 0, 0.7, 0, -1.05697e-07, 0, -0.7, 0.000166655, -0.000171661, -0.000264883)
 
 [node name="DUST2" parent="Preview/SubViewportContainer/SubViewport/Player2" instance=ExtResource("16_dgh31")]
-transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0.0452724, 0.22471, -0.133994)
+transform = Transform3D(-0.7, 0, 1.05697e-07, 0, 0.7, 0, -1.05697e-07, 0, -0.7, 0.0452724, 0.22471, -0.133994)
 
 [node name="CamTarget" type="Marker3D" parent="Preview/SubViewportContainer/SubViewport/Player2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.204153, 0.456101, 0.0283322)
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.204153, 0.456101, 0.0283322)
 gizmo_extents = 4.42
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("15_a41v4")
-volume_db = -21.679
-autoplay = true
+stream = ExtResource("12_yhw42")
+volume_db = -10.0
+
+[node name="Buildings2" parent="." instance=ExtResource("13_b0rkl")]
+transform = Transform3D(1.295, 0, 0, 0, 1.295, 0, 0, 0, 1.295, -7.39913, 2.37186, -6.73624)
+
+[node name="Buildings3" parent="." instance=ExtResource("13_b0rkl")]
+transform = Transform3D(-1.25, 0, 1.88745e-07, 0, 1.25, 0, -1.88745e-07, 0, -1.25, -0.738222, 2.59397, 38.5604)

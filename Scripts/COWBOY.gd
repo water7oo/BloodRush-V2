@@ -21,6 +21,7 @@ var GroundSpark = preload("res://FX/GroundSPark.tscn")
 @onready var playerHealthMan = get_node("/root/PlayerHealthManager")
 @onready var enemyHealthMan = get_node("/root/EnemyHealthManager")
 @onready var speedDebug = $CurrentSpeedDebug
+@onready var spinDodgeDebug = $SpinDodgeDebug
 
 
 var camera = preload("res://Player/PlayerCamera.tscn").instantiate()
@@ -200,6 +201,7 @@ func _ready():
 	armature_rot_speed = armature_default_rot_speed
 	controllerDebug.text = "Keyboard Connected"
 	playerHealthLabel.value = playerHealthMan.max_health
+	spinDodgeDebug.value = spinDodge_timer_cooldown
 	
 	var animation_player = playerEditInstance.get_node("$AnimationPlayer")
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -314,25 +316,32 @@ func _proccess_movement(delta):
 
 	if direction != Vector3.ZERO && can_move:
 		is_moving = true
-		if velocity.dot(direction) < 0 && current_speed > speed_threshold:
-			print("player is changing directions")
-			current_speed = move_toward(current_speed, 0, momentum_deceleration * delta)  
-			if current_speed >= 0:
-				armature_rot_speed = armature_turn
-				current_speed = 0
-			if current_speed == 0 && direction:
-				move_toward(ACCELERATION, BASE_ACCELERATION, delta)
-				move_toward(DECELERATION, BASE_ACCELERATION, delta)
-				await get_tree().create_timer(.2).timeout
-				armature_rot_speed = armature_default_rot_speed
-			
-			if sprinting && current_speed >= 11:
-				DASH_DECELERATION = momentum_deceleration
-				DASH_ACCELERATION = momentum_acceleration
+		if velocity.dot(direction) < 0:
+			if current_speed >= 11:
+				Animationtree.set("parameters/Ground_Blend2/blend_amount", 0)
+				print("skid")
 			else:
-				DASH_DECELERATION = BASE_DASH_DECELERATION
-				DASH_ACCELERATION = BASE_DASH_ACCELERATION
+				Animationtree.set("parameters/Ground_Blend2/blend_amount", -1)
+			if current_speed > speed_threshold:
+				print("player is changing directions")
+					
+				current_speed = move_toward(current_speed, 0, momentum_deceleration * delta)  
+				if current_speed >= 0:
+					armature_rot_speed = armature_turn
+					current_speed = 0
+				if current_speed == 0 && direction:
+					move_toward(ACCELERATION, BASE_ACCELERATION, delta)
+					move_toward(DECELERATION, BASE_ACCELERATION, delta)
+					await get_tree().create_timer(.2).timeout
+					armature_rot_speed = armature_default_rot_speed
 				
+				if sprinting && current_speed >= 11:
+					DASH_DECELERATION = momentum_deceleration
+					DASH_ACCELERATION = momentum_acceleration
+				else:
+					DASH_DECELERATION = BASE_DASH_DECELERATION
+					DASH_ACCELERATION = BASE_DASH_ACCELERATION
+					
 		if current_speed < target_speed:
 			current_speed = move_toward(current_speed, target_speed, ACCELERATION * delta)
 		else:
@@ -343,8 +352,9 @@ func _proccess_movement(delta):
 
 		if direction && !is_sprinting && is_on_floor():
 			Animationtree.set("parameters/Ground_Blend/blend_amount", 0)
-		else:
-			Animationtree.set("parameters/Ground_Blend/blend_amount", -1)
+		#else:
+			#Animationtree.set("parameters/Ground_Blend/blend_amount", -1)
+			#print("mario")
 
 		armature.rotation.y = lerp_angle(armature.rotation.y, atan2(-velocity.x, -velocity.z), armature_rot_speed)
 
@@ -455,7 +465,7 @@ func _proccess_sprinting(delta):
 	if sprinting && is_moving && Stamina_bar.value > 0 && can_sprint && can_move == true && is_on_floor():
 		sprint_timer += delta
 		is_sprinting = true
-		Animationtree.set("parameters/Jump_Blend/blend_amount", 1)
+		Animationtree.set("parameters/Ground_Blend/blend_amount", 1)
 		Stamina_bar.value -= sprinting_deplete_rate * delta
 		target_speed = MAX_SPEED
 		ACCELERATION = DASH_ACCELERATION
@@ -463,10 +473,11 @@ func _proccess_sprinting(delta):
 		target_blend_amount = 1.0
 		current_blend_amount = lerp(current_blend_amount, target_blend_amount, blend_lerp_speed * delta)
 		
-		if sprint_timer >= 0.2:
-			Animationtree.set("parameters/Ground_Blend2/blend_amount", 0)
+		#if sprint_timer >= 0.2:
+			#Animationtree.set("parameters/Ground_Blend2/blend_amount", 0)
+			#print("skid")
 		
-		if sprint_timer >= 4.5:
+		if sprint_timer >= 3.5:
 			DASH_ACCELERATION = SECOND_DASH_ACCELERATION
 			DASH_DECELERATION = SECOND_DASH_DECELERATION
 			target_speed = SECOND_MAX_SPEED
@@ -518,7 +529,7 @@ func _proccess_dodge(delta):
 	#print("SpinDodge Timer " + str(spinDodge_timer_cooldown))
 	#print(current_speed)
 	
-	if dodging && is_on_floor() && can_dodge && Stamina_bar.value > 0 && current_speed >= 3 && is_moving:
+	if dodging && is_on_floor() && can_dodge && Stamina_bar.value > 0 && current_speed >= BASE_SPEED && is_moving:
 		is_dodging = true
 		$AudioStreamPlayer2.play()
 		armature_rot_speed = 1
@@ -542,7 +553,7 @@ func _proccess_dodge(delta):
 			
 	if is_dodging && is_moving:
 		dodge_cooldown_timer -= delta
-		await get_tree().create_timer(.2).timeout
+		#await get_tree().create_timer(.2).timeout
 		spinDodge_timer_cooldown -= delta
 
 		if dodge_cooldown_timer <= 0:
@@ -558,19 +569,20 @@ func _proccess_dodge(delta):
 			spinDodge_timer_cooldown = spinDodge_reset
 			
 		
-	if spinDodge_timer_cooldown <= spinDodge_reset && !air_spin && dodging && is_moving && is_on_floor():
-		#Animationtree.set("parameters/Ground_Blend3/blend_amount", 1)
-		armature_rot_speed = armature_default_rot_speed
-		velocity.y = 6
-		air_spin = true
-		jump_counter = 1
-		current_speed = SPIN_DODGE_SPEED
-		ACCELERATION = DODGE_ACCELERATION
-		DECELERATION = DODGE_DECELERATION
-		LERP_VAL = DODGE_LERP_VAL
-		Stamina_bar.value -= 10
-		can_move = false
-		can_jump = false
+	#if spinDodge_timer_cooldown <= spinDodge_reset && !air_spin && dodging && is_moving && is_on_floor():
+		##Animationtree.set("parameters/Ground_Blend3/blend_amount", 1)
+		#armature_rot_speed = armature_default_rot_speed
+		#velocity.y = 6
+		#air_spin = true
+		#jump_counter = 1
+		#current_speed = SPIN_DODGE_SPEED
+		#spinDodge_timer_cooldown = spinDodge_reset
+		#ACCELERATION = DODGE_ACCELERATION
+		#DECELERATION = DODGE_DECELERATION
+		#LERP_VAL = DODGE_LERP_VAL
+		#Stamina_bar.value -= 10
+		#can_move = false
+		#can_jump = false
 			
 	if is_on_floor():
 		if is_in_air:
@@ -606,8 +618,20 @@ func _proccess_cooldown(delta):
 			dodge_cooldown_timer = dodge_cooldown
 			can_dodge = false
 
-func _proccess_jump(delta):
+func jump(delta):
+	if Input.is_action_just_pressed("move_jump") && is_on_floor():
+		velocity.y = JUMP_VELOCITY
 		
+	if Input.is_action_just_released("move_jump") && velocity.y < 0:
+		velocity.y = 10
+		
+	if !is_on_floor():
+		velocity.y -= custom_gravity * delta
+	pass
+
+func _proccess_jump(delta):
+	if velocity.y <= 0:
+		Animationtree.set("parameters/Jump_Blend/blend_amount", 1)
 	if !is_on_floor():
 		air_timer += delta
 		can_jump = false
@@ -685,19 +709,20 @@ func _process_walljump(delta):
 								node.get_node("AnimationPlayer").play("Landing_strong_001|CircleAction_002")
 
 func _proccess_attack(delta):
+	
 	if is_attacking:
 		attack_cooldown -= delta
 	if attack_cooldown <= 0.0:
 		is_attacking = false
 	if Input.is_action_just_pressed("attack_light_1") && attack_cooldown <= 0.0 && is_on_floor() && can_attack:
-		Animationtree.set("parameters/Attack_Shot/blend_amount", 0)
+		Animationtree.set("parameters/Sword1_Shot/request" , 1)
 		print("Attack")
 		current_speed = 0
 		Attack_Box.monitoring = true
 		is_attacking = true
-		attack_cooldown = 0.5 # Set the cooldown time (0.5 seconds in this case)
-		await get_tree().create_timer(1).timeout
-		Animationtree.set("parameters/Attack_Shot/blend_amount", 1)
+		attack_cooldown = 0.5 
+		#await get_tree().create_timer(1).timeout
+		#Attack_Box.monitoring = false
 		
 	else:
 		Attack_Box.monitoring = false
@@ -715,6 +740,7 @@ func _physics_process(delta):
 	_proccess_cooldown(delta)
 	_proccess_sprinting(delta)
 	_proccess_attack(delta)
+	#jump(delta)
 	
 	controller_switch(delta)
 	LandingGroundEffect(delta)
@@ -761,6 +787,7 @@ func _on_refill_cooldown_timeout():
 func _on_attack_box_area_entered(area):
 	if area.has_method("takeDamageEnemy") && !attack_proccessing && can_attack:
 		enemyHealthMan.takeDamageEnemy(enemyHealthMan.health , attack_power)
+		print("Enemy got hit")
 		$AudioStreamPlayer.play()
 		gameJuice.hitStop(0.25, area)
 		attack_cooldown = 0.1
@@ -768,6 +795,7 @@ func _on_attack_box_area_entered(area):
 		Attack_Box.monitoring = false
 		gameJuice.knockback(area.get_parent(), Attack_Box, 6)
 		
+
 
 
 func pause():

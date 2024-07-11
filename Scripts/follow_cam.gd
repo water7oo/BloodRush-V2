@@ -44,7 +44,7 @@ func _unhandled_input(event):
 		
 		
 		if rotation_x <= -1:
-			camera.set_fov(55)
+			camera.set_fov(40)
 		elif rotation_x >= 0:
 			camera.set_fov(30)
 		else:

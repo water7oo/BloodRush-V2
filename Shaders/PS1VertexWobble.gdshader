@@ -2,9 +2,9 @@ shader_type spatial;
 render_mode blend_mix,
 	cull_disabled,
 	depth_prepass_alpha,
+	diffuse_toon,
 	shadows_disabled,
 	specular_disabled,
-	unshaded,
 	vertex_lighting;
 
 
@@ -47,7 +47,7 @@ void fragment()
 	vec4 texture_color = texture(albedo, UV);
 
 	ALBEDO = (color_base * texture_color).rgb;
-	
+	ROUGHNESS = 0.0;
 	ALPHA = texture_color.a * color_base.a;
 	ALPHA_SCISSOR_THRESHOLD = alpha_scissor;
 }
