@@ -45,13 +45,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0353532, 0.005)
 [node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.946006, 0.735815, 0, -0.324148, 2.14743, 0.00799954, 0.0505664, 0.100976)
 collision_mask = 255
-spring_length = 0.03
+spring_length = 2.145
 
 [node name="Margin" type="Node3D" parent="SpringArmPivot/SpringArm3D"]
 transform = Transform3D(1, 0, 0, -8.18316e-16, 1.00393, 0.0147458, -6.9647e-15, -0.0949428, 0.994697, 3.58559e-07, 3.25808, -2.69453)
 
 [node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D/Margin"]
-transform = Transform3D(0.996503, 0.00439826, 0.0834448, 0.0249132, 0.932026, -0.34664, -0.0329995, 0.240969, 0.381381, 0, -3.59577, 5.15113)
+transform = Transform3D(0.996503, 0.00439826, 0.0834448, 0.0249132, 0.932026, -0.34664, -0.0329995, 0.240969, 0.381381, 0, -4.41225, 4.94835)
 current = true
 fov = 40.0
 size = 5.762

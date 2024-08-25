@@ -2850,29 +2850,26 @@ bones/19/scale = Vector3(1, 1, 1)
 bones/20/rotation = Quaternion(0.0567006, 0.795909, -0.550294, 0.245949)
 bones/20/scale = Vector3(1, 1, 1)
 bones/21/rotation = Quaternion(0.350875, -0.163907, 0.0625211, 0.919844)
-bones/21/scale = Vector3(1, 1, 1)
 bones/23/rotation = Quaternion(-0.00120437, -0.0434415, 0.99903, -0.00713321)
 bones/23/scale = Vector3(1, 1, 1.00003)
 bones/24/rotation = Quaternion(0.196224, -0.00153166, -0.0209873, 0.980333)
-bones/24/scale = Vector3(1, 1, 1)
 bones/25/rotation = Quaternion(-0.0599857, 0.797559, -0.548493, -0.243837)
 bones/25/scale = Vector3(1, 1, 1)
-bones/26/scale = Vector3(1, 1, 1)
 
 [node name="Cylinder" parent="Armature/Skeleton3D" index="0"]
-transform = Transform3D(13.4691, -4.18084, 16.8901, 0.666639, 36.6539, 2.61188, -17.0554, -1.86904, 13.4407, -65.9985, -76.8933, -75.414)
+transform = Transform3D(21.2857, -7.36978, 0.923202, 4.39463, 36.0838, -1.52332, -0.597911, 2.85057, 21.6697, -76.7155, -78.8694, -132.141)
 
 [node name="Cylinder" parent="Armature/Skeleton3D/Cylinder" index="0"]
 surface_material_override/0 = SubResource("ShaderMaterial_4d6vf")
 
 [node name="Cube" parent="Armature/Skeleton3D" index="1"]
-transform = Transform3D(7.87177, -1.83491, 9.87108, 0.389604, 16.0869, 1.52646, -9.9677, -0.820296, 7.85514, -65.9985, -76.8933, -75.414)
+transform = Transform3D(12.44, -3.2345, 0.539548, 2.56836, 15.8367, -0.890276, -0.349437, 1.25108, 12.6644, -76.7155, -78.8694, -132.141)
 
 [node name="Cube" parent="Armature/Skeleton3D/Cube" index="0"]
 surface_material_override/0 = SubResource("ShaderMaterial_cjqha")
 
 [node name="Plane" parent="Armature/Skeleton3D" index="2"]
-transform = Transform3D(121.971, -152.949, -22.2848, 6.0368, -23.652, 195.374, -154.447, -121.713, -9.96239, -71.9569, -44.4082, -78.8497)
+transform = Transform3D(192.754, -8.36013, -39.2827, 39.7959, 13.7946, 192.335, -5.41443, -196.232, 15.1942, -83.4369, -46.3529, -132.429)
 
 [node name="Plane" parent="Armature/Skeleton3D/Plane" index="0"]
 surface_material_override/0 = SubResource("ShaderMaterial_g8sxb")
@@ -2890,7 +2887,7 @@ surface_material_override/0 = ExtResource("1_6p5pg")
 surface_material_override/0 = ExtResource("1_6p5pg")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Armature/Skeleton3D" index="7"]
-transform = Transform3D(121.971, -152.949, -22.2848, 6.0368, -23.652, 195.374, -154.447, -121.713, -9.96239, -71.9569, -44.4082, -78.8497)
+transform = Transform3D(192.754, -8.36013, -39.2827, 39.7959, 13.7946, 192.335, -5.41443, -196.232, 15.1942, -83.4369, -46.3529, -132.429)
 bone_name = "Plane"
 bone_idx = 17
 
