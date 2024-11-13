@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b2ud3ury8epgi"]
+[gd_scene load_steps=15 format=3 uid="uid://b2ud3ury8epgi"]
 
 [ext_resource type="Environment" uid="uid://cadv2uehcxqkc" path="res://MaterialTextures/NewGame.tres" id="1_c0qo6"]
 [ext_resource type="Material" uid="uid://dcuvjs33ebpe3" path="res://MaterialTextures/Room.tres" id="1_ewgn2"]
@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://bl275sfu3mmds" path="res://Enemy/Enemy2.tscn" id="9_38om4"]
 [ext_resource type="PackedScene" uid="uid://7l5yih8w56c3" path="res://Player/PlayerCamera.tscn" id="11_hq17w"]
 [ext_resource type="AudioStream" uid="uid://b6ntep1rwaq7e" path="res://Sounds/Doku.mp3" id="12_yhw42"]
-[ext_resource type="PackedScene" uid="uid://da2icq52660iu" path="res://Buildings/BUILDINGS_2.tscn" id="13_b0rkl"]
 [ext_resource type="PackedScene" uid="uid://rlcylvhdacih" path="res://FX/Move_Dust.tscn" id="14_xyb0d"]
 [ext_resource type="PackedScene" uid="uid://dcfrtjlyu7745" path="res://Player/BloodRushPlayer.tscn" id="15_i88xo"]
 [ext_resource type="PackedScene" uid="uid://dq1wojfy8mi7q" path="res://FX/Dust.tscn" id="16_dgh31"]
@@ -48,37 +47,9 @@ use_collision = true
 collision_layer = 3
 collision_mask = 3
 
-[node name="MeshInstance3D7" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(-2.32411e-11, -3.55271e-14, -2.41311, 2.92654e-11, 0.0114111, -7.36655e-12, 0.000531693, -6.28087e-10, -1.0548e-07, 2.85619, 1.41345, -1.27191)
-size = Vector3(2688.42, 204.717, 24.0763)
-
-[node name="MeshInstance3D13" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(-2.32411e-11, -3.55271e-14, -2.41311, 2.92654e-11, 0.0114111, -7.35256e-12, 0.000531693, -6.28087e-10, -1.0548e-07, 28.8165, 3.54376, -3.02427)
-size = Vector3(8171.78, 187.328, 45.5924)
-
-[node name="MeshInstance3D10" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(-2.3241e-11, -3.55271e-14, -1.81209, 2.92654e-11, 0.0114111, -5.54878e-12, 0.000531693, -6.28087e-10, -7.92089e-08, 22.9798, 2.42378, -0.271898)
-size = Vector3(3015.63, 231.891, 46.2867)
-
-[node name="MeshInstance3D12" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(-2.3241e-11, -3.55271e-14, -1.81209, 2.92654e-11, 0.0114111, -5.5187e-12, 0.000531693, -6.28087e-10, -7.92089e-08, -6.77075, 2.42378, -4.31325)
-size = Vector3(3015.63, 231.891, 13.4511)
-
-[node name="MeshInstance3D11" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(-2.3241e-11, -3.55271e-14, -1.81209, 2.92654e-11, 0.0114111, -5.5479e-12, 0.000531693, -6.28087e-10, -7.92089e-08, 22.9798, -2.22429, -0.271898)
-size = Vector3(3015.63, 231.891, 46.2867)
-
-[node name="MeshInstance3D8" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(-2.32411e-11, -3.55271e-14, -2.41311, 2.92654e-11, 0.0114111, -7.36256e-12, 0.000531693, -6.28087e-10, -1.0548e-07, 2.85618, -1.46014, -1.09357)
-size = Vector3(2017.57, 231.59, 24.0763)
-
-[node name="MeshInstance3D9" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(-8.71129e-11, -3.55271e-14, -1.81209, 1.09694e-10, 0.0114111, -5.51792e-12, 0.00199291, -6.28087e-10, -7.92089e-08, 23.9296, -0.531785, -1.349)
-size = Vector3(845.143, 371.116, 8.92601)
-
 [node name="MeshInstance3D" type="CSGBox3D" parent="Floor"]
-transform = Transform3D(11.342, 6.91216e-11, 0, 1.77636e-15, 9.38252, 0, 0, 0, 8.72365, -154.369, -0.222031, -1.93092)
-size = Vector3(27.131, 0.730957, 0.634949)
+transform = Transform3D(11.342, 7.11225e-10, 0, 1.77636e-15, 9.38252, 0, 0, 0, 8.72365, -4.85705, -0.569923, -0.345418)
+size = Vector3(0.766698, 0.425964, 0.271454)
 
 [node name="MeshInstance3D4" type="CSGBox3D" parent="Floor"]
 transform = Transform3D(6.39158e-09, -1.77944e-07, 4.014, 0.00319167, -1.12415e-08, -8.03841e-06, 5.20006e-10, 0.069, 1.03517e-05, -1.31426, -0.906931, -0.413)
@@ -134,9 +105,9 @@ metadata/_edit_use_anchors_ = true
 
 [node name="SubViewport" type="SubViewport" parent="Preview/SubViewportContainer"]
 handle_input_locally = false
-scaling_3d_mode = 0
+texture_mipmap_bias = -2.0
 canvas_item_default_texture_filter = 0
-size = Vector2i(1152, 648)
+size = Vector2i(1280, 720)
 render_target_update_mode = 4
 
 [node name="Pausing" parent="Preview/SubViewportContainer/SubViewport" instance=ExtResource("4_x187o")]
@@ -187,9 +158,3 @@ gizmo_extents = 4.42
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_yhw42")
 volume_db = -10.0
-
-[node name="Buildings2" parent="." instance=ExtResource("13_b0rkl")]
-transform = Transform3D(1.295, 0, 0, 0, 1.295, 0, 0, 0, 1.295, -7.39913, 2.37186, -6.73624)
-
-[node name="Buildings3" parent="." instance=ExtResource("13_b0rkl")]
-transform = Transform3D(-1.25, 0, 1.88745e-07, 0, 1.25, 0, -1.88745e-07, 0, -1.25, -0.738222, 2.59397, 38.5604)

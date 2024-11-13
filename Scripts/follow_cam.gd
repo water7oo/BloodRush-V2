@@ -43,12 +43,12 @@ func _unhandled_input(event):
 		spring_arm_pivot.rotation.y = rotation_y
 		
 		
-		if rotation_x <= -1:
-			camera.set_fov(40)
-		elif rotation_x >= 0:
-			camera.set_fov(30)
-		else:
-			camera.set_fov(40)
+		#if rotation_x <= -1:
+			#camera.set_fov(40)
+		#elif rotation_x >= 0:
+			#camera.set_fov(30)
+		#else:
+			#camera.set_fov(40)
 		
 	#if Input.get_action_strength("cam_down"):
 		#spring_arm_pivot.rotation.x -= joystick_sensitivity

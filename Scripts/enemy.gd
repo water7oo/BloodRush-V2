@@ -1,6 +1,8 @@
 class_name Enemy
 extends CharacterBody3D
 
+
+
 @onready var playerHealthMan = get_node("/root/PlayerHealthManager")
 @onready var enemyHealthMan = get_node("/root/EnemyHealthManager")
 

@@ -41,8 +41,7 @@ bg_color = Color(0.6, 1, 0.945098, 1)
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 script = ExtResource("2_sw84i")
-BASE_SPEED = 8
-MAX_SPEED = 13
+BASE_SPEED = 10
 RUNJUMP_MULTIPLIER = 1.2
 armature_turn = 0.05
 ACCELERATION = 30.0
@@ -71,6 +70,7 @@ wait_time = 5.0
 autostart = true
 
 [node name="Dodge_Cooldown_Label" type="Label" parent="."]
+visible = false
 offset_right = 40.0
 offset_bottom = 23.0
 scale = Vector2(1, 1.00156)
@@ -112,6 +112,7 @@ max_value = 50.0
 value = 50.0
 
 [node name="ControllerDebug" type="Label" parent="."]
+visible = false
 z_index = 2
 texture_filter = 5
 offset_left = 712.0
@@ -147,8 +148,10 @@ stream = ExtResource("9_oc5oe")
 transform = Transform3D(1, 0, 2.13163e-14, 0, 1, 0, -2.13163e-14, 0, 1, -1.50914e-07, 1.11191, 1.72625)
 
 [node name="Opener" parent="." instance=ExtResource("9_cvihx")]
+visible = false
 
 [node name="FPS_LABEL" type="Label" parent="."]
+visible = false
 texture_filter = 1
 offset_left = 976.0
 offset_top = 8.0
